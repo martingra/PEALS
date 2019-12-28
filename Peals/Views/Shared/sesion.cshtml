@@ -1,0 +1,26 @@
+﻿@if (Request.IsAuthenticated && Request.Cookies["DatosUsuario"] != null)
+{
+    <text><strong>@User.Identity.Name</strong></text>
+    //switch (@ViewContext.RouteData.Values["controller"].ToString())
+    switch (Request.Cookies["DatosUsuario"]["tipoUsuario"])
+    {
+        case "Administrador":
+            <text>[ @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Administrador") ]</text>;
+            break;                                                                     
+        case "Docente":
+            <text>[ @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Docente") ]</text>;
+            break;
+        case "Alumno":
+            <text>[ @Html.ActionLink("Cerrar Sesion", "CerrarSesion", "Alumno") ]</text>;
+            break;
+        default:
+            break;
+    }
+
+}
+else
+{
+    <text>No has iniciado sesion.</text>    
+}
+
+

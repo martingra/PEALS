@@ -1,0 +1,44 @@
+﻿@model Peals.Models.recurso
+@{ 
+    var ruta = "";
+    int? tipoRecurso = 0;
+    if (Model != null) {
+        ruta = Url.Content(Model.ruta);
+        tipoRecurso = Model.tipo_recurso;
+    }
+}
+<div class="titulo">
+    <h2>Recurso Seleccionado</h2>
+</div>
+<div class="nr_left" style="float:left">
+    
+    @if (@tipoRecurso == 1)
+    {
+         	<img src="@ruta"   width="128" height="92" />
+    }
+    else
+    {
+        if (@tipoRecurso == 2)
+        {
+            <img src="../../Content/Resources/General/sonido.png"   width="128" height="92" />
+        }
+        else
+        {
+            <img src="../../Content/Resources/General/video.png"   width="128" height="92" />
+        }
+    }
+</div>
+<div class="nr_right" style="float:left; margin-left: 10px; width: 65%">
+    <label for="nr_nombre" >Nombre:</label>
+    <input type="text" id="nr_nombre" name="nombre" placeholder="Escribe el nombre" />
+    <h2 id="nr_tamanio">Tamaño:<b></b></h2>
+
+    <div class="nrr_acciones" style="float:right; margin-top:15px">
+        <button type="button" id="nr_btnCancelar" class="cancelar" onclick="@ViewBag.CancelarCallback">Cancelar</button>
+        <button type="button" id="nr_btnAceptar" class="aceptar" onclick="@ViewBag.AceptarCallback">Aceptar</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(applyUIStyles());
+</script>

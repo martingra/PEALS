@@ -1,0 +1,59 @@
+﻿a, h1, h2, dt, dd, ul, p{ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align:justify; }
+dd{ text-align: center; padding: 20px; font-style: italic; }
+
+.Content{ padding-left: 15px; padding-right: 10px; }
+
+#titulo_manual{
+  text-align: center;
+  font-size: 2em;
+  text-decoration: underline;
+}
+
+#sidebar a{
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#sidebar h3{
+  text-align: center;
+  font-size: 1.4em;
+  text-decoration: underline;
+  padding: 20px;
+}
+
+#sidebar > ul > li > a > h2 { float: left; width: 50px; }
+
+#paginas h1{
+  text-align: left;
+  font-size: 1.3em;
+  font-weight: bold;
+  background: #E58E42;
+  color: white;
+  padding: 10px;
+  margin-left: -15px;
+  margin-right: -10px;
+  margin-top:20px;  
+  margin-bottom: 10px;
+}
+
+#paginas h2{
+  text-align: left;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-bottom: 2px solid #1398D6;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#paginas ul{ padding: 10px 30px 10px 30px; }
+#paginas { text-align: center; }
+#paginas img { padding: 10px; border: 2px solid gray; }
+#paginas figcaption { text-decoration: underline; color: #1D4F73 }
+
+.submenu .title { float: left; width: 100%; }
+.submenu h2 { float:left; border-bottom: none !important; padding:5px;}
+.submenu h2:first-child { border-right: 5px solid #1D4F73; border-radius: 30px; }
+.submenu h2:last-child{ text-decoration: underline;}
+
+small > img{ border: none !important; padding: 0px 5px 0px 5px !important; width: 24px; height: 24px; }
+canvas{ float:left; width: 15px; height:15px; margin-right: 5px;}

@@ -1,0 +1,55 @@
+﻿<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Galeria de Archivos";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/AudioVideo/Test.js")"></script>
+
+
+<div>
+    <p>Selecciona el tipo de Archivo</p>
+    <select id="tipoArchivo" onchange="renderGallery();">
+        <option value='0'>Elige una opción</option>
+        <option value='1'>Imagen</option>
+        <option value='2'>Audio</option>
+        <option value='3'>Video</option>
+    </select>
+</div>
+
+<div id="dialog_recurso" class="reveal-modal xlarge"></div>
+
+<div id="archivoSeleccionado"></div>
+
+<div id="message">
+</div>
+
+<script type="text/javascript">
+    function renderGallery() {
+        var id = $('#tipoArchivo').val();
+        var dialog = $('#dialog_recurso');
+        if (id == 3) {
+            initialization();
+    }
+        else {
+            $(dialog).empty();
+            $.get('/Recurso/SeleccionarRecurso', { 'tipo': id }, function (data) {
+                $(dialog).append(data);
+
+                $(dialog).reveal();
+            });
+    }
+    }
+
+    function onCancelarClickCallback() {
+        $('.reveal-modal').trigger('reveal:close');
+    }
+
+    function onSeleccionarClickCallback() {
+        var img = $('.slideshow', '.reveal-modal').find('img');
+        $('#archivoSeleccionado').append(img);
+
+        $('.reveal-modal').trigger('reveal:close');
+    }
+</script>

@@ -1,0 +1,66 @@
+﻿ @{  if (ViewBag.ListImagenes == null)
+            {
+                <p>No tienes imágenes cargadas.</p>
+            }
+            else
+            {
+                foreach (var img in ViewBag.ListImagenes)
+                { 
+                    <div id="@img.id" class="content">
+                        <img class="imagen" src="@Url.Content(img.ruta)" alt="@img.nombre"/>
+                        <div class="detalle">
+                            <input type="hidden" class="id"  value="@img.id" />
+                            <h2>@img.nombre</h2>
+                            <div>
+                                @if (img.recurso_compartido.Count > 0)
+                                {
+                                    <div class="informacion activo" onclick="mostrarInstitucionesRecCompartidos($(this.parentElement.parentElement).children('.id').val())">   
+                                        <img src="../../Content/Resources/General/group.png" alt="Compartido" width="20px" height="20px" />
+                                        <h3>Compartido</h3>
+                                    </div>
+                                }
+                                else
+                                { 
+                                    <div class="informacion inactivo" >
+                                        <img src="../../Content/Resources/General/user.png" alt="Sin compartir" width="20px" height="20px" />
+                                        <h3>Sin compartir</h3>
+                                    </div>
+                                }
+                                
+                                @if (img.ejercicio_x_recurso.Count > 0)
+                                {
+                                    <div class="informacion activo">
+                                        <img src="../../Content/Resources/General/share-on.png" alt="Usado" width="20px" height="20px" />
+                                        <h3>Usado</h3>
+                                        <div>
+                                            <div class="triangulo" ></div>
+                                            <ul>
+                                                <li onclick="mostrarActividades(@img.id)">
+                                                    <img src="../../Content/Resources/General/Ver.png" alt="Ver" width="24px" height="24px" />
+                                                    <h2>Ver</h2>
+                                                </li>
+                                                <li onclick="activarCambiarRecurso(@img.id)">
+                                                    <img src="../../Content/Resources/General/Cambiar.png" alt="Cambiar" width="24px" height="24px" />
+                                                    <h2>Cambiar</h2>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="informacion inactivo" >
+                                        <img src="../../Content/Resources/General/share-off.png" alt="Sin usar" width="20px" height="20px" />
+                                        <h3>Sin usar</h3>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <img class="eliminar" src="../../Content/Resources/MasterPage/delete.png" width="24px" height="24px" alt="Eliminar Imágen" onclick="eliminarRecurso(@img.id, '@img.nombre', @img.ejercicio_x_recurso.Count > 0)" /> 
+                        <button type="button" class="btn_compartir" value="Compartir" onclick="compartir(@img.id)">Compartir</button>
+                        <button type="button" class="btn_editar" value="Editar" onclick="editar(@img.id, this.parentElement.parentElement)">Editar</button>
+                        <img class="seleccion" src="../../Content/Resources/MasterPage/ok-off.png" width="32px" height="32px" />
+                    </div>
+                }
+            }
+        } 

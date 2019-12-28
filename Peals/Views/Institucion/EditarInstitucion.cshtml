@@ -1,0 +1,150 @@
+﻿<link href="@Url.Content("~/Content/Styles/Institucion.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/jquery.validate.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.js")"></script>   
+<script type="text/javascript" src="@Url.Content("~/Scripts/combosCascada.js")"></script>
+
+@model Peals.Models.institucion
+
+@{
+    ViewBag.Title = "PEALS - EDITAR INSTITUCI&Oacute;N";
+}
+
+@{Html.BeginForm("EditarInstitucion", "Institucion", new { idInstitucion = ViewBag.IDInstitucion }, FormMethod.Post, new { id = "datosInstitucion", enctype = "multipart/form-data" }); }
+    <ul class="errorMessages"></ul> 
+    
+    <div class="tabPanel">
+        <ul>
+            <li id="inst"><a href="#datosInstitucion">Datos de la Instituci&oacute;n</a></li>
+            <li id="info"><a href="#informacion">Informaci&oacute;n</a></li>
+        </ul>
+
+        <div id="panelContent">
+            <!-- DATOS DE LA INSTITUCIÓN -->
+            <div id="datosInstitucion">
+                <table>
+          	        <tbody>
+            	        <tr>
+                	        <td>Nombre de la Institui&oacute;n:</td>
+                            <td>@Html.TextBoxFor(m => m.nombre, new { id = "institucion_nombre", style = "width:300px", disabled = "disabled" })</td>
+                        </tr>
+                        <tr>
+                	        <td>Tel&eacute;fono:</td>
+                            <td>@Html.TextBoxFor(m => m.telefono, new { id = "institucion_telefono", placeholder = "Telefono de la Institución.", required = "required", pattern = "[0-9]{1,21}", oninvalid="setCustomValidity('Por favor, ingresa el número telefónico.')", onchange="try{setCustomValidity('')}catch(e){}"})</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="fs_domicilio">
+                    <p>Domicilio</p>
+          	        <table>
+            	        <tbody>
+                	        <tr>
+                    	        <td>Calle:</td>
+                                <td>@Html.TextBoxFor(m => m.calle, new { id = "institucion_calle", required = "required" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>N&uacute;mero:</td>
+                                <td>@Html.TextBoxFor(m => m.altura_calle, new { id = "institucion_alturaCalle", required = "required" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>Piso:</td>
+                                <td>@Html.TextBoxFor(m => m.piso, new { id = "institucion_piso" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>Departamento:</td>
+                                <td>@Html.TextBoxFor(m => m.departamento, new { id = "institucion_departamento" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>Pa&iacute;s:</td>
+                                <td>@Html.DropDownList("pais", null, "Seleccionar país", new { id = "usuario_pais", required = "true" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>Provincia:</td>
+                                <td>@Html.DropDownList("provincia", null, "Seleccionar provincia", new { id = "usuario_provincia", required = "required" })</td>
+                            </tr>
+                            <tr>
+                    	        <td>Localidad:</td>
+                                <td>@Html.DropDownList("localidad", null, "Seleccionar localidad", new { id = "usuario_localidad", required = "required" })</td>
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        
+            <!-- INFORMACION -->
+            <div id="informacion"> @{ Html.RenderAction("EditarInformacion", "Informacion"); } </div>
+        </div>
+    </div>
+
+    <div id="botones">
+    	<button name="anterior" type="button" id="btn_anterior" value="Anterior" onClick="antPanel()">Anterior</button>	    
+        <button name="siguiente" type="button" id="btn_siguiente" value="Siguiente" onClick="sigPanel()">Siguiente</button>
+        <button name="guardar" type="submit" id="btn_guardar" value="Guardar">Guardar</button>
+    </div>
+@{ Html.EndForm(); }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.tabPanel').tabs();
+        $('.tabPanel').find('#inst a').on('click', function () { antPanel(); });
+        $('.tabPanel').find('#info a').on('click', function () { sigPanel(); });
+        antPanel();
+
+        var form = $(this);
+        var errorList = $('ul.errorMessages', form);
+
+        var createAllErrors = function () {
+            var showAllErrorMessages = function () {
+                errorList.empty();
+
+                var errorDomicilio = false;
+                var hayError = false;
+
+                form.find(':invalid').each(function (index, node) {
+                    switch (node.id) {
+                        case "institucion_nombre":
+                            errorList.append('<li>Por favor, escribe el nombre de la institución.</li>');
+                            hayError = true;
+                            break;
+                        case "institucion_telefono":
+                            errorList.append('<li>Por favor, escribe el telefono de la institución.</li>');
+                            hayError = true;
+                            break;
+                        case "institucion_calle": case "institucion_alturaCalle": case "institucion_departamento":
+                        case "usuario_pais": case "usuario_provincia": case "usuario_localidad":
+                            if (!errorDomicilio)
+                                errorList.append('<li>Por favor, completá el domicilio.</li>');
+
+                            errorDomicilio = true;
+                            hayError = true;
+                            break;
+                    }
+                });
+
+                if (hayError)
+                    errorList.show();
+                else
+                    $('form').submit();
+            };
+
+            $('button[type=submit]', form).on('click', showAllErrorMessages);
+            $('input[type=text]', form).on('keypress', function (event) {
+                //keyCode 13 es Enter
+                if (event.keyCode == 13) {
+                    showAllErrorMessages();
+                }
+            });
+        };
+
+        $('form').each(createAllErrors);
+    });
+
+    function antPanel() {
+        $(".tabPanel").tabs("option", "active", 0);
+    }
+
+    function sigPanel() {
+        $(".tabPanel").tabs("option", "active", 1);
+    }
+</script>

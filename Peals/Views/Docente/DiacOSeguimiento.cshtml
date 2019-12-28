@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Diac o Seguimiento";
+}
+<link href="@Url.Content("~/Content/Styles/Docente.css")" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.opciones div {
+    float: left;
+    width: 50%;
+}
+
+</style>
+
+<div id="tituloPagina">
+    <h1>
+        D.I.A.C o Seguimiento Docente</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Seleccione la opción deseada: Las D.I.A.C. están definidas por el administrador
+        de la institución y cumplen con la normativa exigida por el ministerio de educación
+        de la nación. El seguimiento docente, es un mecanismo personalizado de evaluación
+        que será solo visible por usted.
+    </h1>
+</div>
+<div id="docenteInicio">
+    <div id="docente_opciones" class="opciones">
+        <div>
+            <figure>
+                <a title="Seguimiento docente" href="@Url.Action("Index", "Seguimiento")">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/Docente/Actividades.jpg")"/>
+				    <figcaption>Seguimiento Docente</figcaption>
+                </a>
+			</figure>
+        </div>
+        <div>
+            <figure>
+                <a title="DIAC" href="@Url.Action("MenuResolucion", "Diac")">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" />
+				    <figcaption>D.I.A.C.</figcaption>
+                </a>
+			</figure>
+        </div>
+    </div>
+</div>

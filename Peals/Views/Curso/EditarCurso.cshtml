@@ -1,0 +1,141 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Curso.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/jquery.validate.css")" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.curso
+@{
+    ViewBag.Title = "PEALS - Editar Curso";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.js")"></script>   
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script> 
+
+@{Html.BeginForm("EditarCurso", "Curso", new { idCurso = @ViewBag.idCurso }, FormMethod.Post, new { id = "datosInstitucion", enctype = "multipart/form-data" });}
+    <ul class="errorMessages"></ul> 
+
+    <div id="div_datosCurso">
+        <div class="form_row" >
+            <div><label for="curso_nombre" >Nombre</label></div>
+            <div>@Html.TextBoxFor(x => x.nombre, new { id="curso_nombre", placeholder="Nombre del Curso", required="true", style="width:35%", oninvalid="setCustomValidity('Por favor, ingresa el nombre del curso')", onchange="try{setCustomValidity('')}catch(e){}" })</div>
+        </div>
+
+        <div class="form_row" >
+            <div><label for="curso_anio">Año</label></div>
+            <div>@Html.TextBoxFor(x => x.ano, new { id="curso_anio", placeholder="Año de cursado", required="true", oninvalid="setCustomValidity('Por favor, ingresa el año de cursado')", onchange="try{setCustomValidity('')}catch(e){}" })</div>
+        </div>
+        
+        <div class="form_row" >
+            <div><label for="curso_division">Division</label></div>
+            <div>@Html.TextBoxFor(x => x.division, new { id="curso_division", placeholder="División del curso", required="true", oninvalid="setCustomValidity('Por favor, ingresa la division del curso')", onchange="try{setCustomValidity('')}catch(e){}" })</div>
+        </div>
+        
+        <div class="form_row">
+            <div><label for="curso_turno">Turno</label></div>
+            <div>@Html.DropDownList("turno", null, "Seleccionar Turno", new { id = "curso_turno", required = "true", oninvalid="setCustomValidity('Por favor, selecciona el turno')", onchange="try{setCustomValidity('')}catch(e){}" })</div>
+        </div>
+        
+        <div class="form_row">
+            <div><label for="curso_nivel">Nivel</label></div>
+            <div>@Html.DropDownList("nivel", null, "Seleccionar Nivel", new { id = "curso_nivel", required = "true", oninvalid = "setCustomValidity('Por favor, selecciona el nivel')", onchange = "try{setCustomValidity('')}catch(e){}" })</div>
+        </div>
+        
+        <div class="form_row">
+            <div><label for="curso_descripcion">Descripcion</label></div>
+            @Html.TextAreaFor(x => x.descripcion, new { id="curso_descripcion", rows="5", cols="50" })
+        </div>
+        
+        <div class="form_row cb_personalizado" style="display:none;">
+            <input type="checkbox" id="rDeletreo" name="es_publico" />
+            <label for="rDeletreo" >Publico</label>
+        </div>
+
+        <div class="form_row">
+            <p>
+                Por favor, escribe el nombre del docente responsable del curso. Si todavía no lo tienes decidido,
+                no te preocupes, lo puedes completar más tarde.
+            </p>
+            <div><label for="curso_docenteResponsable">Nombre del Docente</label></div>
+            <div>
+                <input type="hidden" id="curso_idDocenteResponsable" name="idDocente" value="@ViewBag.idDocente" />
+                <input type="text" id="curso_nombreDocenteResponsable" name="docente" placeholder="Escribe el nombre o el email del docente" style="float:left; width:35%" value="@ViewBag.nombreDocente" />
+                <button type="button" id="curso_seleccionarDocente" style="margin-left:10px">Seleccionar Docente</button>
+            </div>
+        </div>
+    </div>
+    <!-- Ventana Modal para seleccionar Docente -->
+    <div id="dialog_plantelDocente" class="reveal-modal">
+        <h1 style="padding:3px; border-bottom:2px solid #3966A2">Docentes de @ViewBag.nombreInstitucion</h1>
+        @{ Html.RenderAction("_Docentes", "Institucion", new { idInstitucion = ViewBag.idInstitucion }); } 
+    </div>
+    
+    <div class="acciones">
+        <button name="guardar" type="submit" id="mB_Save" value="Guardar">Guardar</button>
+        <button name="guardar" type="button" id="mB_Cancel" value="Cancelar" onclick="backPage()">Cancelar</button>
+    </div>
+
+@{Html.EndForm();}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var form = $(this);
+        var errorList = $('ul.errorMessages', form);
+
+        var createAllErrors = function () {
+            var showAllErrorMessages = function () {
+                errorList.empty();
+
+                var hayError = false;
+
+                form.find(':invalid').each(function (index, node) {
+                    switch (node.id) {
+                        case "curso_nombre":
+                            errorList.append('<li>Por favor, completa el nombre del curso.</li>');
+                            hayError = true;
+                            break;
+                        case "curso_anio":
+                            errorList.append('<li>Por favor, completa el año de cursado.</li>');
+                            hayError = true;
+                            break;
+                        case "curso_division":
+                            errorList.append('<li>Por favor, completa la división del curso.</li>');
+                            hayError = true;
+                            break;
+                        case "curso_turno":
+                        case "curso_nivel":
+                            errorList.append('<li>Por favor, selecciona a que ' + node.name + ' pertenece el curso.</li>');
+                            hayError = true;
+                            break;
+                    }
+                });
+
+                if (hayError)
+                    errorList.show();
+                else
+                    $('form').submit();
+            };
+
+            $('button[type=submit]', form).on('click', showAllErrorMessages);
+            $('input[type=text]', form).on('keypress', function (event) {
+                //keyCode 13 es Enter
+                if (event.keyCode == 13) {
+                    showAllErrorMessages();
+                }
+            });
+        };
+
+        $('form').each(createAllErrors);
+
+        $('#curso_seleccionarDocente').click(function (e) {
+            e.preventDefault();
+            $('#dialog_plantelDocente').reveal();
+        });
+
+        var rowDocente = $('#gridDocentes').find('tr');
+        rowDocente.bind('click', function (event) {
+            $('#curso_idDocenteResponsable').val($(this).find('input[type=hidden]').val());
+            $('#curso_nombreDocenteResponsable').val($(this).find('td:first').text());
+            $('.reveal-modal').trigger('reveal:close');
+        });
+    });
+</script>

@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "DIAC - MENU CURSO";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+    #fechasFiltro input
+    {
+        margin-right: 0.5em;
+        float: left;
+    }
+    
+    #fechasFiltro
+    {
+        float: left;
+        margin-top: 1em;
+        width: 100%;
+    }
+    
+    #fechasFiltro div
+    {
+        margin-right: 0.5em;
+        width: fix;
+        float: left;
+    }
+    
+    #panelDiacResueltos
+    {
+        float: left;
+        width: 100%;
+        margin-top: 4em;
+        margin-bottom: 4em;
+    }
+    #divDiacResueltas, #divAlumnos
+    {
+        float: left;
+        display: none;
+        width: 100%;
+        margin-bottom:2em;
+    }
+    
+    #divComboSelector
+    {
+        float: left;
+        margin-bottom: 2em;
+        margin-right: 0.5em;
+        width: 100%;
+    }
+    #divComboSelector select
+    {
+        margin-left: 1em;
+    }
+</style>
+<div id="tituloPagina">
+    <h1>
+        DIAC Curso @ViewBag.nombreCurso</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        En esta sección usted podrá efectuar el seguimiento de sus alumnos, completando
+        las DIAC definidas por el administrador de la institución o las plantillas de seguimiento
+        que usted puede crear.
+    </h1>
+</div>
+<div id="divComboSelector">
+    Mostrar:
+    <select id="comboMostrar">
+        <option id="1">Alumnos</option>
+        <option id="2">Resoluciones</option>
+    </select>
+    <div id="fechasFiltro">
+        <div class="filtroFechas">
+            Fecha Desde:</div>
+        <input type="text" id="fechaDesde" class="datePicker filtroFechas" />
+        <div class="filtroFechas">
+            Fecha Hasta:</div>
+        <input type="text" id="fechaHasta" class="datePicker filtroFechas" />
+        <div>
+            Alumno:</div>
+        <input type="text" id="filtroAlumno" />
+
+        <input id="btnBuscar" type="button" value="Buscar" style="font-size: 1em !important;" />
+    </div>
+</div>
+<div id="divDiacResueltas">
+    <div id="panelDiacResueltos">
+    </div>
+</div>
+<div id="divAlumnos">
+    <div id="grillaAlumnos">
+    </div>
+</div>
+
+<div id="seleccionarVersion" class="reveal-modal large">
+hola
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    
+});
+    
+
+    $( document ).ready(function() {
+        $("#divAlumnos").show("slow");
+        $(".filtroFechas").hide("slow");
+        $("#divDiacResueltas").hide("slow", function() {
+           
+            $("#btnBuscar").click();
+        });        
+    });
+    
+    $(".datePicker").datepicker();
+
+    $("#btnBuscar").click(function () {
+        if($("#comboMostrar").val() == "Alumnos"){
+            $("#grillaAlumnos").load("/Llenadoseguimiento/_AlumnosResolucionCurso?fechaDesde=" + $("#fechaDesde").val() + "&fechaHasta=" + $("#fechaHasta").val() + "&idCurso=" + @ViewBag.idCurso  + "&identificador=DIAC&alumno=" + $("#filtroAlumno").val());
+        }
+        else {
+            $("#panelDiacResueltos").load("/Llenadoseguimiento/_DiacResueltas?fechaDesde=" + $("#fechaDesde").val() + "&fechaHasta=" + $("#fechaHasta").val() + "&idCurso=" + @ViewBag.idCurso  + "&identificador=DIAC&alumno=" + $("#filtroAlumno").val());
+        }
+    });
+
+    $("#comboMostrar").change(function() {
+        if($("#comboMostrar").val() == "Alumnos"){
+            $(".filtroFechas").hide("slow");
+            $("#divDiacResueltas").hide("slow");
+            $("#divAlumnos").show("slow");
+            $("#btnBuscar").click();
+        }
+        else {
+            $(".filtroFechas").show("slow");
+            $("#divDiacResueltas").show("slow");
+            $("#divAlumnos").hide("slow");
+            $("#btnBuscar").click();
+        }
+    });
+
+
+        
+
+
+</script>

@@ -1,0 +1,86 @@
+﻿@*<video id="video"></video>
+<button id="startbutton">
+    Capturar video</button>
+<canvas id="canvas"></canvas>
+<img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+
+*@
+<div style="text-align:center;">
+    <video autoplay id="video" width="640" height="480" autoplay style="display: inline;"></video>
+    <canvas width="320" id="canvas" height="240" style="display: none;"></canvas>
+    
+</div>
+<div style="text-align:center;">
+<br /> <br />
+<img src="../../Content/Resources/Actividad/grabador.jpg" />
+<br /> <br />
+
+    <input id="btnIniciar" type="button" value="Iniciar" />
+    <input id="btnParar" type="button" value="Parar" />
+    @*<input id="btnGrabar" type="button" value="Descargar" />*@
+    <a id="downloadLink" download="mediarecorder.ogv" name="mediarecorder.ogv" href></a>
+</div>
+
+<script type="text/javascript">
+    var mediaRecorder;
+    $(function () {
+
+        var videoElement = $('video');
+        //var dataElement = document.querySelector('#data');
+        var downloadLink = document.querySelector('a#downloadLink');
+
+        $('video').hide();
+        $("#btnGrabar").hide();
+        $("#btnParar").hide();
+
+        navigator.getMedia = (navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+        navigator.getMedia(
+            {
+                video: false,
+                audio: true
+            },
+            function (stream) {
+                if (navigator.mozGetUserMedia) {
+                    video.mozSrcObject = stream;
+                } else {
+                    var vendorURL = window.URL || window.webkitURL;
+                    video.src = vendorURL.createObjectURL(stream);
+                }
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = function (e) {
+                    videoElement.src = window.URL.createObjectURL(e.data);
+                    downloadLink.href = window.URL.createObjectURL(e.data);
+                    downloadLink.innerHTML = 'Descargar video';
+                };
+
+                video.play();
+            },
+            function (err) {
+                console.log("An error occured! " + err);
+            }
+          );
+    });
+
+
+        $("#btnIniciar").click(function () {
+            mediaRecorder.start();
+            $("#btnGrabar").hide();
+            $("#btnParar").show();
+            $("#btnIniciar").hide();
+            $('a#downloadLink')[0].href = '';
+            $('a#downloadLink')[0].innerHTML = '';
+        });
+
+        $("#btnParar").click(function () {
+            mediaRecorder.stop();
+            $("#btnGrabar").show();
+            $("#btnParar").hide();
+            $("#btnIniciar").show();
+        });
+
+</script>

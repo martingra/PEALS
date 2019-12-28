@@ -1,0 +1,330 @@
+﻿<style type="text/css">
+    #divRecursos
+    {
+        display: none;
+        float:left;
+        position: relative;
+        height: 600px !important;
+        min-height: 600px;
+    }
+
+    .texto_actividad
+    {
+        height: 5em;
+    }
+    
+    #btnSaltearEjercicio, #btnResolverEjercicio
+    {
+        cursor: pointer;
+        height: 50%;
+        width: 20%;
+    }
+    
+    
+    #explicacionTituloPagina
+    {
+        text-align: center;
+    }
+    
+    .botonera
+    {
+        text-align: center;
+    }
+    
+    .botonera input 
+    {
+        width: 20%;
+    }
+    
+    #divResolucion 
+    {
+        width:100%;
+        text-align: center;
+    }
+    
+    #txtResultadoTexto 
+    {
+        width:30%;
+    }
+    
+    #divReemplazableRecursos 
+    {
+        background-image: url("../../Content/Resources/Actividad/fondoPizarronNegro.jpg");
+        border: 0.2em solid black;
+        border-radius: 1em;
+        margin-bottom:1em;
+        position: relative;
+        height: 600px !important;
+        min-height: 600px;
+    }
+    
+    #txtResultadoTexto
+    {
+        text-transform: uppercase;
+    }
+    
+    .progress 
+    {
+        margin-top:1em;
+    }
+    
+    .seleccionado 
+    {
+        box-shadow: 0px 0px 5px 5px #99c81a;
+    }
+    
+</style>
+@model List<Peals.Models.ejercicio_x_recurso>
+<div id="divEjercicio">
+</div>
+<input type="hidden" id="txtConDeletreo" value="@ViewBag.deletreo" />
+<input type="hidden" id="txtDeletreo" value="" />
+@if (ViewBag.senia != null)
+{
+    <div id="divEjercicioSenias">
+    </div>
+    <input type="hidden" id="txtClaseEsperada" value="@ViewBag.senia" />
+}
+@if (ViewBag.textoSolucion != null)
+{
+    <div id="divEjercicioTexto">
+    </div>
+    <input type="hidden" id="txtTextoEsperado" value="@ViewBag.textoSolucion" />
+}
+@if (ViewBag.recursoCorrecto != null)
+{
+    <div id="divEjercicioRecursoCorrecto">
+    </div>
+    <input type="hidden" id="txtRecursoCorrecto" value="@ViewBag.recursoCorrecto" />
+}
+
+
+  
+
+
+<div id="divRecursos">
+    @foreach (var aXr in Model)
+    {
+        String left = @aXr.pos_left;
+        String top = @aXr.pos_top;
+        string width = @aXr.width;
+        string height = @aXr.height;
+        switch (aXr.recurso1.tipo_recurso)
+        {
+            case (int)TipoDeRecurso.Imagen:
+        <img src="@Url.Content(aXr.recurso1.ruta)" id="@aXr.recurso1.id" class="seleccionable" style="margin:0; height: @height; width: @width; position: absolute; left: @left; top: @top;" />
+                                                                                                                 break;
+            case (int)TipoDeRecurso.Audio:
+        <audio  id="@aXr.recurso1.id" class="seleccionable" style="height: @height; width: @width; position: absolute; left:@left; top:@top;" controls><source src="@Url.Content(aXr.recurso1.ruta)" type="audio/ogg"><source src="@Url.Content(aXr.recurso1.ruta)" type="audio/mpeg"></audio>
+                                                                                                                                                                                                                                             break;
+            case (int)TipoDeRecurso.Video:
+        <video width="320" height="240" controls id="@aXr.recurso1.id" class="seleccionable" style="margin:0; height: @height; width: @width; position: absolute; left:@left; top:@top;" > <source src="@Url.Content(aXr.recurso1.ruta)" /></video>
+                                                                                                                                                                                              break;
+            case (int)TipoDeRecurso.Texto:
+        <div style="height: @height; width: @width; position: absolute; left: @left; top:@top; display: inline-block;"> <textarea cols="25" rows="10"  id="@aXr.recurso1.id" class="texto_actividad">@aXr.recurso1.ruta</textarea></div>
+                                                                                        break;
+        }
+    }
+</div>
+<script type="text/javascript">
+    function processAutoheight() {
+        var maxHeight = 0;
+
+        // This will check first level children ONLY as intended.
+        $(".autoheight > *").each(function () {
+
+            height = $(this).outerHeight(true); // outerHeight will add padding and margin to height total
+            if (height > maxHeight) {
+                maxHeight = height;
+            }
+        });
+
+        //$(".autoheight").height(maxHeight);
+    }
+
+
+    $("#divEjercicioSenias").unbind();
+    $("#divEjercicioSenias").empty();
+    $("#divEjercicioSenias").load("/Ejercicio/_ResolverEjercicioSenias?senia=" + $("#txtClaseEsperada").val(), function () {
+
+        //$("html, body").animate({ scrollTop: $('#pantallaInicial').offset().top }, "slow");
+
+        //$("#divRecursos").addClass("reveal-modal xlarge");
+        //$("#divRecursos").addClass("autoheight");
+        //$("#divRecursos").show();
+
+        //$(window).resize(function () { processAutoheight(); });
+        //$(document).resize(function () { processAutoheight(); });
+        //processAutoheight();
+
+        $("#divReemplazableRecursos").html($("#divRecursos").html());
+
+        $("#verAyudaActividad").click(function (e) {
+            e.preventDefault();
+            $("#divAyuda").reveal();
+            $("#txtUsoAyudaActividad").val('1');
+        });
+
+        $(".btnResolverActividad").on("click", function () {
+            $("#txtCapturarVideo").val('1');
+
+            $("#divTituloSeniaARealizar").text("Preparate! Comenzamos en:");
+
+            $(".visorVideo").hide("slow");
+            $("#imgRestart").hide();
+
+
+            var descuento = 5;
+            intervalEspera = setInterval(function () {
+
+                $("#divContenidoSeniaARealizar").text(descuento);
+                descuento--;
+                if (descuento == 0)
+                    clearInterval(intervalEspera);
+            }, 1000);
+
+            setTimeout(
+                function () {
+                    var tiempo = 0;
+                    intervalTiempo = setInterval(function () {
+                        tiempo++;
+                    }, 1000);
+
+                    $("#video").hide();
+
+                    $("#divSeniaARealizar").hide("slow", function () {
+                        $(".visorVideo").show("slow", function () {
+                            $("#canvasVuelta").show("slow", function () {
+                                $("#canvas").show("slow", function () {
+                                    $("#imgRestart").show("slow", function () {
+                                        $("#btnSaltearEjercicio").show();
+                                        $("#divTituloSeniaARealizar").text("Reliza la seña:");
+                                        $("#divContenidoSeniaARealizar").text($("#txtClaseEsperada").val());
+                                    });
+                                    $("html, body").animate({ scrollTop: $('.visorVideo').offset().top }, "slow");
+                                });
+                            });
+                        });
+                    });
+
+                    var strValor = "imagenes\\" + $("#txtClaseEsperada").val();
+
+
+
+                    interval = setInterval(function () {
+
+
+                        if ($("#txtResultado").text() == strValor) {
+                            clearInterval(intervalTiempo);
+                            clearInterval(interval);
+
+
+                            detenerEnvio = true;
+                            localStream.stop();
+                            $.connection.hub.stop();
+
+                            $("#divResultado").css('background-color', '#5DB85D');
+                            $("#divResultado").text('Has resulto el ejercicio correctamente en ' + tiempo + ' segundos. Hace click para continuar!');
+                            $("#txtTiempo").val(parseInt($("#txtTiempo").val()) + tiempo);
+
+                            $("#ejercicio").hide("slow", function () {
+                                $("#divResultado").show("slow", function () {
+                                    var nroEjercicio = $("#txtNroEjercicio").val();
+                                    nroEjercicio = parseInt(nroEjercicio) + 1;
+                                    var cantidadEjercicios = parseInt($("#txtCantidadEjercicios").val());
+                                    var avance = nroEjercicio * 100 / cantidadEjercicios;
+                                    var restante = 100 - avance;
+
+                                    $("#progresoCompletado").css('width', avance + '%');
+                                    $("#progresoRestante").css('width', restante + '%');
+
+                                    $("#progresoCompletado").text(nroEjercicio + ' completados');
+                                    $("#progresoRestante").text((cantidadEjercicios - nroEjercicio) + ' restantes');
+
+                                    $("#btnSiguienteEjercicio").show();
+                                });
+                            });
+                        }
+                    }, 2000);
+
+                }, 5000);
+        });
+    });
+
+
+
+    $("#divEjercicioTexto").load("/Ejercicio/_ResolverEjercicioTexto", function () {
+
+        $("html, body").animate({ scrollTop: $('#pantallaInicial').offset().top }, "slow");
+
+        $("#divReemplazableRecursos").html($("#divRecursos").html());
+        //$("#divReemplazableRecursos").addClass("autoheight");
+
+//        $(window).resize(function () { processAutoheight(); });
+//        $(document).resize(function () { processAutoheight(); });
+//        processAutoheight();
+
+
+        $("#verAyudaActividad").click(function (e) {
+            alert('Por el tipo de ejercicio, no hay ayuda disponible');
+        });
+    });
+
+
+
+    $("#divEjercicioRecursoCorrecto").load("/Ejercicio/_ResolverEjercicioRecursoCorrecto", function () {
+
+        $("html, body").animate({ scrollTop: $('#pantallaInicial').offset().top }, "slow");
+
+        $("#divReemplazableRecursos").html($("#divRecursos").html());
+        //$("#divReemplazableRecursos").addClass("autoheight");
+
+//        $(window).resize(function () { processAutoheight(); });
+//        $(document).resize(function () { processAutoheight(); });
+//        processAutoheight();
+
+        $("#verAyudaActividad").click(function (e) {
+            alert('Por el tipo de ejercicio, no hay ayuda disponible');
+        });
+
+        $(".seleccionable").click(function () {
+            $(".seleccionable").removeClass('seleccionado');
+            $(this).addClass('seleccionado');
+            $("#txtResultadoRecursoCorrecto").val($(this).attr('id'));
+        });
+
+    });
+
+
+
+
+    $("#divResultado").one("click", function () {
+        $("#txtCapturarVideo").val('0');
+        var idActividad = $("#txtIdActividad").val();
+        var nroEjercicio = $("#txtNroEjercicio").val();
+        nroEjercicio = parseInt(nroEjercicio) + 1;
+        var cantidadEjercicios = parseInt($("#txtCantidadEjercicios").val());
+
+        $("#verAyudaActividad").unbind();
+
+        if (cantidadEjercicios > nroEjercicio) {
+            //muestro el siguiente ejercicio
+            $("#txtNroEjercicio").val(nroEjercicio);
+
+            $("#ejercicio").load("/Ejercicio/_ResolverEjercicio?idActividad=" + idActividad + "&nroEjercicio=" + nroEjercicio, function () {
+                $("#divResultado").hide("slow", function () {
+                    $("#ejercicio").show("slow", function () {
+                        //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                        //$("html, body").animate({ scrollTop: $('#pantallaInicial').offset().top }, "slow");
+                        $("html, body").animate({ scrollTop: $('#ejercicio').offset().top }, "slow");
+                    });
+                });
+            });
+        }
+        else {
+            //terminó la actividad
+            //$("#txtIntentos").val('1');
+            $('form').submit();
+        }
+    });
+</script>

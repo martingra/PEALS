@@ -1,0 +1,116 @@
+﻿@*<video id="video"></video>
+<button id="startbutton">
+    Capturar video</button>
+<canvas id="canvas"></canvas>
+<img src="http://placekitten.com/g/320/261" id="photo" alt="photo">
+
+*@
+<div>
+    <video id="video" width="320" height="240" autoplay style="display: inline;"></video>
+    <canvas width="320" id="canvas" height="240" style="display: inline;"></canvas>
+    <canvas width="320" id="canvasVuelta" height="240" style="display: inline;"></canvas>
+    <div id="txtResultado" style="font-size: 3em; color:white; background-color:Red;"/> 
+</div>
+<script src="@Url.Content("~/Scripts/jquery.signalR-1.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/signalr/hubs")"></script>
+<script type="text/javascript">
+
+    $(function () {
+        var chat = $.connection.reconocimientoHub;
+
+        //vuellta del server
+        chat.client.respuesta = function (imagen, respuesta) {
+            var canvasVuelta = $("#canvasVuelta");
+            var canvas = $("#canvas");
+            var ctxVuelta = canvasVuelta.get()[0].getContext('2d');
+
+                        var img = new Image;
+                        img.onload = function () {
+                            ctxVuelta.drawImage(img, 0, 0);
+                        };
+                        img.src = imagen;
+            $("#txtResultado").text(respuesta);
+
+            canvas.get()[0].getContext('2d').drawImage(video, 0, 0, 320, 240);
+            var data = $("#canvas").get()[0].toDataURL('image/jpeg', 1.0);
+            var newblob = dataURItoBlob(data);
+            chat.server.send(data);
+
+            //var data = $("#canvas").get()[0].toDataURL('image/jpeg', 1.0);
+            //chat.server.send(data);
+        };
+
+        //ida al server
+        $.connection.hub.start().done(function () {
+
+            var video = $("#video").get()[0];
+            var canvas = $("#canvas");
+            var ctx = canvas.get()[0].getContext('2d');
+
+            // use the chrome specific GetUserMedia function
+            navigator.getMedia = (navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+            navigator.getMedia(
+            {
+                video: true,
+                audio: true
+            },
+            function (stream) {
+                if (navigator.mozGetUserMedia) {
+                    video.mozSrcObject = stream;
+                } else {
+                    var vendorURL = window.URL || window.webkitURL;
+                    video.src = vendorURL.createObjectURL(stream);
+                }
+                video.play();
+            },
+            function (err) {
+                console.log("An error occured! " + err);
+            }
+          );
+            ctx.drawImage(video, 0, 0, 320, 240);
+            var data = canvas.get()[0].toDataURL('image/jpeg', 1.0);
+            var newblob = dataURItoBlob(data);
+            chat.server.send(data);
+
+            //                        timer = setInterval(
+            //                        function () {
+            //                            ctx.drawImage(video, 0, 0, 320, 240);
+            //                            var data = canvas.get()[0].toDataURL('image/jpeg', 1.0);
+            //                            var newblob = dataURItoBlob(data);
+            //                            //chat.server.send(data);
+            //                        }, 250);
+        });
+    });
+    // This optional function html-encodes messages for display in the page.
+    function htmlEncode(value) {
+        var encodedValue = $('<div />').text(value).html();
+        return encodedValue;
+    }
+
+
+    function dataURItoBlob(dataURI) {
+        'use strict'
+        var byteString,
+        mimestring
+
+        if (dataURI.split(',')[0].indexOf('base64') !== -1) {
+            byteString = atob(dataURI.split(',')[1])
+        } else {
+            byteString = decodeURI(dataURI.split(',')[1])
+        }
+
+        mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+        var content = new Array();
+        for (var i = 0; i < byteString.length; i++) {
+            content[i] = byteString.charCodeAt(i)
+        }
+
+        return content;
+        //return new Blob([new Uint8Array(content)], { type: mimestring });
+    }
+</script>

@@ -1,0 +1,15 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "MisCursos";
+}
+
+<div id="tituloPagina">
+     <h1>Mis Cursos</h1>
+</div>
+
+<div id="explicacionTituloPagina">
+     <h1>Estos son los cursos en los que te encuentras inscripto.</h1>
+</div>
+
+@{ Html.RenderAction("_CursosAlumno", "Alumno"); }
+

@@ -1,0 +1,82 @@
+.webgrid
+{
+ width: 100%;
+ border: 0px;
+ border-collapse: collapse;
+ white-space:nowrap;
+ }
+
+.des {
+    width:50%;
+}
+
+.webgrid a
+{
+color: #000;
+}
+
+.webgrid-header
+{
+padding: 6px 5px;
+text-align: center;
+background-color: #DBDD2E;
+border-bottom: 2px solid #3966A2;
+height: 40px;
+border-top: 2px solid #D6E8FF;
+border-left: 2px solid #D6E8FF;
+border-right: 2px solid #D6E8FF;
+}
+
+.webgrid-footer
+{
+padding: 6px 5px;
+text-align: center;
+background-color: #e8eef4;
+border-top: 2px solid #3966A2;
+height: 30px;
+border-bottom: 2px solid #D6E8FF;
+border-left: 2px solid #D6E8FF;
+border-right: 2px solid #D6E8FF;
+ }
+
+.webgrid-alternating-row
+{
+height: 30px;
+background-color: #2EDB2E;
+border-bottom: 1px solid #d2d2d2;
+border-left: 2px solid #D6E8FF;
+border-right: 2px solid #D6E8FF;
+}
+
+.editar
+{
+    background: url(../Recursos/Grilla/editar.jpg) no-repeat top left ;
+    display: block;
+    width: 24px;
+    height: 24px;
+    text-indent: -9999px;
+}
+.eliminar
+{
+    background: url(../Recursos/Grilla/eliminar.jpg) no-repeat top left ;
+    display: block;
+     width: 24px;
+    height: 24px;
+    text-indent: -9999px;
+}
+
+.ver
+{
+    background: url(../Recursos/Grilla/ver.jpg) no-repeat  ;
+    display: block;
+     width: 24px;
+     height: 24px;
+     text-indent: -9999px;
+}
+#chiquitin
+.verDocentesCurso
+{
+    display: block;
+     width: 24px;
+     height: 24px;
+}

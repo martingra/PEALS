@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "Menú Resolución";
+}
+<style>
+    .opciones div
+    {
+        float: left;
+        margin-left: 6em;
+        width: 20%;
+    }
+    
+    select
+    {
+        width: 48em;
+        margin-left: 6em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    
+    button {
+        font-size: 0.8em !important;
+    }
+    
+    .searchDiv select {
+        width: 16% !important;
+    }
+    
+    #docente_cursos 
+    {
+        width:85% !important;
+    }
+</style>
+
+<link href="@Url.Content("~/Content/Styles/Docente.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+
+<div id="tituloPagina">
+    <h1>Menú Resolución</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        En esta sección usted podrá efectuar el seguimiento de sus alumnos, completando las DIAC definidas por el administrador de la institución.
+    </h1>
+</div>
+
+
+	<div id="docente_cursos">
+		<div class="titulo">
+			<img src="@Url.Content("~/Content/Resources/Docente/MisCursos.jpg")" width="30px" height="28px" />
+			<h2>Mis Cursos</h2>
+		</div>
+		<div class ="searchDiv">
+			<label for="curso_buscarPor">Buscar por</label>
+			<select id="curso_buscarPor" onchange="cambiarAutocomplete(this, $('#reemplazable_cursos'));">
+				<option value="Institucion">Institución</option>
+				<option value="Curso">Curso</option>
+			</select>
+			<div id="reemplazable_cursos"></div> 
+			<button type="button" onclick="buscarCursos();">Buscar</button>
+		</div>
+		<div id="grillaCursos" style="width:95%; margin:10px">@{Html.RenderAction("_Cursos", "Docente");}</div>
+		<div id="op_cursos" >
+			<button type="button" id="btn_agregarActividades" onclick="mostrarActividades()">Agregar Actividades</button>
+			<button type="button" id="btn_agregarAlumnos" onclick="agregarAlumnos()">Agregar Alumnos</button>
+		</div>
+	</div>
+
+<script type="text/javascript">
+    
+    
+    
+    
+    $("#agregarDiac").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/NuevoDiac?idInstitucion=' + $("#institucion").val();
+    });
+
+    $("#verDiacActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/VerDiacCreada?idInstitucion=' + $("#institucion").val();
+    });
+
+    $("#modificarDiacActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/ModificarDiac?idInstitucion=' + $("#institucion").val();
+    });
+
+
+    function buscarCursos() {
+        var searchCriteria = $('#curso_buscarPor').val();
+        var searchValue = $('input', '#reemplazable_cursos').val();
+
+        var url = '@Url.Action("_Cursos", "Docente")' + '?searchCriteria=' + searchCriteria + '&searchValue=' + searchValue;
+        url = url.replace(/ /g, '%20');
+
+        $('#grillaCursos').load(url);
+    }
+
+
+    function modificarPlaceHolder(placeHolder, autocomplete) {
+        $(autocomplete).fadeIn('slow', function () {
+            $('input', autocomplete).attr('placeholder', placeHolder);
+        });
+    }
+
+    function cambiarAutocomplete(select, autocomplete) {
+        $(autocomplete).fadeOut();
+
+        var placeHolder = "";
+        switch ($(select).val()) {
+            case "Alumno":
+                placeHolder = "Nombre o E-Mail del Alumno";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_Alumno", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+                break;
+            case "Actividad":
+                placeHolder = "Nombre de la Actividad";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreActividad", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+                break;
+            case "Institucion":
+                placeHolder = "Nombre de la Institución";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreInstitucion", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+            case "Curso":
+                placeHolder = "Nombre del Curso";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreCurso", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+        }
+    }
+
+
+    $(document).ready(function () {
+        $('#curso_buscarPor').val('Institucion');
+        cambiarAutocomplete($('#curso_buscarPor'), $('#reemplazable_cursos'));
+
+
+
+
+        $("#gridCursos td").click(function () {
+            var idCursoSeleccionado = $(this).parent().find(".idHidden").val();
+            var url = "/Diac/MenuDiacCurso?idCurso=" + idCursoSeleccionado;
+            window.location.href = url;
+        });
+
+
+    });
+
+        
+
+
+</script>
+

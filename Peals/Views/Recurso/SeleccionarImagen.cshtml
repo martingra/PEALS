@@ -1,0 +1,64 @@
+﻿<div class="gallery-conteiner">
+    <div id="thumbs" class="navigation">
+        <div id="filtro" class="thumb-filter">
+            @{ Html.RenderAction("AutoCompleteConPadre", "Busqueda", new { accion = "AutoCompletePorNombre", controlador = "Recurso", label = "nombre", value = "nombre", idList = "id", idEntidad = 1 }); }
+            <button type="button" id="btn_buscarRecurso" onclick="recargar(1)">Buscar</button>
+        </div>
+        <ul class="thumbs noscript">
+            @foreach (var imagen in Model) { 
+                <li>
+                    <a id="@imagen.id" class="thumb" href="@Url.Content(imagen.ruta)" title="@imagen.nombre">
+                        <img id="@imagen.id" src="@Url.Content(imagen.ruta)" alt="@imagen.nombre" />
+                    </a>
+                    <div class="caption">
+                        <div class="image-title">@imagen.nombre</div>
+                        <div class="subido_por">Subido por: @imagen.subido_por</div>
+                        <img id="@imagen.id" class="reportar" src="../../Content/Resources/General/Alert.png" width="32px" height="32px" alt="Reportar" onclick="repotarRecurso()"/>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="pagination" id="@ViewBag.TotalRecursos"></div>
+    </div>
+    <div id="gallery" class="gallery">
+        <div id="controls" class="controls">
+            <a class="prev" href="#" >&lsaquo; Anterior</a>
+            <a class="next" href="#" >Siguiente &rsaquo;</a>
+        </div>
+        <div class="slideshow-container">
+            <div id="loading" class="loader"></div>
+            <div id="slideshow" class="slideshow"><img /></div>
+        </div>
+        <div id="caption" class="caption-container"></div>
+    </div>
+</div>
+<div class="acciones">
+    <button type="button" id="btn_cancelar" class="cerrar_dialog">Cancelar</button>
+    <button type="button" id="btn_seleccionar" >Seleccionar</button>
+</div>
+<script type="text/javascript">  
+    function init() {
+        $('.thumbs').galeria({
+            content: $('.slideshow img'),
+            caption: $('.caption-container'),
+            navegacion: $('.controls'),
+            paginacion: $('.pagination'),
+            totalRecursos: $('.pagination').attr('id'),
+            recursosPorPagina: 12,
+            selectStyle: "selected",
+            cambiarPagCallback: recargar
+        });
+    }
+
+    var recargar = function (pag) {
+        var filtro = $('.thumb-filter input').val();
+
+        var params = { 'tipo': 1, 'filtro': filtro, 'pagina': pag };
+        $.post("/Recurso/GetRecursosAsJson", params, function (data) {
+            $.galeria.setTotalRecursos(data.total);
+            $.galeria.recargarImagenes(data.recursos); 
+        });
+    }
+
+    $(document).ready(init());
+</script>

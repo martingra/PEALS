@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="historialActividadesDs" targetNamespace="http://tempuri.org/historialActividadesDs.xsd" xmlns:mstns="http://tempuri.org/historialActividadesDs.xsd" xmlns="http://tempuri.org/historialActividadesDs.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="historialActividadesDs" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="historialActividadesDs" msprop:Generator_UserDSName="historialActividadesDs">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="HistorialActividades" msprop:Generator_TableClassName="HistorialActividadesDataTable" msprop:Generator_TableVarName="tableHistorialActividades" msprop:Generator_RowChangedName="HistorialActividadesRowChanged" msprop:Generator_TablePropName="HistorialActividades" msprop:Generator_RowDeletingName="HistorialActividadesRowDeleting" msprop:Generator_RowChangingName="HistorialActividadesRowChanging" msprop:Generator_RowEvHandlerName="HistorialActividadesRowChangeEventHandler" msprop:Generator_RowDeletedName="HistorialActividadesRowDeleted" msprop:Generator_RowClassName="HistorialActividadesRow" msprop:Generator_UserTableName="HistorialActividades" msprop:Generator_RowEvArgName="HistorialActividadesRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" minOccurs="0" />
+              <xs:element name="alumno" msprop:Generator_ColumnVarNameInTable="columnalumno" msprop:Generator_ColumnPropNameInRow="alumno" msprop:Generator_ColumnPropNameInTable="alumnoColumn" msprop:Generator_UserColumnName="alumno" type="xs:string" minOccurs="0" />
+              <xs:element name="docente" msprop:Generator_ColumnVarNameInTable="columndocente" msprop:Generator_ColumnPropNameInRow="docente" msprop:Generator_ColumnPropNameInTable="docenteColumn" msprop:Generator_UserColumnName="docente" type="xs:string" minOccurs="0" />
+              <xs:element name="curso" msprop:Generator_ColumnVarNameInTable="columncurso" msprop:Generator_ColumnPropNameInRow="curso" msprop:Generator_ColumnPropNameInTable="cursoColumn" msprop:Generator_UserColumnName="curso" type="xs:string" minOccurs="0" />
+              <xs:element name="institucion" msprop:Generator_ColumnVarNameInTable="columninstitucion" msprop:Generator_ColumnPropNameInRow="institucion" msprop:Generator_ColumnPropNameInTable="institucionColumn" msprop:Generator_UserColumnName="institucion" type="xs:string" minOccurs="0" />
+              <xs:element name="actividad" msprop:Generator_ColumnVarNameInTable="columnactividad" msprop:Generator_ColumnPropNameInRow="actividad" msprop:Generator_ColumnPropNameInTable="actividadColumn" msprop:Generator_UserColumnName="actividad" type="xs:string" minOccurs="0" />
+              <xs:element name="calificacion_docente" msprop:Generator_ColumnVarNameInTable="columncalificacion_docente" msprop:Generator_ColumnPropNameInRow="calificacion_docente" msprop:Generator_ColumnPropNameInTable="calificacion_docenteColumn" msprop:Generator_UserColumnName="calificacion_docente" type="xs:string" minOccurs="0" />
+              <xs:element name="calificacion_sistema" msprop:Generator_ColumnVarNameInTable="columncalificacion_sistema" msprop:Generator_ColumnPropNameInRow="calificacion_sistema" msprop:Generator_ColumnPropNameInTable="calificacion_sistemaColumn" msprop:Generator_UserColumnName="calificacion_sistema" type="xs:string" minOccurs="0" />
+              <xs:element name="fecha_realizacion" msprop:Generator_ColumnVarNameInTable="columnfecha_realizacion" msprop:Generator_ColumnPropNameInRow="fecha_realizacion" msprop:Generator_ColumnPropNameInTable="fecha_realizacionColumn" msprop:Generator_UserColumnName="fecha_realizacion" type="xs:string" minOccurs="0" />
+              <xs:element name="intentos" msprop:Generator_ColumnVarNameInTable="columnintentos" msprop:Generator_ColumnPropNameInRow="intentos" msprop:Generator_ColumnPropNameInTable="intentosColumn" msprop:Generator_UserColumnName="intentos" type="xs:string" minOccurs="0" />
+              <xs:element name="uso_ayuda_consigna" msprop:Generator_ColumnVarNameInTable="columnuso_ayuda_consigna" msprop:Generator_ColumnPropNameInRow="uso_ayuda_consigna" msprop:Generator_ColumnPropNameInTable="uso_ayuda_consignaColumn" msprop:Generator_UserColumnName="uso_ayuda_consigna" type="xs:string" minOccurs="0" />
+              <xs:element name="uso_ayuda_actividad" msprop:Generator_ColumnVarNameInTable="columnuso_ayuda_actividad" msprop:Generator_ColumnPropNameInRow="uso_ayuda_actividad" msprop:Generator_ColumnPropNameInTable="uso_ayuda_actividadColumn" msprop:Generator_UserColumnName="uso_ayuda_actividad" type="xs:string" minOccurs="0" />
+              <xs:element name="tiempo" msprop:Generator_ColumnVarNameInTable="columntiempo" msprop:Generator_ColumnPropNameInRow="tiempo" msprop:Generator_ColumnPropNameInTable="tiempoColumn" msprop:Generator_UserColumnName="tiempo" type="xs:string" minOccurs="0" />
+              <xs:element name="filtro" msprop:Generator_ColumnVarNameInTable="columnfiltro" msprop:Generator_ColumnPropNameInRow="filtro" msprop:Generator_ColumnPropNameInTable="filtroColumn" msprop:Generator_UserColumnName="filtro" type="xs:string" minOccurs="0" />
+              <xs:element name="campoFiltro" msprop:Generator_ColumnVarNameInTable="columncampoFiltro" msprop:Generator_ColumnPropNameInRow="campoFiltro" msprop:Generator_ColumnPropNameInTable="campoFiltroColumn" msprop:Generator_UserColumnName="campoFiltro" type="xs:string" minOccurs="0" />
+              <xs:element name="impresoPor" msprop:Generator_ColumnVarNameInTable="columnimpresoPor" msprop:Generator_ColumnPropNameInRow="impresoPor" msprop:Generator_ColumnPropNameInTable="impresoPorColumn" msprop:Generator_UserColumnName="impresoPor" type="xs:string" minOccurs="0" />
+              <xs:element name="fechaDesde" msprop:Generator_ColumnVarNameInTable="columnfechaDesde" msprop:Generator_ColumnPropNameInRow="fechaDesde" msprop:Generator_ColumnPropNameInTable="fechaDesdeColumn" msprop:Generator_UserColumnName="fechaDesde" type="xs:string" minOccurs="0" />
+              <xs:element name="fechaHasta" msprop:Generator_ColumnVarNameInTable="columnfechaHasta" msprop:Generator_ColumnPropNameInRow="fechaHasta" msprop:Generator_ColumnPropNameInTable="fechaHastaColumn" msprop:Generator_UserColumnName="fechaHasta" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

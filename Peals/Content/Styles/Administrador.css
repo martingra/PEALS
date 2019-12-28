@@ -1,0 +1,79 @@
+﻿.sinInstituciones { text-align: center; padding: 60px;border-top: 1px solid gray; clear:left; color: #F48459;}
+.institucionActual
+{
+    height: 40px;
+    width: 101%;
+    margin-left: -9px;
+    background-color: #AAAAAA;
+    padding-top: 10px;
+    padding-left: 5px;
+    border: 1px solid gray;
+}
+
+.filaSeleccionada {
+    border: 2px dashed black;
+}
+   
+.nombreInstSel { width: 65%; float: left; padding-top: 2px; padding-left: 10px }
+.nombreInstSel label:hover  
+{
+    cursor: pointer; 
+    border-bottom: 2px solid #333;
+}
+                            
+.nombreInstSel img 
+{ 
+    float:left; 
+    margin-right: 10px; 
+    border: 1px solid #3966A2;
+    border-radius:100%; 
+    -webkit-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -moz-border-radius: 100%;
+    box-shadow:-2px 1px #3966A2;
+    -webkit-box-shadow:-2px 1px #3966A2;
+    -ms-box-shadow:-2px 1px #3966A2;
+}
+    
+.accionInstSel { width: 10%; float: left; margin-right: 1%; text-align:center }
+.accionInstSel label{ cursor: pointer; }
+.accionInstSel:hover
+{ 
+    border-bottom: 1px solid gray;
+    box-shadow: 1px 30px 30px white;
+    -webkit-box-shadow: 1px 30px 30px white;
+    -ms-box-shadow: 1px 30px 30px white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.opciones { text-align: center; }
+.opciones div { float: left; width: 16%; }
+    
+#acciones_mensaje button{ font-size: 1em !important; }
+    
+#acciones_mensaje 
+{
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid gray;
+}
+
+#btn_cancelar { float: left; }
+#btn_exportar { margin-right: 10px; }
+#btn_exportar, #btn_aceptar { float: right; }
+
+#grillas{ margin-left: 10px; margin-right: 25px;}
+#grillaInstitucionesDarBaja { float: left;}
+#grillaInstitucionesDarBaja td{ min-width: 30px; height: auto;}
+
+#grillaDocentesDarBaja { float: left;}
+#grillaDocentesDarBaja td{ min-width: 30px; height: auto;}
+
+#grillaAlumnosDarBaja { float: left;}
+#grillaAlumnosDarBaja td{ min-width: 30px; height: auto;}
+
+#grillaCursosDarBaja { float: left;}
+#grillaCursosDarBaja td{ min-width: 30px; height: auto;}

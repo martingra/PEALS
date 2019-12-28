@@ -1,0 +1,68 @@
+﻿/**************************************************************************************************************************/
+/*********************************************** ALTA Y MODIFICACIÓN ******************************************************/
+/**************************************************************************************************************************/
+#titulo{ padding: 20px 0 0 25px;}
+#titulo h1{ color: #0AA7A2; font-size: xx-large;}
+#titulo h2{ color: #0AA7A2; font-size: medium;}
+
+.tabPanel li { width: 35%; }
+.tabPanel a { width: 89%; }
+
+form td{ margin-right: 10px; min-width: 180px; height: 30px; }
+form input{ width: 300px;}
+form select{ width: 300px;}
+form p { margin-top: 15px; margin-bottom:15px; }
+form #fs_domicilio{ width: 90%; background-color: rgba(248,248,248,1); margin-top:10px }
+
+#botones { text-align: right}
+#botones button{ margin: 10px; }
+
+/**************************************************************************************************************************/
+/******************************************************** INDEX ***********************************************************/
+/**************************************************************************************************************************/
+#body_institucion { clear: both }
+
+.listaDocentes { width:30%; height:585px; border-right:1px solid gray; float: left; }
+.listaDocentes ul { clear: both; overflow: auto }
+.listaDocentes li { 
+    height:55px; 
+    padding:10px; 
+    border-bottom: 1px solid gray; 
+}
+
+.listaDocentes li.over { background: #ffff99; }
+.listaDocentes li:hover { cursor: pointer; background: #ffff99; }
+
+.webgrid-row-style:active, 
+.webgrid-alternating-row:active,
+.listaDocentes li:active { border: 2px dashed #000; cursor: move; }
+
+.listaDocentes li img { padding-top:25%; }
+
+.listaCursos { width: 67%; float:right; margin-right:10px; }
+
+.mensaje-sinInfo { text-align:center; padding:50px 10px 50px 10px }
+
+#fila_seleccionada { width:20px; height:20px; display:none; padding-top:3px }
+
+#buscarPorTurno, #buscarPorNivel { width:48%; float:left; display:none; margin:3px 5px }
+
+.docentes_buscarDiv button { font-size: 1em !important; margin-top: 5px; }
+#reemplazable_docentes{ float: left; width:65%; }
+#reemplazable_docentes input { width:75%; margin: 4px 5px } 
+
+.cursos_burcarDiv { width:85%; float:left }
+.cursos_burcarDiv select { float:left; margin: 4px 5px }
+#buscarPorTurno, #buscarPorNivel { width: 64% }
+.cursos_burcarDiv button { font-size: 1em !important; float:right; margin-top: 5px}
+#reemplazable_cursos{ float: left; width:48%; }
+#reemplazable_cursos input { width:120%; margin: 4px 5px } 
+
+#op_cursos{ float: left; width: 15%; text-align: center; padding-top: 10px }
+
+.reveal-modal button { font-size: 1em !important; }
+#dialog_asignaciones { background-color: #d5efee; }
+#dialog_mensajes #dialog_acciones { overflow: hidden; border-top: 2px solid #3966A2; padding: 10px 10px 0px 10px }
+#dialog_mensajes #dialog_acciones button { width: 45% }
+
+

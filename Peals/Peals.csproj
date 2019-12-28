@@ -1,0 +1,939 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{85995095-E8B8-49BC-AC83-E07F8E6C1CB0}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Peals</RootNamespace>
+    <AssemblyName>Peals</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.1.4\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Owin, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Owin.1.1.4\lib\net40\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.1.4\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Schema, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.Data.Schema.UnitTesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.1.0.1\lib\net40\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Web, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="XamlBuildTask" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\ActividadController.cs" />
+    <Compile Include="Controllers\AdministradorController.cs" />
+    <Compile Include="Controllers\AlumnoController.cs" />
+    <Compile Include="Controllers\AyudaController.cs" />
+    <Compile Include="Controllers\BusquedaController.cs" />
+    <Compile Include="Controllers\ContactoController.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
+    <Compile Include="Controllers\CriterioController.cs" />
+    <Compile Include="Controllers\CursoController.cs" />
+    <Compile Include="Controllers\DiacController.cs" />
+    <Compile Include="Controllers\DocenteController.cs" />
+    <Compile Include="Controllers\DomicilioController.cs" />
+    <Compile Include="Controllers\EjercicioController.cs" />
+    <Compile Include="Controllers\HistorialActividadController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InformacionController.cs" />
+    <Compile Include="Controllers\InstitucionController.cs" />
+    <Compile Include="Controllers\InstitucionCursosDs.cs" />
+    <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\LlenadoseguimientoController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MensajeController.cs" />
+    <Compile Include="Controllers\PruebaController.cs" />
+    <Compile Include="Controllers\QuienessomosController.cs" />
+    <Compile Include="Controllers\RecursoController.cs" />
+    <Compile Include="Controllers\ReporteController.cs" />
+    <Compile Include="Controllers\SeguimientoController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\ReconocimientoHub.cs" />
+    <Compile Include="Models\pealsEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>pealsEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\Actividades.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Actividades.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\AlumnoCursosRpt.cs">
+      <DependentUpon>AlumnoCursosRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\AlumnoInstitucionDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AlumnoInstitucionDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\AlumnoInstitucionRpt.cs">
+      <DependentUpon>AlumnoInstitucionRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\ActividadesRpt.cs">
+      <DependentUpon>ActividadesRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\DocenteActividadesRpt.cs">
+      <DependentUpon>DocenteActividadesRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\DocenteAlumnosRpt.cs">
+      <DependentUpon>DocenteAlumnosRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\DocenteCursosRpt.cs">
+      <DependentUpon>DocenteCursosRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\historialActividadesDs.cs">
+      <DependentUpon>historialActividadesDs.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\historialActividadesRpt.cs">
+      <DependentUpon>historialActividadesRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\DiacCursosRpt.cs">
+      <DependentUpon>DiacCursosRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\DiacAlumnosRpt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DiacAlumnosRpt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\diacAlumnosDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>diacAlumnosDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\historialActividadesDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>historialActividadesDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\InstitucionActividadesRpt.cs">
+      <DependentUpon>InstitucionActividadesRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\InstitucionActividadesDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionActividadesDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\InstitucionAlumnosRpt.cs">
+      <DependentUpon>InstitucionAlumnosRpt.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Reportes\InstitucionAlumnosDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionAlumnosDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\InstitucionCursosRpt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionCursosRpt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\InstitucionCursos.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionCursos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\InstitucionDocentesDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionDocentesDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\InstitucionDocentesRpt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InstitucionDocentesRpt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reportes\PlantillaDs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PlantillaDs.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes\plantillaRpt.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>plantillaRpt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utiles\Password.cs" />
+    <Compile Include="Utiles\Sesion.cs" />
+    <Compile Include="Utiles\Enums.cs" />
+    <Compile Include="Utiles\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Buttons\btn-aceptar.png" />
+    <Content Include="Content\Buttons\btn-cancelar.png" />
+    <Content Include="Content\Buttons\btn-ingresa.png" />
+    <Content Include="Content\Buttons\btn-registrate.png" />
+    <Content Include="Content\Resources\Actividad\check.png" />
+    <Content Include="Content\Resources\Actividad\logo_completo.gif" />
+    <Content Include="Content\Resources\Actividad\PC.png" />
+    <Content Include="Content\Resources\Actividad\alejate.png" />
+    <Content Include="Content\Resources\Actividad\Audio.png" />
+    <Content Include="Content\Resources\Actividad\ayuda.png" />
+    <Content Include="Content\Resources\Actividad\carita-feliz.png" />
+    <Content Include="Content\Resources\Actividad\cartel1.png" />
+    <Content Include="Content\Resources\Actividad\cartel2.png" />
+    <Content Include="Content\Resources\Actividad\Delete.png" />
+    <Content Include="Content\Resources\Actividad\fondo.jpg" />
+    <Content Include="Content\Resources\Actividad\fondoPizarronNegro.jpg" />
+    <Content Include="Content\Resources\Actividad\Google.png" />
+    <Content Include="Content\Resources\Actividad\grabador.jpg" />
+    <Content Include="Content\Resources\Actividad\ic_delete.png" />
+    <Content Include="Content\Resources\Actividad\ic_refresh.png" />
+    <Content Include="Content\Resources\Actividad\Imagen.png" />
+    <Content Include="Content\Resources\Actividad\luz.png" />
+    <Content Include="Content\Resources\Actividad\Marco.png" />
+    <Content Include="Content\Resources\Actividad\MiPc.png" />
+    <Content Include="Content\Resources\Actividad\Nombre.png" />
+    <Content Include="Content\Resources\Actividad\NuevaActividad.png" />
+    <Content Include="Content\Resources\Actividad\opcionCorrecta.png" />
+    <Content Include="Content\Resources\Actividad\opcionCorrecta2.png" />
+    <Content Include="Content\Resources\Actividad\Pin.png" />
+    <Content Include="Content\Resources\Actividad\Pizarron.jpg" />
+    <Content Include="Content\Resources\Actividad\quieto.png" />
+    <Content Include="Content\Resources\Actividad\Recursos.png" />
+    <Content Include="Content\Resources\Actividad\remera.png" />
+    <Content Include="Content\Resources\Actividad\restart.png" />
+    <Content Include="Content\Resources\Actividad\Texto.png" />
+    <Content Include="Content\Resources\Actividad\Video.png" />
+    <Content Include="Content\Resources\Actividad\zoom_in.png" />
+    <Content Include="Content\Resources\Actividad\zoom_out.png" />
+    <Content Include="Content\Resources\Alumno\MasCursos.jpg" />
+    <Content Include="Content\Resources\Alumno\MisCursos.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\1-accesoSistema.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\2-menuPrincipal.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\3-contacto.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\4-seleccionTipoUsuario.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\5-nuevoUsuario.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\6-modificarDatos.png" />
+    <Content Include="Content\Resources\Ayuda\Acceso\7-darDeBajaUsuario.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\10-nuevaInstitucion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\11-nuevaInstitucion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\12-modificarInstitucion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\13-eliminarInstitucionOpcion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\14-exportarInstitucion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\15-cambiarInstitucion.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\16-listaInstituciones.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\17-nuevoCurso.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\18-plantelDocente.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\19-eliminarOpcion.jpg" />
+    <Content Include="Content\Resources\Ayuda\Administrador\20-listadoDocentes.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\21-confirmarAsignacionCurso.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\22-estadoCursos.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\23-desvincularCurso.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\8-funcionesAdministrador.png" />
+    <Content Include="Content\Resources\Ayuda\Administrador\9-pantallaPrincipal.png" />
+    <Content Include="Content\Resources\Ayuda\Alumno\36-funcionesAlumno.png" />
+    <Content Include="Content\Resources\Ayuda\Alumno\37-pantallaPrincipal.png" />
+    <Content Include="Content\Resources\Ayuda\Alumno\38-solicitarInscripcionAcurso.png" />
+    <Content Include="Content\Resources\Ayuda\Alumno\39-resolucionesActividad.png" />
+    <Content Include="Content\Resources\Ayuda\Alumno\40-resolucion.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\24-funcionesDocente.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\25-pantallaPrincipal.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\26-cursosDocentes.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\27-gestionRecursos.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\28-subirRecursos.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\29-Upload.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\30-solucionOpciones.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\31-solucionEscribir.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\32-solucionSeñas.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\33-agregarRecursoActividad.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\34-datosActividad.png" />
+    <Content Include="Content\Resources\Ayuda\Docente\35-asignarActividad.png" />
+    <Content Include="Content\Resources\Ayuda\Reportes\41-reporteAdministrador.png" />
+    <Content Include="Content\Resources\Ayuda\Reportes\42-reporteDocente.png" />
+    <Content Include="Content\Resources\Ayuda\Reportes\43-reporteAlumno.png" />
+    <Content Include="Content\Resources\Diac\add.png" />
+    <Content Include="Content\Resources\Diac\adjunto.png" />
+    <Content Include="Content\Resources\Diac\agregarGrupo.png" />
+    <Content Include="Content\Resources\Diac\agregarItem.png" />
+    <Content Include="Content\Resources\Diac\grupo.png" />
+    <Content Include="Content\Resources\Diac\opciones.png" />
+    <Content Include="Content\Resources\Diac\textoMultilinea.png" />
+    <Content Include="Content\Resources\Diac\textoUnaSolaLinea.png" />
+    <Content Include="Content\Resources\Docente\Docente.PNG" />
+    <Content Include="Content\Resources\Docente\masInstituciones.jpg" />
+    <Content Include="Content\Resources\General\Alert.png" />
+    <Content Include="Content\Resources\General\Audio.png" />
+    <Content Include="Content\Resources\General\bajar.png" />
+    <Content Include="Content\Resources\General\flechaRara.png" />
+    <Content Include="Content\Resources\General\Ver.png" />
+    <Content Include="Content\Resources\General\group.png" />
+    <Content Include="Content\Resources\General\nuves_fondo_oscuro.png" />
+    <Content Include="Content\Resources\General\play.png" />
+    <Content Include="Content\Resources\General\save.png" />
+    <Content Include="Content\Resources\General\share-off.png" />
+    <Content Include="Content\Resources\General\share-on.png" />
+    <Content Include="Content\Resources\General\Upload.png" />
+    <Content Include="Content\Resources\General\user.png" />
+    <Content Include="Content\Resources\MasterPage\loading.gif" />
+    <Content Include="Content\Resources\MasterPage\peals.png" />
+    <Content Include="Content\Resources\MasterPage\reporte.png" />
+    <Content Include="Content\Resources\MasterPage\reportes.jpeg" />
+    <Content Include="Content\Resources\MasterPage\undo.png" />
+    <Content Include="Content\Resources\QuienesSomos\universidad.png" />
+    <Content Include="Content\Styles\Actividad.css" />
+    <Content Include="Content\Resources\General\abrir.png" />
+    <Content Include="Content\Resources\MasterPage\agregar.gif" />
+    <Content Include="Content\Resources\MasterPage\centroMensaje.png" />
+    <Content Include="Content\Resources\MasterPage\delete.png" />
+    <Content Include="Content\Resources\MasterPage\escuela.GIF" />
+    <Content Include="Content\Resources\MasterPage\Institucion.png" />
+    <Content Include="Content\Resources\MasterPage\ok.png" />
+    <Content Include="Content\Resources\Mensajes\enviar.png" />
+    <Content Include="Content\Resources\Mensajes\mensaje_enviado.png" />
+    <Content Include="Content\Resources\Mensajes\mensaje_recibido.png" />
+    <Content Include="Content\Resources\Mensajes\nuevo_mensaje.jpg" />
+    <Content Include="Content\Resources\Mensajes\responder.png" />
+    <Content Include="Content\Resources\Mensajes\volver.png" />
+    <Content Include="Content\Styles\ActividadDisenio.css" />
+    <Content Include="Content\Styles\ActividadGaleria.css" />
+    <Content Include="Content\Styles\ajaxLoading.css" />
+    <Content Include="Content\Styles\alertify.core.css" />
+    <Content Include="Content\Styles\alertify.default.css" />
+    <Content Include="Content\Styles\Ayuda.css" />
+    <Content Include="Content\Styles\bootstrap.progressbar.css" />
+    <Content Include="Content\Styles\botoneraConImagenSeisBotones.css" />
+    <Content Include="Content\Styles\CriterioSolucion.css" />
+    <Content Include="Content\Styles\Curso.css" />
+    <Content Include="Content\Styles\botoneraConImagen.css" />
+    <Content Include="Content\Styles\Diac.css" />
+    <Content Include="Content\Styles\jquery.mCustomScrollbar.css" />
+    <Content Include="Content\Styles\jquery.timeline.css" />
+    <Content Include="Content\Styles\oswald.css" />
+    <Content Include="Content\Styles\radioButtons.css" />
+    <Content Include="Content\Styles\Galeria.css" />
+    <Content Include="Content\Styles\Mensajes.css" />
+    <Content Include="Content\Resources\Uploads\sin_imagen.jpg" />
+    <Content Include="Content\Resources\Administrador\AgregarDocentes.png" />
+    <Content Include="Content\Resources\Administrador\MisCursos.jpg" />
+    <Content Include="Content\Resources\Administrador\Instituciones.png" />
+    <Content Include="Content\Resources\Administrador\NuevaInstitucion.png" />
+    <Content Include="Content\Resources\Administrador\NuevoCurso.png" />
+    <Content Include="Content\Resources\Administrador\PlantelDocente.jpg" />
+    <Content Include="Content\Resources\Alumno\Actividades.png" />
+    <Content Include="Content\Resources\Alumno\SolicitudDeInscripcion.png" />
+    <Content Include="Content\Resources\Docente\Actividades.jpg" />
+    <Content Include="Content\Resources\Docente\Evaluaciones.png" />
+    <Content Include="Content\Resources\Docente\MisCursos.jpg" />
+    <Content Include="Content\Resources\Docente\Seguimiento.jpg" />
+    <Content Include="Content\Resources\Docente\Solicitudes.jpg" />
+    <Content Include="Content\Resources\General\Cadena.png" />
+    <Content Include="Content\Resources\General\Cancelar.png" />
+    <Content Include="Content\Resources\General\Aceptar.png" />
+    <Content Include="Content\Resources\General\Cambiar.png" />
+    <Content Include="Content\Resources\General\Editar.jpg" />
+    <Content Include="Content\Resources\General\Editar.png" />
+    <Content Include="Content\Resources\General\Eliminar.jpg" />
+    <Content Include="Content\Resources\General\Menos.png" />
+    <Content Include="Content\Resources\General\Mas.png" />
+    <Content Include="Content\Resources\General\Profesor.jpg" />
+    <Content Include="Content\Resources\General\Tilde.png" />
+    <Content Include="Content\Resources\Home\InicioSesion.png" />
+    <Content Include="Content\Resources\Informacion\cargar_imagen.jpg" />
+    <Content Include="Content\Resources\Informacion\cargar_video.jpg" />
+    <Content Include="Content\Resources\MasterPage\background.png" />
+    <Content Include="Content\Resources\MasterPage\nombre2.png" />
+    <Content Include="Content\Resources\MasterPage\guarda.png" />
+    <Content Include="Content\Resources\MasterPage\nombre.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\A.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\A1.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\E.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\E1.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\L.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\L1.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\P.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\P1.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\S.png" />
+    <Content Include="Content\Resources\MasterPage\Nombre\S1.png" />
+    <Content Include="Content\Resources\MasterPage\nube-header.png" />
+    <Content Include="Content\Resources\MasterPage\Sol.png" />
+    <Content Include="Content\Resources\MasterPage\test-background.png" />
+    <Content Include="Content\Resources\Reveal\modal-gloss.png" />
+    <Content Include="Content\Styles\Administrador.css" />
+    <Content Include="Content\Styles\Alumno.css" />
+    <Content Include="Content\Styles\Docente.css" />
+    <Content Include="Content\Styles\Inscripcion.css" />
+    <Content Include="Content\Styles\Informacion.css" />
+    <Content Include="Content\Styles\Institucion.css" />
+    <Content Include="Content\Styles\jquery.kwicks.css" />
+    <Content Include="Content\Styles\jquery.validate.css" />
+    <Content Include="Content\Styles\MasterPage.css" />
+    <Content Include="Content\Styles\Home.css" />
+    <Content Include="Content\Styles\Recursos.css" />
+    <Content Include="Content\Styles\reveal.css" />
+    <Content Include="Content\Styles\Usuario.css" />
+    <Content Include="Content\Styles\WebGrid.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Global.asax" />
+    <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Scripts\Actividad.js" />
+    <Content Include="Scripts\Actividad\Actividad.js" />
+    <Content Include="Scripts\Actividad\Ejercicio.js" />
+    <Content Include="Scripts\Actividad\Criterio.js" />
+    <Content Include="Scripts\Actividad\ManagerRecursos.js" />
+    <Content Include="Scripts\Actividad\Recurso.js" />
+    <Content Include="Scripts\Actividad\Solucion.js" />
+    <Content Include="Scripts\Actividad\UIManager.js" />
+    <Content Include="Scripts\ajaxLoading.js" />
+    <Content Include="Scripts\alertify.min.js" />
+    <Content Include="Scripts\DnD-v2.js" />
+    <Content Include="Scripts\AudioVideo\AudioVideo.js" />
+    <Content Include="Scripts\AudioVideo\scriptcam.js" />
+    <Content Include="Scripts\AudioVideo\scriptcam.swf" />
+    <Content Include="Scripts\AudioVideo\swfobject.js" />
+    <Content Include="Scripts\combosCascada.js" />
+    <Content Include="Scripts\Dev\jquery.kwicks.js" />
+    <Content Include="Scripts\DragAndDrop.js" />
+    <Content Include="Scripts\Galerias.js" />
+    <Content Include="Scripts\jquery-1.10.0.js" />
+    <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\jquery-ui-1.8.12.js" />
+    <Content Include="Scripts\jquery-ui-1.8.12.min.js" />
+    <Content Include="Scripts\jquery.flip.js" />
+    <Content Include="Scripts\jquery.galleriffic.js" />
+    <Content Include="Scripts\jquery.inputmask.bundle.js" />
+    <Content Include="Scripts\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\jquery.reveal.js" />
+    <Content Include="Scripts\jquery.signalR-1.1.4.js" />
+    <Content Include="Scripts\jquery.signalR-1.1.4.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Login\IniciarSesion.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\sesion.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Alumno\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Docente\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Docente\NuevoDocente.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Institucion\NuevaInstitucion.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Usuario\NuevoUsuario.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Administrador\NuevoAdministrador.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Administrador\EditarAdministrador.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Administrador\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Informacion\AgregarInformacion.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Font\Doctor Soos Bold 2.1.ttf" />
+    <None Include="Content\Font\Happy Sans.ttf" />
+    <None Include="Content\Font\pEobIV_lL25TKBpqVI_a2w.woff2" />
+    <None Include="Content\Font\TheKingsoftheHouse-Regular.ttf" />
+    <Content Include="Views\Institucion\EditarInstitucion.cshtml" />
+    <Content Include="Views\Docente\_ActividadesSinCorregir.cshtml" />
+    <Content Include="Views\Docente\_Cursos.cshtml" />
+    <Content Include="Views\Institucion\TodasLasInstituciones.cshtml" />
+    <Content Include="Views\Informacion\VerInformacion.cshtml" />
+    <Content Include="Views\Alumno\EditarAlumno.cshtml" />
+    <Content Include="Views\Alumno\NuevoAlumno.cshtml" />
+    <Content Include="Views\Docente\EditarDocente.cshtml" />
+    <Content Include="Views\Informacion\EditarInformacion.cshtml" />
+    <Content Include="Views\Usuario\CambiarContrasenia.cshtml" />
+    <Content Include="Views\Usuario\EditarUsuario.cshtml" />
+    <Content Include="Views\Docente\_SolicitudesPendientes.cshtml" />
+    <Content Include="Views\Institucion\Index.cshtml" />
+    <Content Include="Views\Busqueda\Autocomplete.cshtml" />
+    <Content Include="Views\Institucion\_Cursos.cshtml" />
+    <Content Include="Views\Institucion\_Docentes.cshtml" />
+    <Content Include="Views\Busqueda\AutocompleteConPadre.cshtml" />
+    <Content Include="Views\Curso\EditarCurso.cshtml" />
+    <Content Include="Views\Docente\TodosLosDocentes.cshtml" />
+    <Content Include="Views\Mensaje\Mensajes.cshtml" />
+    <Content Include="Views\Mensaje\NuevoMensaje.cshtml" />
+    <Content Include="Views\Mensaje\informeEnvioMensaje.cshtml" />
+    <Content Include="Views\Mensaje\verMensaje.cshtml" />
+    <Content Include="Views\Alumno\DarBajaAlumno.cshtml" />
+    <Content Include="Views\Mensaje\_VerSolicitud.cshtml" />
+    <Content Include="Views\Docente\DarBajaDocente.cshtml" />
+    <Content Include="Views\Administrador\DarBajaAdministrador.cshtml" />
+    <Content Include="Views\Alumno\_CursosAlumno.cshtml" />
+    <Content Include="Views\Usuario\DarBajaUsuario.cshtml" />
+    <Content Include="Views\Mensaje\_NuevaSolicitud.cshtml" />
+    <Content Include="Views\Shared\mensajesHeader.cshtml" />
+    <Content Include="Views\Administrador\_InstitucionesAdministrador.cshtml" />
+    <Content Include="Views\Administrador\_DocentesAdministrador.cshtml" />
+    <Content Include="Views\Administrador\_AlumnosAdministrador.cshtml" />
+    <Content Include="Views\Administrador\_CursosAdministrador.cshtml" />
+    <Content Include="Views\Alumno\_AlumnosInstitucion.cshtml" />
+    <Content Include="Views\Alumno\MisCursos.cshtml" />
+    <Content Include="Views\Alumno\_AlumnosCurso.cshtml" />
+    <Content Include="Views\Administrador\Reportes.cshtml" />
+    <EntityDeploy Include="Models\pealsEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>pealsEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Content\Font\yg0glPPxXUISnKUejCX4qfesZW2xOQ-xsNqO47m55DA.woff2" />
+    <None Include="Reportes\Actividades.xsc">
+      <DependentUpon>Actividades.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\Actividades.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>Actividades.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\Actividades.xss">
+      <DependentUpon>Actividades.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\AlumnoInstitucionDs.xsc">
+      <DependentUpon>AlumnoInstitucionDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\AlumnoInstitucionDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>AlumnoInstitucionDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\AlumnoInstitucionDs.xss">
+      <DependentUpon>AlumnoInstitucionDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\diacAlumnosDs.xsc">
+      <DependentUpon>diacAlumnosDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\diacAlumnosDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>diacAlumnosDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\diacAlumnosDs.xss">
+      <DependentUpon>diacAlumnosDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\historialActividadesDs.xsc">
+      <DependentUpon>historialActividadesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\historialActividadesDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>historialActividadesDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\historialActividadesDs.xss">
+      <DependentUpon>historialActividadesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionActividadesDs.xsc">
+      <DependentUpon>InstitucionActividadesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionActividadesDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>InstitucionActividadesDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\InstitucionActividadesDs.xss">
+      <DependentUpon>InstitucionActividadesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionAlumnosDs.xsc">
+      <DependentUpon>InstitucionAlumnosDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionAlumnosDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>InstitucionAlumnosDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\InstitucionAlumnosDs.xss">
+      <DependentUpon>InstitucionAlumnosDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionCursos.xsc">
+      <DependentUpon>InstitucionCursos.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionCursos.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>InstitucionCursos.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\InstitucionCursos.xss">
+      <DependentUpon>InstitucionCursos.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionDocentesDs.xsc">
+      <DependentUpon>InstitucionDocentesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\InstitucionDocentesDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>InstitucionDocentesDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\InstitucionDocentesDs.xss">
+      <DependentUpon>InstitucionDocentesDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\PlantillaDs.xsc">
+      <DependentUpon>PlantillaDs.xsd</DependentUpon>
+    </None>
+    <None Include="Reportes\PlantillaDs.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>PlantillaDs.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Reportes\PlantillaDs.xss">
+      <DependentUpon>PlantillaDs.xsd</DependentUpon>
+    </None>
+    <Content Include="Views\Alumno\Reportes.cshtml" />
+    <Content Include="Views\Actividad\VerActividad.cshtml" />
+    <Content Include="Views\Ejercicio\_ResolverEjercicioSenias.cshtml" />
+    <Content Include="Views\Actividad\ResultadoActividad.cshtml" />
+    <Content Include="Views\Alumno\_AlumnosNoCurso.cshtml" />
+    <Content Include="Views\Actividad\_Senias.cshtml" />
+    <None Include="Views\Alumno\_InstitucionesAlumno.cshtml" />
+    <Content Include="Views\Docente\_CursosDocente.cshtml" />
+    <Content Include="Views\Docente\_InstitucionesDocente.cshtml" />
+    <Content Include="Views\Docente\_ActividadesDocente.cshtml" />
+    <Content Include="Views\Diac\NuevoDiac.cshtml" />
+    <Content Include="Views\Diac\Index.cshtml" />
+    <Content Include="Views\Diac\verDiacCreada.cshtml" />
+    <Content Include="Views\Diac\modificarDiac.cshtml" />
+    <Content Include="Views\Diac\MenuResolucion.cshtml" />
+    <Content Include="Views\Diac\_Cursos.cshtml" />
+    <Content Include="Views\Diac\MenuDiacCurso.cshtml" />
+    <Content Include="Views\Llenadoseguimiento\_DiacResueltas.cshtml" />
+    <Content Include="Views\Llenadoseguimiento\_AlumnosResolucionCurso.cshtml" />
+    <Content Include="Views\Llenadoseguimiento\Resolucion.cshtml" />
+    <Content Include="Views\Llenadoseguimiento\ModificarResolucion.cshtml" />
+    <Content Include="Views\Shared\ErrorConMensaje.cshtml" />
+    <Content Include="Views\Docente\DiacOSeguimiento.cshtml" />
+    <Content Include="Views\Seguimiento\Index.cshtml" />
+    <Content Include="Views\Seguimiento\NuevoSeguimiento.cshtml" />
+    <Content Include="Views\Seguimiento\verSeguimientoCreado.cshtml" />
+    <Content Include="Views\Seguimiento\modificarSeguimiento.cshtml" />
+    <Content Include="Views\Seguimiento\menuSeguimientoCurso.cshtml" />
+    <Content Include="Views\Llenadoseguimiento\_SeleccionarVersion.cshtml" />
+    <Content Include="Views\Mensaje\eliminarMensaje.cshtml" />
+    <Content Include="Views\Contacto\Index.cshtml" />
+    <Content Include="Views\Busqueda\AutocompleteCustomInput.cshtml" />
+    <Content Include="Views\Docente\Reportes.cshtml" />
+    <Content Include="Views\Institucion\PruebaVideo.cshtml" />
+    <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\Ejercicio\_ResolverEjercicio.cshtml" />
+    <Content Include="Views\HistorialActividad\historialAlumnoActividad.cshtml" />
+    <Content Include="Views\Docente\corregirActividad.cshtml" />
+    <Content Include="Views\Ejercicio\_ResolverEjercicioTexto.cshtml" />
+    <Content Include="Views\Ejercicio\Copia de _ResolverEjercicioTexto.cshtml" />
+    <Content Include="Views\Ejercicio\_ResolverEjercicioRecursoCorrecto.cshtml" />
+    <Content Include="Views\Contacto\Exito.cshtml" />
+    <Content Include="Views\Quienessomos\Index.cshtml" />
+    <Content Include="Views\Recurso\_Imagenes.cshtml" />
+    <Content Include="Views\Recurso\_Sonidos.cshtml" />
+    <Content Include="Views\Recurso\_Videos.cshtml" />
+    <Content Include="Views\Mensaje\_NoLeidos.cshtml" />
+    <Content Include="Views\Ayuda\Index.cshtml" />
+    <Content Include="Views\Ayuda\_Indice.cshtml" />
+    <Content Include="Views\Ayuda\_Conceptos.cshtml" />
+    <Content Include="Views\Ayuda\_Administrador.cshtml" />
+    <Content Include="Views\Ayuda\_Docente.cshtml" />
+    <Content Include="Views\Ayuda\_Alumno.cshtml" />
+    <Content Include="Views\Ayuda\_Reportes.cshtml" />
+    <Content Include="Views\Ayuda\_Introduccion.cshtml" />
+    <Content Include="Views\Usuario\RecuperarContrasenia.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Institucion\EliminarInstitucion.cshtml" />
+    <Content Include="Views\Prueba\ProbandoGrabadores.cshtml" />
+    <Content Include="Views\Actividad\CrearActividad.cshtml" />
+    <Content Include="Views\Actividad\_AsignarActividad.cshtml" />
+    <Content Include="Views\Docente\_ListadoDeActividades.cshtml" />
+    <Content Include="Views\Actividad\_CursosPorActividad.cshtml" />
+    <Content Include="Views\Actividad\Index.cshtml" />
+    <Content Include="Views\Mensaje\_MostrarTodos.cshtml" />
+    <Content Include="Views\Mensaje\_Enviados.cshtml" />
+    <Content Include="Views\Mensaje\_Recibidos.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Recurso\_AgregarEditarRecurso.cshtml" />
+    <Content Include="Views\Recurso\ListadoRecursos.cshtml" />
+    <Content Include="Views\Recurso\SeleccionarAudio.cshtml" />
+    <Content Include="Views\Recurso\SeleccionarImagen.cshtml" />
+    <Content Include="Views\Recurso\SeleccionarVideo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Curso\NuevoCurso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reportes\AlumnoCursosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AlumnoCursosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\AlumnoInstitucionRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AlumnoInstitucionRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\ActividadesRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ActividadesRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\DocenteActividadesRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DocenteActividadesRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\DocenteAlumnosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DocenteAlumnosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\DocenteCursosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DocenteCursosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\historialActividadesRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>historialActividadesRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\DiacCursosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DiacCursosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\DiacAlumnosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DiacAlumnosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\InstitucionActividadesRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>InstitucionActividadesRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\InstitucionAlumnosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>InstitucionAlumnosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\InstitucionCursosRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>InstitucionCursosRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\InstitucionDocentesRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>InstitucionDocentesRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes\plantillaRpt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>plantillaRpt.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Reporte\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Detection\Detector.csproj">
+      <Project>{CC813884-5D90-4044-9571-8FB7C54D9612}</Project>
+      <Name>Detector</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>59992</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,78 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+
+
+<style type="text/css">
+
+#btnNuevaVersion, #btnCerrarPopUp
+{
+    float: right;
+    margin-top:2%;
+    margin-right:2%;
+}
+</style>
+
+@{
+    var grillaSeleccionarVersion = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridSeleccionarVersion");
+    grillaSeleccionarVersion.Bind(Model);
+    grillaSeleccionarVersion.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+    if (grillaSeleccionarVersion.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			"No hay resoluciones"
+		</section>
+	}
+	else
+	{
+        
+		@grillaSeleccionarVersion.GetHtml(htmlAttributes: new { id = "grillaSeleccionarVersion" },
+			tableStyle: "webgrid",
+			headerStyle: "webgrid-header",
+			footerStyle: "webgrid-footer",
+			alternatingRowStyle: "webgrid-alternating-row",
+			rowStyle: "webgrid-row-style",
+                                columns: grillaSeleccionarVersion.Columns(
+                                grillaSeleccionarVersion.Column(columnName: "Version",header: "Versión", format: item =>@item.WebGrid.Rows.IndexOf(item) + 1 + Math.Round(Convert.ToDouble(grillaSeleccionarVersion.TotalRowCount / grillaSeleccionarVersion.PageCount) / grillaSeleccionarVersion.RowsPerPage) * grillaSeleccionarVersion.RowsPerPage * grillaSeleccionarVersion.PageIndex),
+                                grillaSeleccionarVersion.Column(format: @<input type="hidden" id="idAlumno" name="IDHidden" value="@item.alumno"/>),
+                                grillaSeleccionarVersion.Column(format: @<input type="hidden" id="idDiac" name="IDDiac" value="@item.diac"/>),
+                                grillaSeleccionarVersion.Column(format: @<input type="hidden" id="idLlenadoSeguimiento" name="IDLlenadoSeguimiento" value="@item.id"/>),
+                                grillaSeleccionarVersion.Column(columnName: "fecha", header: "Fecha", style: "institucion")
+                                )
+                            )
+    }
+}     
+
+
+
+<input type="button" id="btnNuevaVersion" value="Nueva Versión" />
+<input type="button" id="btnCerrarPopUp" value="Cancelar" />
+
+<script type="text/javascript">
+
+    $("#grillaSeleccionarVersion td").on("click", function () {
+                var idAlumno = $(this).parent().find("#idAlumno").val();
+        //        if ($(this).parent().find(".resuelto").text() == 'No') {
+        //            var url = "/Llenadoseguimiento/Resolucion?idCurso=" + @ViewBag.curso + "&idAlumno=" + idAlumno + "&identificador=@ViewBag.identificador";            
+        //        }
+        //        else {
+        //            //var idDiac = $(this).parent().find("#idDiac").val();
+                    var idLlenadoSeguimiento = $(this).parent().find("#idLlenadoSeguimiento").val();
+                    var url = "/Llenadoseguimiento/ModificarResolucion?idCurso=" + @ViewBag.idCurso + "&idAlumno=" + idAlumno + "&idLlenadoSeguimiento=" + idLlenadoSeguimiento; 
+        //        }
+                window.location.href = url;
+
+    });
+
+    $("#btnNuevaVersion").click(function() {
+        var url = "/Llenadoseguimiento/Resolucion?idCurso=" + @ViewBag.idCurso + "&idAlumno=" + @ViewBag.idAlumno + "&identificador=@ViewBag.identificador";            
+        window.location.href = url;
+    });
+
+    $("#btnCerrarPopUp").click(function() {
+        $("#seleccionarVersion").trigger('reveal:close');
+    });
+</script>

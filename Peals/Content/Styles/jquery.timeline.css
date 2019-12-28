@@ -1,0 +1,57 @@
+.color_hover { color: #ed145b; }
+.color_normal { color: #58595B; }
+span.selected { color: #ed145b }
+span.odd_row { margin-top:-10px !important; }
+
+#timeline ul li { float: left; }
+
+#timeline ul li#plus a {
+    background-color: #58595b;
+    color: white;
+    display:inline-block;
+    margin-top: -7px;
+    border-radius: 10;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#timeline ul li#minus a {
+    background-color: #58595b;
+    color: white;
+    display:inline-block;
+    margin-top: -7px;
+    border-radius: 10;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#timeline ul li a {
+    width:10px;
+    height:10px;
+    text-decoration: none;
+    background-color: #58595b;
+    display:inline-block;
+    float:left;
+    margin-top:4px;
+    border-radius: 10px;
+}
+
+#timeline ul li span {
+    margin-top: 12px;
+    margin-left: -20px;
+    float: left;
+    font-family: arial,sans-serif;
+    font-size: 0.75em;
+    color: #58595b;
+
+    -webkit-transition: color 0.2s ease;
+    -moz-transition: color 0.2s ease;
+    -ms-transition: color 0.2s ease;
+    -o-transition: color 0.2s ease;
+    transition: color 0.2s ease;
+}
+
+/** Hover Color */
+#timeline ul li a#plus:hover, 
+#timeline ul li a#minus:hover, 
+#timeline ul li a:hover { background-color: #ed145b; }

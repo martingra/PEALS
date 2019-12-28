@@ -1,0 +1,24 @@
+﻿@{
+    var grillaCursos = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridCursos");
+    grillaCursos.Bind(Model);
+    grillaCursos.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+
+    @grillaCursos.GetHtml(htmlAttributes: new { id = "gridCursos" },
+        tableStyle: "webgrid",
+        headerStyle: "webgrid-header",
+        footerStyle: "webgrid-footer",
+        alternatingRowStyle: "webgrid-alternating-row",
+        selectedRowStyle: "webgrid-selected-row",
+        rowStyle: "webgrid-row-style",
+        columns: grillaCursos.Columns(
+            grillaCursos.Column(format: @<input type="hidden" name="IDHidden" value="@item.curso"/>),
+            grillaCursos.Column(columnName: "curso1.nombre", header: "Nombre"),
+            grillaCursos.Column(columnName: "fecha_apertura", header: "Fecha"),
+            grillaCursos.Column(format: @<img onclick="desvincularCurso(@item.curso);" src="../../Content/Resources/General/Cadena.png"/>)
+        )
+    )
+}

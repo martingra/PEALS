@@ -1,0 +1,122 @@
+﻿<link href="@Url.Content("~/Content/Styles/Inscripcion.css")" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+    .buscar  
+    {
+        font-size: 0.8em !important;
+        margin-top:10px;
+    }
+    
+
+
+</style>
+
+@{
+    ViewBag.Title = "PEALS - INSTITUCIONES";
+}
+@model List<Peals.Models.institucion>
+          
+<h1 style="color: #0AA7A2; font-size: 3em;">Instituciones que forman parte de PEALS</h1>
+
+@{Html.BeginForm();}
+
+<div class ="busquedaAutocomplete">
+    <label for="searchCriteria">Buscar por</label>
+    <select id="searchCriteria" name="searchCriteria">
+        <option value="Mostrar Todas">Mostrar Todas</option>
+        <option value="Nombre">Nombre</option>
+        <option value="Localidad">Localidad</option>
+        <option value="Provincia">Provincia</option>
+        <option value="Pais">Pais</option>
+    </select>
+
+
+<div id="reemplazable"></div> 
+<div><button type="submit" class= "buscar" style="vertical-align:top;">Buscar</button></div>
+</div>
+
+@{Html.EndForm();}
+
+<div class="contTodasLasInstituciones">
+@foreach (var inst in Model)
+{
+    <div class = "todasLasInstituciones">
+        <a href=@Url.Action("VerInformacion", "Informacion", new { idInstitucion = @inst.id }) >
+            @{ 
+                string imagen = "../../Content/Resources/Uploads/sin_imagen.jpg";
+                if (inst.informacion1 != null && !string.IsNullOrEmpty(inst.informacion1.imagen) )
+                {
+                    imagen = inst.informacion1.imagen;
+                }
+            }    
+            <img src=@Url.Content(imagen) alt="Institucion"/>
+            <h1>@inst.nombre</h1>
+        </a>
+    </div>
+}
+</div>
+
+<div class = "paginacion">
+@{
+    int hasta = ViewBag.desde + 6;
+    String mostrarAnterior = "true";
+    String MostrarSiguiente = "true";
+    if (hasta >= ViewBag.count)
+    {
+        hasta = ViewBag.count;
+        MostrarSiguiente = "none";
+    }
+    if (ViewBag.desde == 0)
+    {
+        mostrarAnterior = "none";
+    }
+    
+<a href=@Url.Action("TodasLasInstituciones", new { inicio = ViewBag.desde - 6 })> <img src="../../Content/Recursos/Home/anterior.png" style="display:@mostrarAnterior" /> </a>
+
+    <h3>Mostrando @ViewBag.desde a @hasta Instituciones de @ViewBag.count</h3>
+    
+<a href=@Url.Action("TodasLasInstituciones", new { inicio = ViewBag.desde + 6 })> <img src="../../Content/Recursos/Home/siguiente.png" style="display:@MostrarSiguiente" /> </a>
+}
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var cambiarAutocomplete = function () {
+            $('#reemplazable').fadeOut();
+            switch ($("#searchCriteria").val()) {
+                case "Nombre":
+                    $('#reemplazable').load('@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "AutocompletePorNombre" , controlador = "Institucion", label = "nombre" , value = "nombre" , idList = "id" }))');
+                    $('#reemplazable').fadeIn();
+                    break;
+                case "Localidad":
+                    $('#reemplazable').load('@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "AutocompletePorLocalidad" , controlador = "Institucion", label = "label" , value = "localidad" , idList = "id" }))');
+                    $('#reemplazable').fadeIn();
+                    break;
+                case "Provincia":
+                    $('#reemplazable').load('@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "AutocompletePorProvincia" , controlador = "Institucion", label = "label" , value = "provincia" , idList = "id" }))');
+                    $('#reemplazable').fadeIn();
+                    break;
+                case "Pais":
+                    $('#reemplazable').load('@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "AutocompletePorPais" , controlador = "Institucion", label = "pais" , value = "pais" , idList = "id" }))');
+                    $('#reemplazable').fadeIn();
+                    break;
+            }
+        }
+
+        $("#searchCriteria").on('change', cambiarAutocomplete);
+
+        $(this).find('option').each(function (index, node) {
+            if (node.value == $('#hideSearchCriteria').val())
+                node.setAttribute('selected', 'selected');
+            else
+                node.removeAttribute("selected");
+        });
+
+    });
+
+
+</script>
+

@@ -1,0 +1,66 @@
+﻿@{
+    var grillaActividadesPendientes = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridActividadesPendientes");
+    grillaActividadesPendientes.Bind(Model);
+    grillaActividadesPendientes.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+
+    if (grillaActividadesPendientes.TotalRowCount == 0)
+    {
+        <section style="text-align:center; padding:20px; color:#65BE70;" >
+            En estos momentos no tienes tarea para corregir.
+        </section>
+    }
+    else
+    {
+        @grillaActividadesPendientes.GetHtml(htmlAttributes: new { id = "gridActividadesPendientes" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            columns:
+                        grillaActividadesPendientes.Columns(
+                        grillaActividadesPendientes.Column(format: @<input type="hidden" id="IDHidden" name="IDHidden" value="@item.id"/>),
+                        grillaActividadesPendientes.Column("Actividad"),
+                        grillaActividadesPendientes.Column(
+                            header: "Alumno",
+                            format: alu => string.Concat(alu.apellidoalumno, ", ", alu.nombrealumno)
+                        ),
+                        grillaActividadesPendientes.Column("Institucion"),
+                        grillaActividadesPendientes.Column(
+                            header: "Curso",
+                            format: cur => string.Concat(cur.anocurso, cur.divisioncurso, " - ", cur.nombrecurso)
+                        ),
+                        grillaActividadesPendientes.Column("Calificacion")
+                    )
+          )
+    }
+}        
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		var cambiarPlaceHolder = function () {
+			var placeHolder = "";
+			switch ($("#searchCriteria").val()) {
+				case "Alumno":
+					placeHolder = "Nombre o E-Mail del Alumno";
+					break;
+				case "Actividad":
+					placeHolder = "Nombre de la Actividad";
+					break;
+				case "Institucion":
+					placeHolder = "Nombre de la Institución";
+					break;
+				case "Curso":
+					placeHolder = "Nombre del Curso";
+					break;
+			}
+
+			$("#searchValue").attr("placeholder", placeHolder);
+		}
+	});
+</script>

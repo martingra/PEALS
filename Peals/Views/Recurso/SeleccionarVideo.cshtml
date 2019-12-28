@@ -1,0 +1,64 @@
+﻿<div class="gallery-conteiner">
+    <div id="thumbs" class="video-navigation">
+        <div id="filtro" class="thumb-filter">
+            @{ Html.RenderAction("AutoCompleteConPadre", "Busqueda", new { accion = "AutoCompletePorNombre", controlador = "Recurso", label = "nombre", value = "nombre", idList = "id", idEntidad = 3 }); }
+            <button type="button" id="btn_buscarRecurso" onclick="recargar(1)">Buscar</button>
+        </div>
+        <ul class="thumbs noscript">
+            @foreach (var video in Model) { 
+                <li>
+                    <a class="thumb" href="@Url.Content(video.ruta)" title="@video.nombre">
+                        @video.nombre
+                    </a>
+                    <div class="caption">
+                        <div class="image-title">@video.nombre</div>
+                        <div class="subido_por">Subido por: @video.subido_por</div>
+                        <img id="@video.id" class="reportar" src="../../Content/Resources/General/Alert.png" width="32px" height="32px" alt="Reportar" onclick="repotarRecurso()"/>
+                    </div>
+                </li>
+            }
+        </ul>
+        <div class="pagination" id="@ViewBag.TotalRecursos"></div>
+    </div>
+    <div id="gallery" class="gallery">
+        <div id="controls" class="controls">
+            <a class="prev" href="#" >&lsaquo; Anterior</a>
+            <a class="next" href="#" >Siguiente &rsaquo;</a>
+        </div>
+        <div class="slideshow-container">
+            <div id="loading" class="loader"></div>
+            <div id="slideshow" class="slideshow"><video controls="controls" /></div>
+        </div>
+        <div id="caption" class="caption-container"></div>
+    </div>
+</div>
+<div class="acciones">
+    <button type="button" id="btn_cancelar" class="cerrar_dialog">Cancelar</button>
+    <button type="button" id="btn_seleccionar" >Seleccionar</button>
+</div>
+<script type="text/javascript">
+    function init() {
+        $('.thumbs').galeria({
+            content: $('.slideshow video'),
+            caption: $('.caption-container'),
+            navegacion: $('.controls'),
+            paginacion: $('.pagination'),
+            totalRecursos: $('.pagination').attr('id'),
+            recursosPorPagina: 12,
+            selectStyle: "selected",
+            cambiarPagCallback: recargar
+        });
+    }
+
+    var recargar = function (pag) {
+        var filtro = $('.thumb-filter input').val();
+
+        var params = { 'tipo': 3, 'filtro': filtro, 'pagina': pag };
+        $.post("/Recurso/GetRecursosAsJson", params, function (data) {
+            $.galeria.setTotalRecursos(data.total);
+            $.galeria.recargarVideos(data.recursos);
+        });
+    }
+
+    $(document).ready(init());
+</script>

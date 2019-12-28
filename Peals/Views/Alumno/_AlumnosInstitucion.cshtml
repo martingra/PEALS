@@ -1,0 +1,49 @@
+﻿
+
+
+@{
+	var grillaAlumnosInstitucion = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridCursosDarBaja");
+    grillaAlumnosInstitucion.Bind(Model);
+    grillaAlumnosInstitucion.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+    if (grillaAlumnosInstitucion.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			@ViewBag.Alumnos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaAlumnosInstitucion.GetHtml(htmlAttributes: new { id = "gridAlumnosInstitucion" },
+			tableStyle: "webgrid",
+			headerStyle: "webgrid-header",
+			footerStyle: "webgrid-footer",
+			alternatingRowStyle: "webgrid-alternating-row",
+			rowStyle: "webgrid-row-style",
+                    columns: grillaAlumnosInstitucion.Columns(
+                        grillaAlumnosInstitucion.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                        grillaAlumnosInstitucion.Column(columnName: "nombre", header: "Nombre", style: "institucion"),
+                        grillaAlumnosInstitucion.Column(columnName: "apellido", header: "Apellido", style: "nivel"),
+                        grillaAlumnosInstitucion.Column(columnName: "mail", header: "Mail", style: "nivel")
+			)
+		)
+	}
+}     
+
+
+
+ 
+ <input type='hidden' id='idCurso' value = @ViewBag.curso />
+<script type="text/javascript">
+    $(document).ready(function () {
+        var alumnoSeleccionado = $('#gridAlumnosInstitucion').find('tbody > tr');
+        alumnoSeleccionado.bind('click', function (event) {
+            var mail = $(this).find('td:nth-child(4)').text();
+            $('#modalAgregarAlumno').load('/Mensaje/_NuevaSolicitudAAlumno?mail=' + mail + '&idCurso=' + $("#idCurso").val());
+        });
+    });
+</script>

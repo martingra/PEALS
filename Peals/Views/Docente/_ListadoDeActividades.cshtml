@@ -1,0 +1,32 @@
+﻿@{
+    var grillaActividades = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridActividades", ajaxUpdateCallback: "init");
+    grillaActividades.Bind(Model);
+    grillaActividades.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+
+    if (grillaActividades.TotalRowCount == 0)
+    {
+		<section style="text-align:center; padding:20px">
+			@ViewBag.DefaultMessage
+		</section>
+    }
+    else
+    {
+		@grillaActividades.GetHtml(htmlAttributes: new { id = "gridActividades" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            columns: grillaActividades.Columns(
+                grillaActividades.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                grillaActividades.Column(columnName: "nombre", header: "Nombre"),
+                grillaActividades.Column(header: "Cursos", format: item => item.actividad_x_curso.Count)
+            )
+        )
+    }
+}

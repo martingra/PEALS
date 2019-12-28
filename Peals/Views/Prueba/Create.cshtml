@@ -1,0 +1,105 @@
+﻿@model Peals.Models.institucion
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>institucion</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.telefono)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.telefono)
+            @Html.ValidationMessageFor(model => model.telefono)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.calle)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.calle)
+            @Html.ValidationMessageFor(model => model.calle)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.altura_calle)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.altura_calle)
+            @Html.ValidationMessageFor(model => model.altura_calle)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.piso)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.piso)
+            @Html.ValidationMessageFor(model => model.piso)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.departamento)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.departamento)
+            @Html.ValidationMessageFor(model => model.departamento)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.localidad, "localidad1")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("localidad", String.Empty)
+            @Html.ValidationMessageFor(model => model.localidad)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.administrador, "usuario")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("administrador", String.Empty)
+            @Html.ValidationMessageFor(model => model.administrador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha_alta)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha_alta)
+            @Html.ValidationMessageFor(model => model.fecha_alta)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.informacion, "informacion1")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("informacion", String.Empty)
+            @Html.ValidationMessageFor(model => model.informacion)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

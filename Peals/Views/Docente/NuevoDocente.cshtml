@@ -1,0 +1,109 @@
+﻿<link href="@Url.Content("~/Content/Estilos/Docente.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.usuario 
+@{
+    ViewBag.Title = "PEALS - NUEVO DOCENTE";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script> 
+
+<div id="tituloUsuario">
+    <h1>A continuaci&oacute;n se solicitan datos sobre el Docente</h1>
+</div>
+
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+        @{Html.RenderAction("NuevoUsuario", "Usuario");}
+        <fieldset>
+            <table id="tablaUsuarioDocente">
+                <tbody>
+                    <tr>
+                        <td>Especialidad</td>
+                        <td>@Html.DropDownList("especialidad", "Seleccionar Especialidad")</td>
+                        <td><button type="button" id="nueva_especialidad">Nueva Especialidad</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+        <div class="boton">
+            <input id="aceptar" type="button" class="submit guardar" value="Aceptar"/>
+        </div>
+    @{Html.EndForm();}
+        <div class="boton">
+            <input type="button" onclick="location.href='@Url.Action("Index", "Home")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+
+    <div id="dialog_formEspecialidad" class="reveal-modal">
+        <h1 style="text-align:center; border-bottom: 3px solid #3966A2">Nueva Especialidad</h1>
+        <p>Ingresa el nombre completo de la especialidad sin hacer uso de abreviaturas.</p>
+
+        <div>@Html.LabelFor(m => m.especialidad1.nombre, "Nombre:")</div>
+        <div>@Html.TextBoxFor(m => m.especialidad1.nombre, new { id = "nombre_especialidad", placeholder = "Nombre de la Especialidad", required = "required" })</div>
+        <div>
+            <button type="button" id="btn_cancelar">Cancelar</button>
+            <button type="button" id="btn_guardarEspecialidad">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function cargarEspecialidades(itemSelected) {
+        var action = '@Url.Action("GetEspecialidades", "Docente")';
+        $.getJSON(action, null,
+            function (data) {
+                $("#especialidad").empty();
+                $("#especialidad").append("<option value=''>Seleccionar Especialidad</option>");
+                $.each(data, function (i, item) {
+                    if (itemSelected == item.Value)
+                        $("#especialidad").append("<option value='" + item.Value + "' selected= 'selected'>" + item.Text + "</option>");
+                    else
+                        $("#especialidad").append("<option value='" + item.Value + "'>" + item.Text + "</option>");
+                });
+            }
+        );
+    }
+    $(document).ready(function () {
+        $('#nueva_especialidad').click(function (e) {
+            e.preventDefault();
+            $('#dialog_formEspecialidad').reveal({
+                animation: 'fadeAndPop',                   //fade, fadeAndPop, none
+                animationspeed: 300,                       //velocidad de la animación
+                closeonbackgroundclick: false,             //si se hace click en el background, se cierra la ventana modal?
+                dismissmodalclass: 'close-reveal-modal'    //la clase del botón o del elemento que cerrará la ventana modal
+            });
+        });
+
+        $('#btn_guardarEspecialidad').click(function () {
+            var action = '@Url.Action("NuevaEspecialidad", "Docente")';
+            var params = { nombre_especialidad: $("#nombre_especialidad").val() };
+            $.getJSON(action,
+                params,
+                function (data) {
+                    if (data.Index == -1) {
+                        alert("No se pudo guardar la especialidad. Por favor, intente de nuevo.");
+                    } else {
+                        cargarEspecialidades(data.Index);
+                        $('#nombre_especialidad').empty();
+                        $('.reveal-modal').trigger('reveal:close');
+                    }
+                }
+            );
+        });
+
+        $('#btn_cancelar').click(function () {
+            $('#nombre_especialidad').empty();
+            $('.reveal-modal').trigger('reveal:close');
+        });
+
+        $("#aceptar").click(function () {
+            if ($("#especialidad").val() == "") {
+                alert("Debe ingresar una especialidad");
+            }
+            else {
+                $("form").submit();
+            }
+        });
+    });
+</script>

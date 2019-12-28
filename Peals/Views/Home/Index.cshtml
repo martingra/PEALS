@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "PEALS - INICIO";
+}
+<link href="../../../Content/Styles/Home.css" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.usuario
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@{
+    if (Html.ValidationSummary() != null)
+    {
+        ModelState state = ViewData.ModelState.Values.First<ModelState>();
+        string code = state.Errors[0].ErrorMessage;
+        switch(code)
+        {
+            case "1":
+                <script type="text/javascript">
+                    $(document).ready(function () { alert("Los datos no son correctos. Por favor, ingresa nuevamente tus datos."); });
+                </script>
+                break;
+            case "2":
+                <script type="text/javascript">
+                    $(document).ready(onLoad);
+
+                    function onLoad() {
+                        confirmAlert("Este usuario ya ha sido dado de baja. Igualmente, si quieres recuperarlo, haz click en \"Aceptar\" y recuperaras todos tus cursos de nuevo.", mostrarMensajeDeConfirmacion);
+                    }
+
+                    function mostrarMensajeDeConfirmacion() {
+                        alert("Por favor, inicia sesión para completar la acción.");
+                    }
+                </script>
+                break;
+        }
+    }   
+}
+
+<div id="login">
+    <h1>Ingresar</h1>
+    <h3>Ingres&aacute; tus datos para iniciar sesi&oacute;n:</h3>
+        
+        <div id="loginData">
+            @using (Html.BeginForm())
+            {
+                <table class="Form">
+                    <tr>
+                        <td>Usuario:</td>
+                        <td>@Html.TextBoxFor(m => m.mail)</td>
+                    </tr>
+                    <tr>
+                        <td>Contraseña:</td>
+                        <td>@Html.PasswordFor(m => m.contrasena)</td>
+                    </tr>
+                    <tr>
+                    <td></td>
+                    <td align="center">
+                        <input type="submit" class="submitLogin" value="Iniciar Sesión" style="font-size: 1.2em !important;"/>
+                    </td>
+                    </tr>
+                </table>
+            }
+            @{Html.EndForm();} 
+        </div>
+    <div id="recuperarContrasenia">
+        ¿Olvidaste tu <a href="/Usuario/RecuperarContrasenia">Contraseña</a> ?
+    </div>
+</div>
+<div id="registrarse">
+    <h1>Registrate</h1>
+    <h3>¿No ten&eacute;s cuenta? Registrate en pocos segundos.</h3>
+    <br />
+    <h3>Eleg&iacute; una opci&oacute;n para continuar:</h3>
+            
+        @using (Html.BeginForm("Registrar", "Home", FormMethod.Post, new { }))
+        {
+        <div class="FormRegistrar">
+        <table>
+        <tr>
+        <td>Tipo de Usuario:</td>
+        <td>@Html.DropDownList("tipo_usuario", ViewData["tipo_usuario"] as IEnumerable<SelectListItem>, "TIPO USUARIO")</td>
+        </tr>
+        <tr><th colspan="2"><input id="btnRegistrarse" type="button" class="submitRegistrar" value="Registrarse" style="font-size: 1.2em !important;"/></th></tr>
+        </table>
+        </div>
+        }
+    @{Html.EndForm();} 
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnRegistrarse").click(function () {
+            if ($("#tipo_usuario").val() != '') {
+                $('form').submit();
+            }
+            else {
+                alert('Seleccione un tipo de usuario');
+            }
+        });
+    });
+</script>

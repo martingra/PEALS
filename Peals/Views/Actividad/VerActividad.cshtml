@@ -1,0 +1,107 @@
+﻿<link href="@Url.Content("~/Content/Styles/Actividad.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/bootstrap.progressbar.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.inputmask.bundle.js")"></script>
+@{
+    ViewBag.Title = "PEALS - Actividad";
+}
+@model List<Peals.Models.ejercicio>
+<section class="explicacion">
+	<h1>@ViewBag.Titulo</h1>
+	<div class="descripcion">
+        <div class="titulo">
+            <img width="30px" height="25px" src="/Content/Resources/Docente/Docente.PNG">
+            <h2> Instrucciones </h2>
+        </div>
+
+		<p>@ViewBag.Descripcion</p>
+        <a href="#"><img id="verVideoExplicacion" src="/Content/Resources/Actividad/cartel1.png" /></a>
+        <a href="#"><img id="verAyudaActividad" src="/Content/Resources/Actividad/cartel2.png" /></a>
+	</div>
+
+    
+</section>
+<section class="detalle">
+	
+<div id="ejercicio" >
+</div>
+
+
+<div id="divResultado"> </div>
+
+
+<div id="progresoResolucion">
+    <div class="progress">
+      <div id="progresoCompletado" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:0%">
+        Free Space
+      </div>
+      <div id="progresoRestante" class="progress-bar progress-bar progress-bar-striped active" role="progressbar" style="width:100%">
+        Warning
+      </div>
+    </div>
+</div>
+
+
+</section>
+<div id="videoExplicacionEjercicio" class="reveal-modal large">
+    <h1>
+        Explicación del ejercicio</h1>
+
+         <video width="320" height="240" controls>
+              <source src="@Url.Content(ViewBag.Explicacion)" type="video/mp4">
+              <source src="@Url.Content(ViewBag.Explicacion)" type="video/ogg">
+        </video> 
+</div>
+<section class="respuesta">    
+</section>
+
+
+@{ Html.BeginForm("VerActividad", "Actividad", FormMethod.Post); }
+<!-- Datos globales para guardar -->
+<input type="hidden" id="txtIdActividad" name="idActividad" value="@ViewBag.idActividad"/>
+<input type="hidden" id="txtIdCurso" name="idCurso" value="@ViewBag.idCurso"/>
+<input type="hidden" id="txtTiempo" name="tiempo" value="0" />
+<input type="hidden" id="txtNroEjercicio" value="0" />
+<input type="hidden" id="txtCantidadEjercicios" name="cantidadEjercicios" value="0" />
+<input type="hidden" id="txtCapturarVideo" value="0" />
+<input type="hidden" id="txtUsoAyudaActividad" name="usoAyudaActividad" value="0" />
+<input type="hidden" id="txtUsoAyudaConsigna" name="usoAyudaConsigna" value="0" />
+<input type="hidden" id="txtIntentos" name="intentos" value="1" />
+<input type="hidden" id="txtEjNoResueltos" name="ejNoResueltos" value="0" />
+<input type="hidden" id="txtDeletreo" value="" />
+<!-- --------------------------- -->
+@{ Html.EndForm(); }
+
+<script type="text/javascript">
+    var ejercicioActual = 0;
+    var cantidadEjercicios = 0;
+    
+    $("#verVideoExplicacion").click(function (e) {
+        e.preventDefault();
+        $("#videoExplicacionEjercicio").reveal();
+        $("#txtUsoAyudaConsigna").val('1');
+    });
+
+    $(document).ready(init);
+
+    function init() {
+
+        $.ajax({
+            type: "POST",
+            url: '/Ejercicio/getCantidadEjercicios',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({ idActividad: @ViewBag.idActividad }),
+            success: function (data) {
+                cantidadEjercicios = data.cantidadEjercicios;
+                $("#txtCantidadEjercicios").val(cantidadEjercicios);
+                $("#progresoRestante").text(cantidadEjercicios + ' restantes'); //.css( "width", "" );
+            },
+            error: function () { }
+        });
+
+        $("#ejercicio").load("/Ejercicio/_ResolverEjercicio?idActividad=@ViewBag.idActividad&nroEjercicio=0");
+    }
+
+</script>

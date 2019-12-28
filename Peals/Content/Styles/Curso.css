@@ -1,0 +1,19 @@
+﻿.form_row { width: 100%; margin-top: 10px; }
+.left { float: left; width: 21%  }
+
+.form_row select { width: 39%; }
+.form_row textarea { width: 39%; }
+
+.cb_personalizado { margin-left: -20px; }
+
+button{ font-size: 1em !important; width: 20% }
+.acciones { clear: both; margin: 40px}
+.acciones button { margin: 0px 20px 0 20px }
+
+#tituloCurso {
+    color: #0AA7A2;
+    font-size: 3em;
+    padding: 20px 0 0 25px;
+    text-align: center;
+}
+#tituloCurso h1{ color: #0AA7A2; font-size: xx-large;}

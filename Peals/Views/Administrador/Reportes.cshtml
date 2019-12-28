@@ -1,0 +1,578 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+}
+<link href="@Url.Content("~/Content/Styles/botoneraConImagen.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<style>
+    .opciones div
+    {
+        float: left;
+        margin-left: 3em;
+        width: 20%;
+        height: 250px;
+    }
+    
+    select
+    {
+        width: 48em;
+        margin-left: 6em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    
+    #modal_cursos select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_alumnos select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_alumnos input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+    
+    #modal_actividades select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_actividades input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+    
+    #modal_docentes select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_docentes input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+</style>
+<div id="tituloPagina">
+    <h1>
+        Reportes Administrador</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Emisión de reportes generales para el seguimiento de sus instituciones.
+    </h1>
+</div>
+@Html.DropDownList("institucion", ViewData["institucion"] as IEnumerable<SelectListItem>)
+<div class="image-effect-rotation">
+    <div class="image-side">
+        <img src="@Url.Content("~/Content/Resources/MasterPage/Institucion.png")" width="500" alt="California surf">
+        <div>
+            INSTITUCIÓN</div>
+    </div>
+    <div class="share-side">
+        <div>
+            INSTITUCIÓN</div>
+        <a id='institucionCursos' href="#" class="share-button share-via-facebook"><i class="fa fa-facebook">
+        </i>Cursos</a> <a id='institucionDocentes' href="#" class="share-button share-via-twitter">
+            <i class="fa fa-twitter"></i>Docentes </a><a id='institucionAlumnos' href="#" class="share-button share-via-google">
+                <i class="fa fa-google"></i>Alumnos por curso</a> <a id='institucionActividades'
+                    href="#" class="share-button share-via-flicker"><i class="fa fa-flicker"></i>Actividades
+                    por curso</a>
+    </div>
+</div>
+<div class="image-effect-rotation">
+    <div class="image-side">
+        <img src="@Url.Content("~/Content/Resources/Docente/Actividades.jpg")">
+        <div>
+            RESOLUCIÓN ACTIVIDADES</div>
+    </div>
+    <div class="share-side">
+        <div>
+            RESOLUCIÓN ACTIVIDADES</div>
+        <a id='resolucionActividad' href="#" class="share-button share-via-facebook"><i class="fa fa-facebook">
+        </i>Por actividad</a> <a id='resolucionCurso' href="#" class="share-button share-via-twitter">
+            <i class="fa fa-twitter"></i>Por curso </a><a id='resolucionAlumno' href="#" class="share-button share-via-google">
+                <i class="fa fa-google"></i>Por alumno</a> <a id='resolucionDocente' href="#" class="share-button share-via-flicker">
+                    <i class="fa fa-flicker"></i>Por docente</a>
+    </div>
+</div>
+<div class="image-effect-rotation">
+    <div class="image-side">
+        <img src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" width="500" alt="California surf">
+        <div>
+            SEGUIMIENTO (D.I.A.C)</div>
+    </div>
+    <div class="share-side">
+        <div>
+            SEGUIMIENTO (D.I.A.C)</div>
+        <a id='seguimientoAlumno' href="#" class="share-button share-via-facebook"><i class="fa fa-facebook">
+        </i>Por alumno</a> <a id='seguimientoCurso' href="#" class="share-button share-via-twitter">
+            <i class="fa fa-twitter"></i>Por curso</a> <a id='seguimientoInstitucion' href="#"
+                class="share-button share-via-google"><i class="fa fa-google"></i>Por institución</a>
+        <a id='seguimientoPlantilla' href="#" class="share-button share-via-flicker"><i class="fa fa-flicker">
+        </i>Plantilla</a>
+    </div>
+</div>
+<div id="modal_cursos" class="reveal-modal large">
+    <div id="tituloPagina">
+        <h1>
+            Seleccione el curso</h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Sarasa
+        </h1>
+    </div>
+    <div id="divCurso" style="float: left; margin-left: 6em;">
+        Curso:</div>
+    <select id='selectCursos'>
+    </select>
+    <div id="contenedorFiltrosFecha">
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em;">
+            Fecha desde:</div>
+        <input type="text" id="txtFechaDesdeCurso" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em;" />
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em; margin-bottom: 1em;">
+            Fecha hasta:</div>
+        <input type="text" id="txtFechaHastaCurso" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em; margin-bottom: 2em;" />
+    </div>
+    <input type="button" value="Aceptar" id="btnAceptar" />
+    <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+<div id="modal_alumnos" class="reveal-modal large">
+    <div id="tituloPagina">
+        <h1>
+            Seleccione el alumno</h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Sarasa
+        </h1>
+    </div>
+    <div id="divCurso" style="float: left; margin-left: 6em; text-align: right;width: 10%;">
+        Curso: </div>
+    <select id='selectCursosAlumno'>
+    </select>
+    <div id="divAlumno" style="float: left; margin-left: 6em; text-align: right;width: 10%;">
+        Alumno:</div>
+    <select id='selectAlumnos'>
+    </select>
+    <div id="contenedorFiltrosFecha">
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em;">
+            Fecha desde:</div>
+        <input type="text" id="txtFechaDesdeAlumno" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em;" />
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em; margin-bottom: 1em;">
+            Fecha hasta:</div>
+        <input type="text" id="txtFechaHastaAlumno" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em; margin-bottom: 2em;" />
+    </div>
+    <input type="button" value="Aceptar" id="btnAceptar" />
+    <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+<div id="modal_actividades" class="reveal-modal large">
+    <div id="tituloPagina">
+        <h1>
+            Seleccione la actividad</h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+        </h1>
+    </div>
+    <div id="divCurso" style="float: left; margin-left: 6em;">
+        Actividad:</div>
+    <select id='selectActividades'>
+    </select>
+    <div id="contenedorFiltrosFecha">
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em;">
+            Fecha desde:</div>
+        <input type="text" id="txtFechaDesdeActividad" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em;" />
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em; margin-bottom: 1em;">
+            Fecha hasta:</div>
+        <input type="text" id="txtFechaHastaActividad" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em; margin-bottom: 2em;" />
+    </div>
+    <input type="button" value="Aceptar" id="btnAceptar" />
+    <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+<div id="modal_docentes" class="reveal-modal large">
+    <div id="tituloPagina">
+        <h1>
+            Seleccione el docente</h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+        </h1>
+    </div>
+    <div id="divDocente" style="float: left; margin-left: 6em;">
+        Docente:</div>
+    <select id='selectDocentes'>
+    </select>
+    <div id="contenedorFiltrosFecha">
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em;">
+            Fecha desde:</div>
+        <input type="text" id="txtFechaDesdeDocente" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em;" />
+        <div style="float: left; margin-left: 4em; margin-top: 1.8em; margin-bottom: 1em;">
+            Fecha hasta:</div>
+        <input type="text" id="txtFechaHastaDocente" class="datePicker" style="float: left;
+            width: 50%; margin-left: 1em; margin-top: 1em; margin-bottom: 2em;" />
+    </div>
+    <input type="button" value="Aceptar" id="btnAceptar" />
+    <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datePicker").datepicker();
+        $("#contenedorFiltrosFecha").hide();
+
+        cambioCombo();
+        cambioComboAlumno();
+        cambioComboActividades();
+        cambioComboDocentes();
+
+        $("#institucionCursos").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/InstitucionCursos?idInstitucion=" + $("#institucion").val(), '_blank');
+        });
+
+        $("#institucionDocentes").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/institucionDocentes?idInstitucion=" + $("#institucion").val(), '_blank');
+        });
+
+        $("#institucionAlumnos").click(function (e) {
+            e.preventDefault();
+
+            $("#divCurso").show();
+            $("#selectCurso").show();
+            $("#contenedorFiltrosFecha").hide();
+
+            $("#modal_cursos #explicacionTituloPagina").text('Alumnos Institución');
+            $("#modal_cursos").reveal();
+        });
+
+        $("#institucionActividades").click(function (e) {
+            e.preventDefault();
+
+            $("#divCurso").show();
+            $("#selectCurso").show();
+            $("#contenedorFiltrosFecha").hide();
+
+            $("#modal_cursos #explicacionTituloPagina").text('Actividades Institución');
+            $("#modal_cursos").reveal();
+        });
+
+        $("#seguimientoAlumno").click(function (e) {
+            e.preventDefault();
+
+            $("#divAlumno").show();
+            $("#selectAlumno").show();
+            $("#contenedorFiltrosFecha").show();
+
+            $("#modal_alumnos #explicacionTituloPagina").text('Seguimiento Alumno');
+            $("#modal_alumnos").reveal();
+        });
+
+        $("#seguimientoCurso").click(function (e) {
+            e.preventDefault();
+
+            $("#divCurso").show();
+            $("#selectCursos").show();
+            $("#contenedorFiltrosFecha").show();
+
+            $("#modal_cursos #explicacionTituloPagina").text('Seguimiento Curso');
+            $("#modal_cursos").reveal();
+        });
+
+        $("#seguimientoInstitucion").click(function (e) {
+            e.preventDefault();
+
+            $("#contenedorFiltrosFecha").show();
+            $("#divCurso").hide();
+            $("#selectCursos").hide();
+
+            $("#modal_cursos #explicacionTituloPagina").text('Seguimiento Institución');
+            $("#modal_cursos").reveal();
+        });
+
+        $("#seguimientoPlantilla").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/diacPlantilla?idInstitucion=" + $("#institucion").val(), '_blank');
+        });
+
+        $("#resolucionActividad").click(function (e) {
+            e.preventDefault();
+
+            $("#contenedorFiltrosFecha").show();
+            $("#divCurso").show();
+            $("#selectActividades").show();
+
+
+            $("#modal_actividades #explicacionTituloPagina").text('Resolución Actividad');
+            $("#modal_actividades").reveal();
+        });
+
+        $("#resolucionCurso").click(function (e) {
+            e.preventDefault();
+
+            $("#divCurso").show();
+            $("#selectCurso").show();
+            $("#contenedorFiltrosFecha").show();
+
+            $("#modal_cursos #explicacionTituloPagina").text('Resolución Cursos');
+            $("#modal_cursos").reveal();
+        });
+
+        $("#resolucionAlumno").click(function (e) {
+            e.preventDefault();
+
+            $("#divAlumno").show();
+            $("#selectAlumnos").show();
+            $("#contenedorFiltrosFecha").show();
+
+            $("#modal_alumnos #explicacionTituloPagina").text('Resolución Alumnos');
+
+            $("#modal_alumnos").reveal();
+        });
+
+        $("#resolucionDocente").click(function (e) {
+            e.preventDefault();
+
+            $("#divDocente").show();
+            $("#selectDocente").show();
+            $("#contenedorFiltrosFecha").show();
+
+            $("#modal_docentes #explicacionTituloPagina").text('Resolución Docentes');
+            $("#modal_docentes").reveal();
+        });
+
+        function cambioCombo() {
+            var id_institucion = $("#institucion").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/Institucion/getCursos',
+                data: JSON.stringify({ idInstitucion: id_institucion }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success:
+                function (data) {
+                    if (data.length != 0) {
+                        $('#selectCursos option').remove();
+                        $('#selectCursos').append('<option value="0">Todos</option>');
+                        $.each(data, function (key, value) {
+                            $('#selectCursos').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                        });
+                    }
+                    else {
+                        $('#selectCursos option').remove();
+                        $('#selectCursos').append('<option value="0">Todos</option>');
+                    }
+                },
+                error: function (data) { alert('error'); }
+            });
+        }
+
+
+        function cambioComboAlumno() {
+            var id_institucion = $("#institucion").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/Institucion/getCursos',
+                data: JSON.stringify({ idInstitucion: id_institucion }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success:
+                function (data) {
+                    if (data.length != 0) {
+                        $('#selectCursosAlumno option').remove();
+                        $('#selectCursosAlumno').append('<option value="0">Todos</option>');
+                        $.each(data, function (key, value) {
+                            $('#selectCursosAlumno').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                        });
+                    }
+                    else {
+                        $('#selectCursosAlumno option').remove();
+                        $('#selectCursosAlumno').append('<option value="0">Todos</option>');
+                    }
+
+                    $("#selectCursosAlumno").unbind();
+                    $("#selectCursosAlumno").change(function () {
+                        $.ajax({
+                            type: "POST",
+                            url: '/Institucion/getAlumnosCurso',
+                            data: JSON.stringify({ idInstitucion: id_institucion, idCurso: $(this).val() }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success:
+                            function (data) {
+                                if (data.length != 0) {
+                                    $('#selectAlumnos option').remove();
+                                    //$('#selectAlumnos').append('<option value="0">Todos</option>');
+                                    $.each(data, function (key, value) {
+                                        $('#selectAlumnos').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                                    });
+                                }
+                                else {
+                                    $('#selectAlumnos option').remove();
+                                    $('#selectAlumnos').append('<option value="0">Todos</option>');
+                                }
+                            },
+                            error: function (data) { alert('error'); }
+                        });
+                    });
+
+                    $('#selectCursosAlumno').trigger('change');
+
+                },
+                error: function (data) { alert('error'); }
+            });
+        }
+
+        function cambioComboActividades() {
+            var id_institucion = $("#institucion").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/Institucion/getActividades',
+                data: JSON.stringify({ idInstitucion: id_institucion }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success:
+                function (data) {
+                    if (data.length != 0) {
+                        $('#selectActividades option').remove();
+                        $('#selectActividades').append('<option value="0">Todos</option>');
+                        $.each(data, function (key, value) {
+                            $('#selectActividades').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                        });
+                    }
+                    else {
+                        $('#selectActividades option').remove();
+                        $('#selectActividades').append('<option value="0">Todos</option>');
+                    }
+                },
+                error: function (data) { alert('error'); }
+            });
+        }
+
+        function cambioComboDocentes() {
+            var id_institucion = $("#institucion").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/Institucion/getDocentes',
+                data: JSON.stringify({ idInstitucion: id_institucion }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success:
+                function (data) {
+                    if (data.length != 0) {
+                        $('#selectDocentes option').remove();
+                        $('#selectDocentes').append('<option value="0">Todos</option>');
+                        $.each(data, function (key, value) {
+                            $('#selectDocentes').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                        });
+                    }
+                    else {
+                        $('#selectDocentes option').remove();
+                        $('#selectDocentes').append('<option value="0">Todos</option>');
+                    }
+                },
+                error: function (data) { alert('error'); }
+            });
+        }
+
+        $("#institucion").change(function () {
+            cambioCombo();
+            cambioComboAlumno();
+            cambioComboActividades();
+            cambioComboDocentes();
+        });
+
+        $("#modal_cursos #btnCancelar").click(function () {
+            $("#modal_cursos").trigger('reveal:close');
+        });
+
+        $("#modal_cursos #btnAceptar").click(function () {
+            if ($("#modal_cursos #explicacionTituloPagina").text() == 'Alumnos Institución') {
+                window.open("/Reporte/institucionAlumnos?idInstitucion=" + $("#institucion").val() + "&idCurso=" + $("#selectCursos").val(), '_blank');
+            }
+            else if ($("#modal_cursos #explicacionTituloPagina").text() == 'Actividades Institución') {
+                window.open("/Reporte/institucionActividades?idInstitucion=" + $("#institucion").val() + "&idCurso=" + $("#selectCursos").val(), '_blank');
+            }
+            else if ($("#modal_cursos #explicacionTituloPagina").text() == 'Seguimiento Curso') {
+                window.open("/Reporte/diacCursos?idCurso=" + $("#selectCursos").val() + "&fechaDesde=" + $("#txtFechaDesdeCurso").val() + "&fechaHasta=" + $("#txtFechaHastaCurso").val() + "&idInstitucion=" + $("#institucion").val(), '_blank');
+            }
+            else if ($("#modal_cursos #explicacionTituloPagina").text() == 'Seguimiento Institución') {
+                window.open("/Reporte/diacInstitucion?idInstitucion=" + $("#institucion").val() + "&fechaDesde=" + $("#txtFechaDesdeCurso").val() + "&fechaHasta=" + $("#txtFechaHastaCurso").val(), '_blank');
+            }
+            else if ($("#modal_cursos #explicacionTituloPagina").text() == 'Resolución Cursos') {
+                window.open("/Reporte/resolucionCursos?idInstitucion=" + $("#institucion").val() + "&idCurso=" + $("#selectCursos").val() + "&fechaDesde=" + $("#txtFechaDesdeCurso").val() + "&fechaHasta=" + $("#txtFechaHastaCurso").val(), '_blank');
+            }
+        });
+
+        $("#modal_alumnos #btnCancelar").click(function () {
+            $("#modal_alumnos").trigger('reveal:close');
+        });
+
+        $("#modal_alumnos #btnAceptar").click(function () {
+            if ($("#modal_alumnos #explicacionTituloPagina").text() == 'Seguimiento Alumno') {
+                window.open("/Reporte/diacAlumnos?idInstitucion=" + $("#institucion").val() + "&idAlumno=" + $("#selectAlumnos").val() + "&fechaDesde=" + $("#txtFechaDesdeAlumno").val() + "&fechaHasta=" + $("#txtFechaHastaAlumnoD").val(), '_blank');
+            }
+            else if ($("#modal_alumnos #explicacionTituloPagina").text() == 'Resolución Alumnos') {
+                window.open("/Reporte/resolucionAlumnos?idInstitucion=" + $("#institucion").val() + "&idAlumno=" + $("#selectAlumnos").val() + "&fechaDesde=" + $("#txtFechaDesdeAlumno").val() + "&fechaHasta=" + $("#txtFechaHastaAlumno").val(), '_blank');
+            }
+        });
+
+        $("#modal_actividades #btnCancelar").click(function () {
+            $("#modal_actividades").trigger('reveal:close');
+        });
+
+        $("#modal_actividades #btnAceptar").click(function () {
+            if ($("#modal_actividades #explicacionTituloPagina").text() == 'Resolución Actividad') {
+                window.open("/Reporte/resolucionActividades?idInstitucion=" + $("#institucion").val() + "&idActividad=" + $("#selectActividades").val() + "&fechaDesde=" + $("#txtFechaDesdeActividad").val() + "&fechaHasta=" + $("#txtFechaHastaActividad").val(), '_blank');
+            }
+        });
+
+        $("#modal_docentes #btnCancelar").click(function () {
+            $("#modal_docentes").trigger('reveal:close');
+        });
+
+        $("#modal_docentes #btnAceptar").click(function () {
+            if ($("#modal_docentes #explicacionTituloPagina").text() == 'Resolución Docentes') {
+                window.open("/Reporte/resolucionDocentes?idInstitucion=" + $("#institucion").val() + "&idDocente=" + $("#selectDocentes").val() + "&fechaDesde=" + $("#txtFechaDesdeDocente").val() + "&fechaHasta=" + $("#txtFechaHastaDocente").val(), '_blank');
+            }
+        });
+
+    });
+    
+</script>

@@ -1,0 +1,31 @@
+﻿@{
+	var grillaAlumnosDarBaja = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridAlumnos");
+    grillaAlumnosDarBaja.Bind(Model);
+    grillaAlumnosDarBaja.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grillaAlumnosDarBaja.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px; color:#F58457;">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaAlumnosDarBaja.GetHtml(htmlAttributes: new { id = "gridAlumnos" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+            columns: grillaAlumnosDarBaja.Columns(
+                        grillaAlumnosDarBaja.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                        grillaAlumnosDarBaja.Column(columnName: "nombre", header: "Nombre", style: "alumno"),
+                        grillaAlumnosDarBaja.Column(columnName: "apellido", header: "Apellido", style: "alumno")
+            )
+        )
+    }
+}      

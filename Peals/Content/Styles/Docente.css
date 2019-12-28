@@ -1,0 +1,65 @@
+﻿/************************************************************************/
+/****************************** INDEX ***********************************/
+/************************************************************************/
+.opciones
+{
+    text-align: center; 
+    width: 100%;
+    float:left;
+}
+
+.opciones div  
+{
+    float: left; 
+    width: 20%;
+}
+
+#docente_actividades { border-bottom: 1px solid gray; padding-bottom: 10px }
+#docente_cursos { width: 70%; float: left; border-right: 1px solid gray; min-height: 18em; }
+#docente_solicitudes  
+{
+    width: 29%; 
+    float: right;
+    overflow-y: scroll;
+    height: 300px;
+    max-height:300px; 
+}
+
+#docente_instituciones 
+{
+    width: 100%; 
+    float: right;
+    overflow-y: scroll;
+    height: 300px;
+    max-height:300px; 
+}
+
+.searchDiv { width:700px; float:left}
+.searchDiv label { float:left; margin-top: 12px;}
+.searchDiv select { float:left; margin: 3px 5px }
+.searchDiv button { 
+    float: left;
+    margin-left: 20px;
+    margin-top: 0.3em;
+    padding: 0.2em 1em;
+     }
+
+#reemplazable_actividades { float: left; width:40%; }
+#reemplazable_actividades input{ width:90%; margin: 3px 5px}
+
+#reemplazable_cursos{ float: left; width:40%; }
+#reemplazable_cursos input { width:90%; margin: 3px 5px } 
+
+#op_cursos { display: none; text-align:center }
+#op_cursos button{ padding:5px; margin:15px; width:28%; }
+#grillaActividadesPendientes, #grillaCursos { clear: both }
+
+#dialog .op_dialog { border-top: 2px solid #3966A2; margin-top: 20px; padding: 15px 10px 0px 10px; }
+#dialog .dialog_aceptar, #dialog .dialog_registrar { float: right; margin-left: 20px;}
+#dialog .dialog_cancelar { float: left; }
+#dialog button { font-size: 1em !important; width: 200px; }
+
+.reveal-modal button { font-size: 1em !important; }
+#dialog_asignaciones { background-color: #d5efee; }
+#dialog_mensajes #dialog_acciones { overflow: hidden; border-top: 2px solid #3966A2; padding: 10px 10px 0px 10px }
+#dialog_mensajes #dialog_acciones button { width: 45% }

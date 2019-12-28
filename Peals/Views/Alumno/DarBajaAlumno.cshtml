@@ -1,0 +1,33 @@
+﻿<link href="@Url.Content("~/Content/Styles/Usuario.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Alumno.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "PEALS - DAR BAJA ALUMNO";
+}
+<div id="tituloUsuario">
+    <h1>Dar de baja al alumno</h1>
+</div>
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+    <fieldset>
+        @{Html.RenderAction("DarBajaUsuario", "Usuario");}
+        <div id="grillas">
+            <div id="grillaCursosDarBaja">
+                <p>Se borrar&aacute; la inscripci&oacute;n a los siguientes cursos:</p>
+                @{Html.RenderAction("_CursosAlumno");}
+             </div>
+             <div id="grillaInstitucionesDarBaja">
+                <p>Se borrar&aacute; la inscripci&oacute;n a las siguientes instituciones:</p>
+                @{Html.RenderAction("_InstitucionesAlumno");}
+            </div>
+        </div>
+    </fieldset>
+       <div class="boton">
+            <input class="submit guardar" type="submit" value="Aceptar" />       
+       </div>
+    @{Html.EndForm();}
+    
+       <div class="boton">
+            <input type="button" onclick="location.href='@Url.Action("Index", "Alumno")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+</div>

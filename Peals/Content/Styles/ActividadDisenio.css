@@ -1,0 +1,456 @@
+﻿.temp { display: none !important; }
+.scrollbar-ext{ overflow-y: auto; }
+
+.panel_izquierda
+{
+    float:left;
+    width:15%;
+    height: 900px;
+    background-color: #d55c4c;
+}
+
+.panel_centro { float:right; width:85%; }
+
+.area_titulo
+{
+    background: #d0473e;
+    text-align: center;
+    color:white;
+    height: 28px;  
+}
+
+#zoom_panel  
+{
+   visibility: hidden;
+   position: relative;
+   margin-top: -27px;
+   margin-left: 690px;
+}
+
+#zoom_panel img{
+   width: 20px;
+   height: 20px;
+   padding: 3px 5px 3px 5px;
+   border-radius: 10px;
+   background: #343C45;
+   cursor: pointer;
+}
+
+.menu_vertical li:first-child{
+   background-color: #d55c4c;
+   height: 28px;
+   border-top: 0px solid #666;
+   border-right: 0px solid #666;
+   border-bottom: 0px solid #666;
+   margin: 0 0;
+}
+
+.menu_vertical li:first-child p{
+    float:left;
+    color: white;
+    margin-left: 10px;
+}
+
+.menu_vertical li:first-child img{
+    float: right;
+    position: relative;
+    margin-top: 4px;
+    margin-left: 0px;   
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.menu_vertical li:first-child:hover
+{
+   border-left: 0px solid #333;
+   background-color: #d55c4c;
+}
+
+.menu_vertical
+{
+   list-style: none;
+   background-color: whitesmoke;
+   border-bottom: 3px solid #d55c4c;
+   width:98.5%;
+   height: 100%;
+}
+
+.menu_vertical li
+{
+   border-top: 1px solid #666;
+   border-bottom: 1px solid #666;
+   background-color: #ddd;
+   margin: 4px 0;
+}
+
+.menu_vertical li p
+{
+   text-decoration: none;
+   color: #666;
+   display: block;
+   padding: 0px 10px;
+   cursor: poiter;
+}
+
+.menu_vertical li img{
+   position: absolute;
+   margin: -25px 0px 0px 128px;
+   cursor: pointer;
+}
+
+.menu_vertical li p:last-child { text-align: right; font-size: 0.8em; }
+.menu_vertical li:hover { background-color: #eee; }
+.menu_vertical li.selected { border-right: none; background-color: #fff; border-left: 8px solid #006699; }
+
+#area_disenio{ height: 600px; }
+#area_solucion{ height: 300px; border-bottom: 3px solid #d55c4c; }
+
+.contenido_ejercicio { position: relative; float:left; width: 92%; min-width: 92%; height:90%; min-height: 90%; }
+.panel_derecha
+{
+   float: right;
+   width: 8%;
+   height: 95.4%;
+   background-color: #d55c4c;   
+   margin-top: -5px;
+}
+
+.herramientas {
+   background-color: whitesmoke;
+   height: 100%;
+   width: 97%;
+   margin-left: 4%; 
+}
+
+.herramientas li{
+   margin-left: 10%;
+   padding-top: 20px;
+   cursor: pointer;
+}
+
+.herramientas li img:first-child{
+   display: none;
+   position:absolute;
+   margin-left: -8px;
+}
+
+.herramientas li:hover > img:first-child{ display: block; }
+
+#tipos_soluciones{ width:100%; height: 10%; }
+#tipos_soluciones li
+{
+   float:left;
+   width: 31%;
+   background-color: white;
+   padding: 10px 10px 0px 10px;
+   border-bottom: 1px solid black;
+   cursor: pointer;
+}
+#tipos_soluciones li:nth-child(2)
+{ 
+   width:30.3%; 
+   border-left: 1px solid black;
+   border-right: 1px solid black;
+}
+#tipos_soluciones li img { margin-left: 70px; }
+#tipos_soluciones li label{ position: absolute; margin: 3px; cursor: pointer; }
+
+.opciones{ background-color: #e18146 !important; color: white; }
+.escribir{ background-color: #00759b !important; color: white; }
+.senias{ background-color: #7c3a7d !important; color: white; }
+
+.contenido_solucion #panel_drag {
+   margin: 30px 0px 0px 17px;
+   width:95%;
+   height: 200px;
+   text-align: center;
+   border: 4px dashed gray;
+}
+
+.contenido_solucion #panel_drag h3 {
+   width: 100%;
+   height: inherit;
+   vertical-align: middle;
+   display: table-cell;
+   padding-left: 260px;
+   font-size: 1.2em;
+   color: gray;
+}
+
+.contenido_solucion #panel_img {
+   text-align: center;
+   height: 200px;
+   width: auto;
+   margin-top: 37px;
+}
+
+.contenido_solucion #panel_img img{
+   height: 190px;
+   width: auto;
+}
+
+.contenido_solucion #panel_img video{
+   height: 190px;
+   width: auto;
+   margin-left: 230px;
+}
+
+.contenido_solucion #panel_img audio{
+   margin-top:70px;
+   width: auto;
+}
+
+.contenido_solucion #panel_img textarea{
+   width: auto;
+   max-width: 700px;
+   height: 180px;
+   max-height: 180px;  
+   border-radius: 5px;
+}
+
+#solucion_senias
+{
+    text-align:center;
+}
+
+#solucion_senias #select_senias 
+{
+    width: 40%;
+}
+
+#divBuscarSenia 
+{
+    float: left;
+    margin-bottom:1em;
+}
+
+#txtBuscarSenia 
+{
+    cursor: text;
+    font: inherit;
+    outline: medium none;
+    text-align: left;
+}
+
+#gridSenias img
+{
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 3em;
+}
+
+
+.contenido_solucion #solucion_escribir h3,
+.contenido_solucion #solucion_senias h3{
+   float:left;   
+   width: 100%;
+   text-align: center;
+   margin: 20px;
+   font-size: 1.3em;
+   color: #088782;
+}
+
+.contenido_solucion #solucion_escribir #rTexto,
+.contenido_solucion #solucion_senias select
+{
+   float:left;
+   width:75%;
+   margin: 0px 0px 0px 75px;
+   text-align: center !important;
+   font-size: 1.2em !important;
+   text-transform: uppercase;
+}
+
+.contenido_solucion #solucion_escribir .div_deletreo{
+   float:left;
+   width:100%;
+   margin: 20px 0px 0px 290px;
+   color: #088782;
+}
+
+.contenido_solucion #solucion_senias select{ margin-left: 100px !important; }
+
+.contenido_solucion #solucion_senias h3{ margin-left: 0px !important; }
+
+.active { background-color: #d55c4c !important; }
+.active p { color: white !important; }
+
+.content_recurso:hover > span { display: block; }    
+.content_recurso span {
+    background: rgba(150, 150, 150, 0.5) none repeat scroll 0 0;
+    border: 2px solid #999;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 7px;
+    bottom: -30px;
+    height: 28px;
+    position: absolute;
+    right: 0;
+    top: -30px;
+    width: auto;
+    z-index: 1;
+}
+
+.content_recurso span img{
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+}
+
+.content_recurso span img:first-child{ float: right; }
+
+.content_recurso span img:last-child{ float: left; }
+
+.content_recurso > img, video
+{
+    border-radius:10px;
+    float:left;   
+    z-index:2;   
+    width: 100%;
+}
+
+.content_recurso > audio
+{
+    float:left;   
+    z-index:2;   
+    width: 100%;
+}
+
+.content_recurso { position:absolute !important; cursor:pointer; display: inline-block;  }
+
+.content_textarea{ width: 300px ; height: 200px; padding-bottom: 10px; padding-right: 3px; }
+.texto_actividad  
+{
+    background-color: #fff9c9;
+    /*! border: 1px solid gray; */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 0;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px 0px 0px 0px;
+    height: 100%;
+    width: 100%;
+}
+
+.content_imagen { height: 200px; width: 200px; }
+.img_actividad 
+{ 
+   height: 100%; 
+   width: 100%; 
+   border: 1px solid gray; 
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+}
+
+.content_audio { width: 270px; height: 35px; }
+.content_video { width: 500px; height: 300px; }
+.video_actividad { width: 100%; height: 100%; }
+
+/*#region Presentación */
+
+#presentacion { height: 900px; margin: 0px 10px 0px 10px; overflow: hidden; }
+#presentacion #act_nombre { width: 80%; }
+#presentacion #pAct_explicacion { overflow: hidden; }
+#presentacion video{ width: 100%; height: 282px; border-radius: 5px 5px 0px 0px; }
+#presentacion #info_videoOp button{ width: 49%; margin-top: 5px; }
+#presentacion #texto_explicacion
+{ 
+    width:90%; 
+    min-height:172px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    font-size:20px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#presentacion h2 {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 1.05em;a
+    color: #0AA7A2;
+    width: 100%;
+    text-align: left;
+}
+
+#presentacion h3 {
+    font-size: 0.9em;
+    color: #d59720;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.left { width: 50%; float: left; }
+.right { width: 50%; float: right; }
+
+
+/*#endregion*/
+
+#botones button{
+   width: 200px;
+   margin: 10px;
+}
+
+#botones #btn_siguiente,
+#botones #btn_guardar,
+#botones #btn_vistaPrevia{
+   float: right;
+}
+
+#dialog{
+   position: fixed;
+   left: 0px;
+   top: 0px;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(50, 50, 50, 0.8);
+   z-index: 100;
+}
+
+#dialog #mensaje{
+   position: absolute;
+   width: 100%;
+   height: 100px;
+   top: 40%;
+   padding: 20px;
+   background-color: rgb(50, 50, 50);
+   text-align: center;
+   color:white;
+}
+
+#dialog #mensaje #anim_line{
+   position: absolute;
+   left: 50%;
+   height: 30px;
+   width: 30px;
+   margin-top: 10px;
+   padding: 20px;
+   border-radius: 80px;
+   border: 3px solid #3E85D6;
+}
+
+.btnCheck { display:none; }
+
+#guardar-actividad{
+   position: fixed;
+   width: 100%;
+   height: 100%;
+   top:0px;
+   left: 0px;
+   background: rgba(1, 135, 21, 1);;
+   text-align: center;
+   z-index: 1000;
+}
+
+#guardar-actividad img{
+   position: relative;
+   top: 40%;
+   width: 500px;
+}
+
+#guardar-actividad h1{
+   position: relative;
+   font-size: 2em;
+   color: #FFFEFF;
+   top: 45%;
+}

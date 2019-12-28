@@ -1,0 +1,112 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+h1 { color: #0AA7A2; font-size: xx-large;}
+h3 { color: #ecae76;}
+
+/* CSS LOGIN */
+#login{  height: 500px;  float: left; width: 520px; margin-top: 20px; margin-bottom: 20px; margin-left: 20px; }
+/* 520 + 20 = 540px width */
+
+#loginData
+{
+    background-image: url('../Resources/Home/InicioSesion.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    width: 480px;
+    height: 400px;
+    color: #FFF;
+    margin-bottom: 20px; 
+}
+.Form{  width: 400px; position:relative; top: 75px; left: 100px;}
+.Form td{width: 80px; padding-bottom: 10px; padding-right: 5px; border: none; }
+.submitLogin
+{
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("../Buttons/btn-ingresa.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100px 40px;
+    border: medium none;
+    cursor: pointer !important;
+    height: 50px;
+    /*line-height: 100px;*/
+    margin-left: 25px;
+    padding-bottom: 0;
+    padding-right: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 125px;
+}
+
+
+.submitLogin:hover,
+.submitLogin:active,
+.submitLogin:focus {
+    background-size: 130px 50px;
+}
+
+
+/* CSS REGISTRAR USUARIO */
+#registrarse{float: left; width: 375px; height: 500px; margin-top: 20px; margin-bottom: 20px; padding-left: 40px;
+border-left-color: #ecae76; border-left-style: solid; border-left-width: thick; }
+
+/* 540 + 375 + 40 + 5 (Borde) = 960 px; */
+.FormRegistrar { width:375px;}
+.FormRegistrar table{ width:360px;}
+
+.FormRegistrar td{ border: none; color: #ecae76; text-align: left; width: 80px;}
+
+.FormRegistrar th {  text-align: center; width: 80%;}
+
+.submitRegistrar
+{
+    border: 0 none #FFFFFF;
+    cursor: pointer !important;
+    float: right;
+    height: 50px;
+    /*line-height: 100px;*/
+    margin-right: 50px;
+    margin-top: 15px;
+    vertical-align: middle;
+    width: 115px;
+        
+}
+
+.submitRegistrar:hover,
+.submitRegistrar:active,
+.submitRegistrar:focus {
+    background-size: 130px 50px;
+}
+
+#recuperarContrasenia
+{
+    font-family: 'Oswald', sans-serif;
+    font-size: medium;
+    color: #ecae76;
+    text-align:center;
+}
+
+#recuperarContrasenia a
+{
+    color: #0AA7A2;
+    text-decoration:none;
+
+}
+
+#recuperarContrasenia:hover
+{
+    font-size: larger;
+}
+
+#recuperarContrasenia a:hover
+{
+    text-decoration: underline;
+}
+
+#mail, #contrasena
+{
+    color: Black;
+    border:0px;
+    box-shadow: 0px 0px 0px #ECAE76;
+}

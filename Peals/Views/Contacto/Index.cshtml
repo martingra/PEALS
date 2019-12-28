@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "PEALS - CONTACTO";
+}
+<style type="text/css">
+    #map-outer
+    {
+        width: 90%;
+        height: auto;
+        padding: 6px;
+        border: 1px solid #ccc;
+        clear: both;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-box-shadow: 0 0 6px #ddd;
+        -webkit-box-shadow: 0 0 6px #ddd;
+        float: right;
+        background-color: #0aa7a2;
+        color: White;
+        margin-bottom: 1em;
+        margin-right: 2em;
+    }
+    
+    #datos-contacto
+    {
+        float: right;
+        text-align: center;
+        width: 40%;
+    }
+    
+    #formulario
+    {
+        float: left;
+        width: 100%;
+    }
+    
+    #divContacto
+    {
+        float: left;
+        width: 60%;
+    }
+    
+    #map_canvas
+    {
+        width: 40%;
+        height: 200px;
+        float: right;
+        position: relative;
+        background-color: rgb(229, 227, 223);
+        overflow: hidden;
+        -webkit-transform: translateZ(0);
+    }
+    
+    fieldset
+    {
+        background-color: #0aa7a2;
+        width: 90%;
+    }
+    
+    legend
+    {
+        color: White;
+    }
+    
+    #formulario div
+    {
+        width: 100%;
+        text-align: right;
+        float: left;
+        margin-bottom: 0.5em;
+    }
+    
+    #formulario input
+    {
+        float: right;
+        margin-left: 5%;
+        margin-right: 5em;
+        width: 50%;
+    }
+    
+    textarea
+    {
+        margin-right: 5%;
+        width: 85%;
+        height: 10em;
+    }
+    
+    .lblComentario
+    {
+        text-align: left !important;
+        padding-left: 2%;
+    }
+</style>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<div id="tituloPagina">
+    <h1>
+        CONTACTO</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Aquí encontrarás nuestros datos de contacto para que podamos estar comunicados.
+        Puedes contactarte directamente con nosostros, o directamente utilizar el siguiente
+        formulario para contactarte con los desarrolladores del sitio, para que nos dejes
+        tus comentarios, sugerencias y críticas. Muchas gracias por participar!</h1>
+</div>
+<section id="map-outer">
+
+    
+
+	<div id="map_canvas"></div>
+    @{ Html.BeginForm("Index", "Contacto", FormMethod.Post); }
+    <div id="divContacto" >
+        <fieldset>
+    	    <legend>Formulario de contacto</legend>
+            <div id="formulario">
+                <div class="lblNombre" >Nombre: <input type="text" name="txtNombre" value="" required /> </div>
+                <div class="lblTelefono" >Teléfono: <input type="text" name="txtTelefono" value="" required/> </div>
+                <div class="lblMail" >E-Mail: <input type="text" name="txtMail" value="" required/> </div>
+                <div class="lblComentario" >Comentario: <textarea name="txtComentario" required></textarea> </div>
+            </div>
+            <input type="submit" value="Enviar" style="float:right; padding: 0.1em 1em !important; margin-right:12%;"/>
+        </fieldset>
+    </div>
+    @{ Html.EndForm(); }
+    <div id="datos-contacto">
+	        <br /> <div id="mail">contacto@peals.com</div> <br />
+            <div id="direccion">Maestro M. Lopez esq. Cruz Roja Argentina - Ciudad Universitaria - Córdoba Capital</div>
+        </div>
+
+    
+
+</section>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var gmap = {
+            init: function (Lat, Lng) {
+                var mapCanvas = document.getElementById('map_canvas');
+                var mapOptions = {
+                    center: new google.maps.LatLng(Lat, Lng),
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+                var map = new google.maps.Map(mapCanvas, mapOptions);
+            }
+        }
+        google.maps.event.addDomListener(window, 'load', gmap.init(-31.442928, -64.194155));
+    });
+
+</script>

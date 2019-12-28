@@ -1,0 +1,61 @@
+﻿
+
+
+@{
+
+    var grillaSenias = new WebGrid(canPage: true, rowsPerPage: 3, canSort: true, ajaxUpdateContainerId: "gridSenias", ajaxUpdateCallback: "evento");
+    grillaSenias.Bind(Model);
+    grillaSenias.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero",
+        lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+}
+
+
+<div id="tituloPagina">
+<h1> Señas disponibles</h1>
+</div>
+<br />
+<div id="divBuscarSenia">
+    <input type="text" id="txtBuscarSenia" class="ui-button ui-widget ui-state-default ui-corner-all" /> <input type="button" value="buscar" class="submit guardar ui-button ui-widget ui-state-default ui-corner-all" onclick="buscarSenia()" />
+</div>
+
+@grillaSenias.GetHtml(htmlAttributes: new { id = "gridSenias" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+                    columns: grillaSenias.Columns(
+                                grillaSenias.Column("Clase"),
+                                grillaSenias.Column(format: @<img src="@item.ruta" />),
+                                grillaSenias.Column(format: @<input type="hidden" id="IDHidden" value="@item.ID"/>)
+            ))
+
+            <script type="text/javascript"">
+                function clickFila(clase, id) {
+                    $('.reveal-modal').trigger('reveal:close');
+                    _ejercicio_sel.solucion.respuesta = id;
+                    _ejercicio_sel.solucion.senia = clase;
+                    $("#select_senias").val(clase);
+                }
+
+                function evento() {
+                    $("html, body").animate({ scrollTop: $('#divSenias').offset().top }, "slow");
+
+                    $("#gridSenias tbody tr").on('click', function() {
+                        clickFila($(this).find('td').text(), $(this).find('#IDHidden').val());
+                    });
+                }
+
+                function buscarSenia() {
+                    $("#divSenias").load('/Actividad/_Senias?filtro='+$('#txtBuscarSenia').val());
+                }
+
+                $("#gridSenias tbody tr").on('click', function() {
+                    clickFila($(this).find('td').text(), $(this).find('#IDHidden').val());
+                });
+            </script>

@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = "Reportes";
+}
+<link href="@Url.Content("~/Content/Styles/botoneraConImagen.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<style>
+    .opciones div
+    {
+        float: left;
+        margin-left: 3em;
+        width: 20%;
+        height: 250px;
+    }
+    
+    select
+    {
+        width: 48em;
+        margin-left: 6em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+    
+    #modal_cursos select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_alumnos select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_alumnos input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+    
+    #modal_actividades select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_actividades input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+    
+    #modal_docentes select
+    {
+        width: 60%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: -0.5em;
+    }
+    
+    #modal_docentes input
+    {
+        width: 40%;
+        float: left;
+        margin-left: 1.5em;
+        margin-top: 1.3em;
+    }
+    
+    .image-effect-rotation {
+    border: 4px solid #ecae76;
+    float: left;
+    height: 320px;
+    margin-bottom: 5%;
+    margin-left: 39%;
+    perspective: 800px;
+    width: 25%;
+}
+</style>
+<div id="tituloPagina">
+    <h1>
+        Reportes Alumno</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Emisión de reportes generales del alumno.
+    </h1>
+</div>
+
+<div class="image-effect-rotation">
+    <div class="image-side">
+        <img src="@Url.Content("~/Content/Resources/MasterPage/alumno.png")" width="500" alt="California surf">
+        <div>
+            ALUMNO</div>
+    </div>
+    <div class="share-side">
+        <div>
+            ALUMNO</div>
+        <a id='alumnoInstituciones' href="#" class="share-button share-via-facebook"><i class="fa fa-facebook"></i>Mis instituciones</a> 
+        <a id='alumnoCursos' href="#" class="share-button share-via-twitter"><i class="fa fa-twitter"></i>Mis cursos</a>
+        <a id='alumnoActividades' href="#" class="share-button share-via-google"><i class="fa fa-google"></i>Mis actividades</a>
+        <a id='resolucionActividadesAlumno' href="#" class="share-button share-via-flicker"><i class="fa fa-flicker"></i>Resolución actividades</a>
+    </div>
+</div>
+
+<div id="modal_actividades" class="reveal-modal large">
+    <div id="tituloPagina">
+        <h1>Seleccione la actividad</h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            
+        </h1>
+    </div>
+    <div id="divCurso" style="float:left; margin-left:6em;">Actividad:</div>
+        <select id='selectActividades'></select>
+        
+        <div id="contenedorFiltrosFecha" >
+            <div style="float:left; margin-left:4em; margin-top: 1.8em;">Fecha desde:</div>
+            <input type="text" id="txtFechaDesdeActividad" class="datePicker" style="float:left; width:50%; margin-left:1em; margin-top:1em;"/>
+            <div style="float:left; margin-left:4em; margin-top: 1.8em; margin-bottom:1em;">Fecha hasta:</div>
+            <input type="text" id="txtFechaHastaActividad"  class="datePicker" style="float:left; width:50%; margin-left:1em; margin-top:1em; margin-bottom:2em;"/>
+        </div>
+
+        <input type="button" value="Aceptar" id="btnAceptar" />
+        <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".datePicker").datepicker();
+        cambioComboActividades();
+
+        $("#alumnoInstituciones").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/AlumnoInstituciones", '_blank');
+        });
+
+        $("#alumnoCursos").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/AlumnoCursos", '_blank');
+        });
+
+        $("#alumnoActividades").click(function (e) {
+            e.preventDefault();
+            window.open("/Reporte/alumnoActividades", '_blank');
+        });
+
+        $("#resolucionActividadesAlumno").click(function (e) {
+            e.preventDefault();
+            $("#modal_actividades #explicacionTituloPagina").text('Resolución Actividades');
+            $("#modal_actividades").reveal();
+        });
+
+        function cambioComboActividades() {
+            $.ajax({
+                type: "POST",
+                url: '/Alumno/getActividades',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success:
+                function (data) {
+                    if (data.length != 0) {
+                        $('#selectActividades option').remove();
+                        $('#selectActividades').append('<option value="0">Todos</option>');
+                        $.each(data, function (key, value) {
+                            $('#selectActividades').append("<option value=" + value.Id + ">" + value.Label + "</option>");
+                        });
+                    }
+                    else {
+                        $('#selectActividades option').remove();
+                        $('#selectActividades').append('<option value="0">Todos</option>');
+                    }
+                },
+                error: function (data) { alert('error'); }
+            });
+        }
+
+        $("#modal_actividades #btnCancelar").click(function () {
+            $("#modal_actividades").trigger('reveal:close');
+        });
+
+        $("#modal_actividades #btnAceptar").click(function () {
+            if ($("#modal_actividades #explicacionTituloPagina").text() == 'Resolución Actividades') {
+                window.open("/Reporte/resolucionActividadesAlumno?idActividad=" + $("#selectActividades").val() + "&fechaDesde=" + $("#txtFechaDesdeActividad").val() + "&fechaHasta=" + $("#txtFechaHastaActividad").val(), '_blank');
+            }
+        });
+
+    });
+    
+</script>

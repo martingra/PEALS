@@ -1,0 +1,221 @@
+﻿#criterio_correccion{ clear: both; }
+#criterio_correccion label { color: #d59720; margin-left: 10px; margin-right: 10px; }
+#criterio_correccion select { width: 300px; }
+#criterio_correccion input { height:30px; }
+
+#criterio_correccion #btn_nuevoCriterio, 
+#criterio_correccion #btn_editarCriterio,
+#criterio_correccion #btn_guardarCriterio { float: right; width: 175px;}
+
+#criterio_correccion #btn_nuevoCriterio:hover>h2, 
+#criterio_correccion #btn_editarCriterio:hover>h2,
+#criterio_correccion #btn_guardarCriterio:hover>h2{ text-decoration: underline; cursor: pointer; }
+
+#criterio_correccion #btn_nuevoCriterio img, 
+#criterio_correccion #btn_editarCriterio img,
+#criterio_correccion #btn_guardarCriterio img { float: left; margin: 10px; }
+
+#criterio_correccion #btn_editarCriterio,
+#criterio_correccion #btn_guardarCriterio{ position: relative; top: -90px; right: -50px; }
+
+#criterio_correccion #intervalos { padding: 20px; margin-top: 20px; display: none; }
+#criterio_correccion #intervalo #btn_agregarIntervalo{ width: 150px; height: 40px; font-size: 1.1em !important; }
+
+#criterio_correccion #intervalo div:nth-child(1){ float:left; margin-bottom: 20px; }
+#criterio_correccion #intervalo div:nth-child(2){ clear: left; float: left; }
+
+#criterio_correccion #intervalo #txt_nombre { width: 285px; }
+#criterio_correccion #intervalo #txt_hasta { margin-left: 15px; margin-right: 10px; padding-left: 10px; }
+
+#timeline_container { clear: both; width: 100%; padding-top: 170px; padding-bottom: 50px; }
+#timeline_container h1 
+{
+   background-color: #46910e;
+   border-radius: 80px;
+   width: 30px;
+   height: 30px;
+   color: white;
+   text-align: center;
+}
+#timeline_container h1:first-child { float: left; padding: 7px;}
+#timeline_container h1:last-child { float: right; padding: 7px; margin-right:32px;}
+#timeline_container #line
+{ 
+   float:left;  
+   position: absolute;
+   width: 769px; 
+   height: 0px;
+   border: 3px solid #5bab20; 
+   margin: 20px 0px 0px 0px;
+}
+
+#timeline_container ul{
+   position: relative;
+   width: 769;
+}
+
+#timeline_container #timeline li { float: left; position: absolute; margin-left: 50px; }
+#timeline_container #timeline li:last-child{ margin-left: 60px; margin-top: -10px; }
+#timeline_container #timeline li:last-child > p { display:none;}
+#timeline_container #timeline li:last-child > span { 
+   background-color: #46910E;
+   border: none;
+   width: 0px;
+   height: 0px;
+}
+#timeline_container #timeline li:last-child > span:hover{ background-color: #46910E; cursor: pointer; }
+
+#timeline_container #timeline li span{
+   position: absolute;
+   border: 3px solid #5bab20;
+   background-color: white;
+   border-radius: 20px;
+   width: 15px;
+   height: 15px;
+   top:14px;
+}
+
+#timeline_container #timeline li span:hover{ background-color: #5bab20; cursor: pointer; }
+#timeline_container #timeline li span:hover > #panel_imagen #img_foreground
+{ 
+   -webkit-animation-name: pin_anim; /* Chrome, Safari, Opera */
+   -webkit-animation-duration: 0.5s; /* Chrome, Safari, Opera */
+   animation-name: pin_anim;
+   animation-duration: 0.5s;
+   width: 92px; height: 92px; left: -15px; top: -18px; border: 3px solid #494949;
+}
+
+#timeline_container #timeline li #panel_imagen{
+   width: 72px;
+   height: 92px;
+   position: absolute;
+   top: -90px;
+   left: -25.5px;
+}
+
+#timeline_container #timeline li #panel_imagen #img_opciones{
+   position: relative;
+   display: none;
+   background-color: rgba(60, 60, 60, 0.5);
+   width: 98px;
+   height: 94px;
+   top: -118px;
+   left: -15px;
+   border-radius: 128px;
+   z-index: 3;
+}
+
+#timeline_container #timeline li #panel_imagen #img_opciones img {
+   width: 42px;
+   height: 42px;
+   margin-left: 5px;
+   margin-top: 25px;
+   cursor: pointer;   
+}
+
+#timeline_container #timeline li #panel_imagen #img_opciones img:hover{ 
+   border: 2px solid whitesmoke; 
+   border-radius: 42px;
+}
+
+#timeline_container #timeline li #panel_imagen #img_foreground{
+   position: relative;
+   width: 42px;
+   height: 42px;
+   left: 11px;
+   top: 35px;
+   border-radius: 128px;
+   z-index: 2;
+}
+
+#timeline_container #timeline li span #panel_imagen:hover > #img_opciones { display: block; }
+
+/* Standard syntax */
+@keyframes pin_anim {
+   from { width: 42px; height: 42px; left: 11px; top: 35px; }
+   to { width: 92px; height: 92px; left: -15px; top: -18px; border: 3px solid #494949; }
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes pin_anim {
+   from { width: 42px; height: 42px; left: 11px; top: 35px; }
+   to { width: 92px; height: 92px; left: -15px; top: -18px; border: 3px solid #494949; }
+}
+
+#timeline_container #timeline li p{ color: #666; margin-left: 2px; margin-top: 35px; }
+#timeline_container #timeline li #line_over{
+   box-shadow: 0px -13px 5px #A4D52C;
+   position: absolute;
+   margin-top: 0px;
+   height: 10px;
+}
+
+#dialog_recursoCriterio
+{
+   width: 600px;
+   height: 572px;
+}
+
+#dialog_recursoCriterio #titulo{
+   border-bottom: 2px solid #D0473E;
+   padding: 10px;
+}
+
+#dialog_recursoCriterio #btn_cargarPC{ 
+   float: right; 
+   width: 170px; 
+   padding: 10px;
+   margin-top: 20px;
+   margin-right: 30px;
+   border: 2px solid #138BAF;
+   border-radius: 5px;
+   color: black;
+}
+
+#dialog_recursoCriterio #titulo > h2 { font-size: 1.5em; }
+#dialog_recursoCriterio #titulo #btn_cargarPC h2{ margin-top: 6px;  } 
+
+#dialog_recursoCriterio #btn_cargarPC:hover{
+   animation-name: transform_button_anim;
+   animation-duration: 0.3s;
+   background: rgb(5, 113, 142);
+   color: white;
+   border-radius: 15px;
+   cursor: pointer;
+}
+
+#dialog_recursoCriterio #btn_cargarPC:hover > img{
+   filter: invert(100%);
+}
+
+#dialog_recursoCriterio #btn_cargarPC img{ 
+   float: left; 
+   padding-right: 15px; 
+}
+
+#dialog_recursoCriterio #contenido_recursosCriterio{
+   width: 100%;
+   height: 76%;
+}
+
+#dialog_recursoCriterio #contenido_recursosCriterio .rContent_img{
+   float: left;
+   width: 92px;
+   height: 92px;
+   margin: 15px 5px 15px 15px;
+   border-radius: 5px;
+   border: none !important;
+   text-align: center;
+   cursor: pointer;
+}
+
+#dialog_recursoCriterio #contenido_recursosCriterio .rContent_img > img
+{ position: relative; top:0px; left: 0px; width: 88px; height: 90px; border-radius: 5px; }
+
+#dialog_recursoCriterio #contenido_recursosCriterio .rContent_img:hover > img{
+   top:-2px;
+   width: 92px;
+   height: 92px;
+   border-radius: 8px;
+}
+

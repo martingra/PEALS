@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Recuperar Contraseña";
+}
+<div id="tituloPagina">
+    <h1>
+        Recuperar contraseña</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Ingresa tu correo electrónico y te informaremos tu nueva contraseña.
+    </h1>
+</div>
+
+@{Html.BeginForm();}
+<div style="margin-left:3em; height:10em;">
+    Correo Electrónico: <input type="text" id="txtMail" style="width:30%;" name="mail"/>
+    <input type="submit" id="btnAceptar" value="Aceptar" />
+</div>
+@{Html.EndForm();}

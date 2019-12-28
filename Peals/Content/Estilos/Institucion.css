@@ -1,0 +1,24 @@
+#titulo{ padding: 20px 0 0 25px;}
+#titulo h1{ color: #0AA7A2; font-size: xx-large;}
+#titulo h2{ color: #0AA7A2; font-size: medium;}
+
+.tabPanel { background: rgba(0,0,0,0); border: none; }
+.tabPanel ul { background: #0aa7a2; }
+.tabPanel li { width: 35%; border:1px solid black }
+.tabPanel a { width: 89%; }
+.tabPanel .ui-state-default { background: #d2e5b6 }
+.tabPanel .ui-state-hover { background: #c8e1a5; font-weight:bold }
+.tab-state-focus { background: #c8e1a5 }
+
+.tabPanel { background: rgba(0,0,0,0); border: none; }
+
+#panelContent { border-right: 1px solid gray; border-left: 1px solid gray; border-bottom: 1px solid gray }
+
+form td{ margin-right: 10px; min-width: 270px; height: 30px; }
+form input{ width: 300px;}
+form select{ width: 300px;}
+form p { margin-top: 15px; margin-bottom:15px; }
+form #fs_domicilio{ width: 90%; background-color: rgba(248,248,248,1); margin-top:10px }
+
+#botones { text-align: right}
+#botones button{ margin: 10px; }

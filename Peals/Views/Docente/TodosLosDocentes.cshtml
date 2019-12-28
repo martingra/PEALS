@@ -1,0 +1,91 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<style>
+    #gridDocentes
+    {
+        width: 95%;
+        margin: 20px;
+    }
+</style>
+@{
+    ViewBag.Title = "Docentes de PEALS";
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridDocentes");
+    grid.Bind(Model);
+    grid.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15
+    );
+}
+<div id="tituloPagina">
+    <h1>
+        Listado de Docentes</h1>
+</div>
+<p id="explicacionTituloPagina">
+    A continuación podrás ver un listado con todos los docentes inscriptos en PEALS.
+    Si quieres puedes mandarles un mensaje para que se unan a tu institución.
+</p>
+@grid.GetHtml(
+    htmlAttributes: new { id = "gridDocentes" },
+    tableStyle: "webgrid",
+    headerStyle: "webgrid-header",
+    footerStyle: "webgrid-footer",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-selected-row",
+    rowStyle: "webgrid-row-style",
+    columns: grid.Columns(
+        grid.Column(header: "", format: item => (item.TrabajaEnInstitucion > 0) ?
+            Html.Raw("<img src='" + Url.Content("~/Content/Resources/General/Tilde.png") + "' widht='24px' height='24px' />") :
+            (item.SolicitudesEnviadas > 0) ?
+            Html.Raw("<img src='" + Url.Content("~/Content/Resources/General/esperando.png") + "' widht='24px' height='24px' />") :
+            Html.Raw("")),
+        grid.Column("Nombre"),
+        grid.Column("Mail"),
+        grid.Column("Especialidad"),
+        grid.Column(header: "Estado", format: item => (item.CantInstituciones > 0) ?
+                string.Format("Trabajando en {0} instituciones", item.CantInstituciones) :
+                "Actualmente sin instituciones"
+        ),
+        grid.Column(format: @<input type="hidden" name="IDHidden" value="@item.Id"/>)
+    )
+)
+@*<button type="button" id="btn_enviar" style="float: right;
+    font-size: 1em !important;
+    height: 2.5em;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    width: 10em;">Enviar Solicitud</button>*@
+<div id="modal_solicitud_inscripcion" class="reveal-modal">
+    @{Html.RenderAction("_NuevaSolicitudADocente", "Mensaje", new { mail = "admin@peals.com", idInstitucion = @ViewBag.idInstitucion });}
+</div>
+<script type="text/javascript">
+
+        $(document).ready(function (object) {
+
+            var rowDocenteSeleccionado = $('#gridDocentes').find('tbody > tr');
+            rowDocenteSeleccionado.bind('click', function (event) {
+
+                if($(this).find('td:nth-child(1)')[0].innerHTML == '') {
+                     var mail = $(this).find('td:nth-child(3)').text();
+                
+                    //cargo por ajax la partial view de solicitud de curso para pasarle los parametros correctos
+                                    $('#modal_solicitud_inscripcion').load('/Mensaje/_NuevaSolicitudADocente?mail=' + mail + '&idInstitucion=' + @ViewBag.idInstitucion);
+                    //                //muestro la pantalla de solicitud de inscripcion
+                                    $('#modal_solicitud_inscripcion').reveal();
+                    }
+                    else { 
+                        if($(this).find('td:nth-child(1)')[0].innerHTML == '<img src="/Content/Resources/General/Tilde.png" widht="24px" height="24px">') {
+                            alert('El docente ya se encuentra asociado a la institución'); 
+                        }
+                        else {
+                            alert('Ya se envió una solicitud al docente');
+                        }
+                    }
+               
+            });
+        });
+    
+</script>

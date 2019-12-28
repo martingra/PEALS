@@ -1,0 +1,640 @@
+﻿<link href="@Url.Content("~/Content/Styles/Recursos.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+@{
+    ViewBag.Title = "Mis Recursos";
+}
+
+<div id="tituloPagina">
+    <h1> Mis Recursos</h1>
+</div>
+
+<div id="explicacionTituloPagina">
+    <h1> A continuación se muestran los recursos del docente. Para agregar uno nuevo, presione "NUEVO RECURSO", edite el nombre del recurso en la pestaña "POR SUBIR" y presionar la flecha hacia arriba que se encuentra a la derecha de la línea del recurso que esta subiendo. </h1>
+</div>
+
+
+<div class="buscar">
+    @{ Html.RenderAction("AutoComplete", "Busqueda", new { accion = "AutoCompletePorNombre", controlador = "Recurso", label = "nombre", value = "nombre", idList = "id" }); }
+    <button type="button" onclick="buscar()">Buscar</button>
+</div>
+
+<div class="text-button" onclick="seleccionarRecursos()" style="display:none;">
+    <img src="../../Content/Resources/General/share-on.png" alt="Compartir recursos" />
+    <b>Compartir</b>
+</div>
+
+<div class="text-button" onclick="nuevoRecurso()">
+    <img src="../../Content/Resources/MasterPage/agregar.gif" alt="Agregar un Recurso" />
+    <b>Nuevo Recurso</b>
+</div>
+
+<div class="tabPanel">
+    <ul>
+        <li><a href="#recientes">Por subir</a></li>
+        <li><a href="#imagenes">Imagenes</a></li>
+        <li><a href="#sonidos">Sonidos/Musica</a></li>
+        <li><a href="#videos">Videos</a></li>        
+
+        <div class="recursos-seleccionados">
+            <div class="default-tipo-recurso background-tipo-video"  >V <span>0</span></div>
+            <div class="default-tipo-recurso background-tipo-sonido" >S <span>0</span></div>
+            <div class="default-tipo-recurso background-tipo-imagen" >I <span>0</span></div>
+        </div>
+    </ul>
+
+    <div id="recientes" class="list-recientes">
+        <p>No has cargado recursos.</p>
+        <ul>
+            <li class="li-base" onchange="cargarNuevoRecurso(event)" >
+                <div class="default-tipo-recurso" ></div>
+                <input type="text" id="li-nombre" />
+                <h3 id="li-size"></h3>
+                <input type="file" />
+                <progress id="li-progress" max="100" value="0"></progress> 
+                <img src="../../Content/Resources/General/Upload.png" alt="Subir Recurso" onclick="subirArchivo(this)" width="32px" height="32px" />
+                <img src="../../Content/Resources/General/Tilde.png" alt="Archivo subido" onclick="alert('El archivo ya está subido.');" width="32px" height="32px" class='ocultar' />
+            </li>
+        </ul>
+    </div>
+
+        
+    
+    <div id="imagenes" class="list-imagenes">
+       @{ Html.RenderAction("_Imagenes"); }
+    </div>
+    <div id="sonidos" class="list-sonidos">
+        @{ Html.RenderAction("_Sonidos"); }
+    </div>
+    <div id="videos" class="list-videos">
+       @{ Html.RenderAction("_Videos"); }
+    </div>
+    
+</div>
+
+<div class="acciones">
+    <button type="button" class="cancelar">Cancelar</button>    
+    <button type="button" class="mostrar" onclick="mostrarInstituciones()">Ir a selección de escuelas</button>
+    <button type="button" class="cambiar">Cambiar</button>
+    <button type="button" class="subir_archivo" onclick="subirArchivos()" >Subir Archivos</button>
+</div>
+
+<div id="dialog" class="reveal-modal medium">
+    <div class="titulo" ><h2></h2></div>
+    <div class="cuerpo"></div>
+    <div class="dialog-acciones">
+        <button type="button" class="dialog_cancelar" value="Cancelar" >Cancelar</button>
+        <button type="button" class="dialog_aceptar" value="Aceptar" >Aceptar</button>
+        <button type="button" class="dialog_eliminar" value="Eliminar" >Eliminar</button>
+    </div>
+
+    <input type="hidden" id="idItem" />
+</div>
+
+<div id="dialog-editar" class="reveal-modal medium"></div>
+
+
+
+    <script type"text/javascript">
+        function editar(id, element) {
+            var accion = "/Recurso/EditarRecurso";
+            $.get(accion, { 'id': id }, function (data) {
+                $('#dialog-editar').empty();
+                $('#dialog-editar').append(data);
+                $('#dialog-editar').find('#nr_btnAceptar').on('click', function () {
+                    var nombre = $('#dialog-editar').find('#nr_nombre').val();
+                    $.post(accion, { 'id': id, 'nombre': nombre }, function (nuevoNombre) {
+                        if (nuevoNombre != null) {
+                            $('#dialog-editar').trigger('reveal:close');
+                            debugger;
+                            $("#" + id).find('h2').text(nuevoNombre);
+                        }
+                    });
+                });
+                $('#dialog-editar').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'cancelar' });
+            });
+        }
+
+        var recursos_a_compartir = new Array();
+        function seleccionarRecursos() {
+            $('.tabPanel').addClass('compartir-activo');
+            $('.acciones').addClass('modo-compartir');
+            $('div.content, li.content').on('click', function () {
+                var img = $(this).find('.seleccion');
+                var id = $(this).find('.id').val();
+
+                for (var i = 0; i < recursos_a_compartir.length; i++) {
+                    if (recursos_a_compartir[i] == id) {
+                        recursos_a_compartir.splice(i, 1);
+                        $(img).attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+                        $('.recursos-seleccionados').find('span').text(recursos_a_compartir.length);
+
+                        return;
+                    }
+                }
+
+                recursos_a_compartir.push(id);
+                $(img).attr('src', "../../Content/Resources/MasterPage/ok.png");
+                $('.recursos-seleccionados').find('span').text(recursos_a_compartir.length);
+            });
+        }
+
+        function cancelarCompartir() {
+            $('.tabPanel').removeClass('compartir-activo');
+            recursos_a_compartir = [];
+            instituciones_a_compartir = [];
+
+            $('.acciones').removeClass('modo-compartir');
+        }
+
+        function mostrarActividades(idRecurso) {
+            $('#dialog').find('.titulo h2').text('Recurso usado en');
+            $('#dialog').find('.dialog_eliminar').css('display', 'none');
+            $('#dialog').find('.dialog_cancelar').css('display', 'none');
+
+            $.post("/Recurso/GetActividades", { 'idRecurso': idRecurso }, function (data) {
+                var ul = $('<ul>').attr('class', 'actividades');
+
+                data.forEach(function (actividad) {
+                    var id = $('<input>').attr({ 'class': 'id', 'type': 'hidden', 'value': actividad.id });
+                    var nombre = $('<h2>' + actividad.nombre + '</h2>');
+                    var compartido = $('<img>').attr({ 'src': "../../Content/Resources/General/group.png", 'alt': "Compartido", 'width': "20px", 'height': "20px" });
+
+                    var li = $('<li>').append(id).append(nombre);
+
+                    if (actividad.compartido == true)
+                        $(li).append(compartido);
+
+                    ul.append(li);
+                });
+
+                $('#dialog').find('.cuerpo').empty();
+                $('#dialog').find('.cuerpo').append(ul);
+            });
+
+            $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_aceptar' });
+        }
+
+        var instituciones_a_compartir = new Array();
+        function mostrarInstituciones() {
+            $('#dialog').find('.titulo h2').text('Instituciones');
+            $('#dialog').find('.dialog_eliminar').css('display', 'none');
+
+            $.post("/Recurso/GetInstituciones", {}, function (data) { generarHTMLInstituciones(data, null) });
+
+            $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_cancelar' });
+        }
+
+//        function mostrarInstitucionesRecCompartidos(id) {
+//            $('#dialog').find('.titulo h2').text('Compartido con');
+//            $('#dialog').find('.dialog_eliminar').css('display', 'none');
+
+//            $.post("/Recurso/GetInstitucionesCompartidas", {}, function (data) { generarHTMLInstituciones(data, id) });
+
+//            $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_cancelar' });
+//        }
+
+//        function generarHTMLInstituciones(data, idRecurso) {
+//            if (data.length > 0) {
+//                var ul = $('<ul>').attr('class', 'instituciones');
+//                data.forEach(function (inst) {
+//                    var id = $('<input type="hidden" value="' + inst.id + '"/>');
+//                    var nombre = $('<h2>' + inst.nombre + '</h2>');
+//                    var img = $('<img class="seleccion" src="../../Content/Resources/MasterPage/ok-off.png" width="32px" height="32px" />');
+
+//                    var li = $('<li>').append(id).append(nombre).append(img);
+//                    $(li).on('click', function () {
+//                        var idClick = $(this).children('input[type="hidden"]').val();
+
+//                        for (var i = 0; i < instituciones_a_compartir.length; i++) {
+//                            if (instituciones_a_compartir[i] == idClick) {
+//                                instituciones_a_compartir.splice(i, 1);
+//                                $(li).children('img').attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+
+//                                return;
+//                            }
+//                        }
+
+//                        instituciones_a_compartir.push(idClick);
+//                        $(li).children('img').attr('src', "../../Content/Resources/MasterPage/ok.png");
+//                    });
+
+//                    $(ul).append(li);
+//                });
+
+//                $('#dialog').find('.cuerpo').empty();
+//                $('#dialog').find('.cuerpo').append(ul);
+//                $('#dialog').find('.dialog_aceptar').on('click', function () {
+//                    var accion, params;
+//                    if (idRecurso != null) {
+//                        accion = "/Recurso/DejarDeCompartir"
+//                        params = { 'recurso': idRecurso, 'sIns': JSON.stringify(instituciones_a_compartir) };
+//                    } else {
+//                        accion = "/Recurso/CompartirRecursos";
+//                        params = { 'sRes': JSON.stringify(recursos_a_compartir), 'sInst': JSON.stringify(instituciones_a_compartir) }
+//                    }
+
+//                    $.post(accion, params, function () {
+//                        $('#dialog').trigger('reveal:close');
+
+//                        buscar();
+//                        cancelarCompartir();
+//                    });
+//                });
+//            }
+//        };
+
+        function nuevoRecurso() {
+            $('.list-recientes .li-base').children('input:file').click();
+        }
+
+        function cargarNuevoRecurso(event) {
+            var f = event.target.files[0];
+            var li = $('.list-recientes .li-base').clone();
+
+            var tipoRecurso = getTipoRecurso(f.name);
+
+            $(li).removeClass('li-base');
+            $(li).children('div').addClass(tipoRecurso.dClass);
+            $(li).children('div').text(tipoRecurso.dTexto);
+            $(li).children('#li-nombre').val(f.name);
+            $(li).children('#li-size').text(f.size);
+
+            $('.list-recientes').children('ul').append($(li));
+        }
+
+        function getTipoRecurso(name) {
+            var texto = "";
+            var format = name.substring(name.lastIndexOf("."), name.length).toUpperCase();
+            var retClass = "";
+            if (format == ".JPG" || format == ".PNG" || format == ".GIF" || format == ".JPEG") {
+                retClass = "background-tipo-imagen";
+                texto = "I";
+            } else if (format == ".MP3") {
+                retClass = "background-tipo-sonido";
+                texto = "S";
+            }
+            else if (format == ".MP4" || format == ".3GP" || format == ".OGV") {
+                retClass = "background-tipo-video";
+                texto = "V";
+            }
+
+            return { dClass: retClass, dTexto: texto };
+        }
+
+        function subirArchivo(elemento) {
+            var fileInput = elemento.parentElement.children[3];
+            var inputNombre = elemento.parentElement.children[1];
+            var barraProgreso = elemento.parentElement.children[4];
+            var boton = elemento.parentElement.children[5];
+            var imgExito = elemento.parentElement.children[6];
+
+            boton.className += 'ocultar';
+            barraProgreso.value = 50;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Recurso/Upload');
+            xhr.setRequestHeader('Content-type', 'multipart/form-data');
+            //Appending file information in Http headers
+            xhr.setRequestHeader('X-File-Name', inputNombre.value);
+            xhr.setRequestHeader('X-File-Type', fileInput.files[0].type);
+            xhr.setRequestHeader('X-File-Size', fileInput.files[0].size);
+            //Sending file in XMLHttpRequest
+            xhr.send(fileInput.files[0]);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    barraProgreso.value = 100;
+                    if (xhr.responseText == '"Recurso creado con éxito."') {
+                        elemento.parentElement.className = 'cargadoConExito'
+                        imgExito.className = '';
+
+                        $("#imagenes").load('/Recurso/_Imagenes');
+                        $("#sonidos").load('/Recurso/_Sonidos');
+                        $("#videos").load('/Recurso/_Videos');
+                    }
+                    else {
+                        boton.className = '';
+                        alert(xhr.responseText);
+                    }
+                }
+            }
+            return false;
+        }
+
+        function eliminarRecurso(id, nombre, es_usado) {
+            if (!es_usado) {
+                $('#dialog').find('.dialog_eliminar, .dialog_cancelar').css('display', 'block');
+                $('#dialog').find('.dialog_aceptar').css('display', 'none');
+
+                $('#dialog').find('.titulo h2').text("Eliminar " + nombre);
+
+                var texto = $('<p>').text('Esta a punto de eliminar el recurso "' + nombre + '". ¿Está seguro que quiere continuar?');
+                $('#dialog').find('.cuerpo').empty();
+                $('#dialog').find('.cuerpo').append(texto);
+
+                $('#dialog').find('.dialog_eliminar').on('click', function () {
+                    $.get('/Recurso/EliminarRecurso', { 'idRecurso': id }, function (success) {
+                        if (success) {
+                            $('#dialog').trigger('reveal:close');
+                            $('#dialog').find('.dialog_eliminar').unbind();
+                            $("#imagenes").load('/Recurso/_Imagenes');
+                            $("#sonidos").load('/Recurso/_Sonidos');
+                            $("#videos").load('/Recurso/_Videos');
+                        }
+                    });
+                });
+
+                $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_cancelar' });
+            } else {
+                $('#dialog').find('.dialog_eliminar, .dialog_cancelar').css('display', 'none');
+                $('#dialog').find('.dialog_aceptar').css('display', 'block');
+
+                $('#dialog').find('.titulo h2').text("Error al eliminar ");
+
+                var texto = $('<p>').text('El recursos actualmente esta en uso. Para eliminarlo, primero debes quitarlo de las actividades. Puedes realizar esto haciendo click en el texto "Usado en..." ubicado debajo del nombre del recurso.');
+                $('#dialog').find('.cuerpo').empty();
+                $('#dialog').find('.cuerpo').append(texto);
+
+                $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_aceptar' });
+            }
+        }
+
+        function buscar() {
+            var text = $('.buscar').children('input').val();
+            $("#imagenes").load('/Recurso/_ImagenesSearch', { "filtro": text });
+            $("#sonidos").load('/Recurso/_SonidosSearch', { "filtro": text });
+            $("#videos").load('/Recurso/_VideosSearch', { "filtro": text });
+        }
+
+
+//        function buscar() {
+//            var text = $('.buscar').children('input').val();
+//            $.post("/Recurso/GetTodosLosRecursosAsJson", { 'filtro': text }, function (data) {
+//                if (data.Imagenes[0] != null)
+//                    recargarImagenes(data.Imagenes);
+//                else
+//                    $('.list-imagenes').empty().append('<p>No se encontraron imágenes</p>');
+
+//                if (data.Sonidos[0] != null)
+//                    recargarAudioVideo(data.Sonidos, $('.list-sonidos'), 'audio', $('.audio-reproductor'));
+//                else
+//                    $('.list-sonidos').children('ul').empty().append('<p>No se encontraron sonidos</p>');
+
+//                if (data.Videos[0] != null)
+//                    recargarAudioVideo(data.Videos, $('.list-videos'), 'video', $('.video-reproductor'));
+//                else
+//                    $('.list-videos').children('ul').empty().append('<p>No se encontraron videos</p>');
+
+//                applyUIStyles();
+//            });
+//        }
+
+        var currentPlaying;
+        function play(tag, content, row) {
+            var reproductor = $(content).children(tag);
+            if (currentPlaying == row) {
+                if (reproductor[0].paused == true)
+                    reproductor[0].play();
+                else
+                    reproductor[0].pause();
+            } else {
+                if (currentPlaying != null)
+                    $(currentPlaying).children('.en-reproduccion').css('visibility', 'hidden');
+
+                $(row).children('.en-reproduccion').css('visibility', 'visible');
+                currentPlaying = row;
+
+                var nombre = $(row).children('h2').text();
+                $(content).children('label').text(nombre);
+
+                var src = $(row).children('.src').val();
+                $(reproductor).attr('src', src);
+            }
+        }
+
+        function recargarImagenes(lista) {
+            var ul = $('.list-imagenes');
+            $(ul).empty();
+
+            lista.forEach(function (imagen) {
+                var img = $('<img>').attr({ 'class': "imagen", 'src': imagen.ruta.replace('~', ''), 'alt': imagen.nombre });
+
+                var id = $('<input>').attr({ 'type': "hidden", 'class': "id", 'value': imagen.id });
+                var nombre = $('<h2>' + imagen.nombre + '</h2>');
+                var informacion = getHTMLInformacion(imagen.es_compartido, imagen.es_usado);
+                var divInfo = $('<div>').append(informacion.compartido).append(informacion.usado);
+                var detalle = $('<div>').attr('class', 'detalle').append(id).append(nombre).append(divInfo);
+
+                var eliminar = $('<img>').attr({ 'class': "eliminar", 'src': "../../Content/Resources/MasterPage/delete.png", 'alt': "Eliminar", 'height': "24px", 'width': "24px", 'onclick': "eliminarRecurso(" + imagen.id + ", " + imagen.nombre + ", " + imagen.es_usado + ")" });
+
+                var editar = $('<button>').attr({ 'type': "button", 'class': "btn_editar", 'value': "Editar", 'onclick': "editar(" + imagen.id + ", this.parentElement.parentElement)" }).text('Editar');
+                var seleccion = $('<img>').attr({ 'class': "seleccion", 'src': "../../Content/Resources/MasterPage/ok-off.png", 'width': "32px", 'height': "32px" });
+
+                var li = $('<div>').attr({ 'id': imagen.id, 'class': 'content' }).append(img).append(detalle).append(eliminar).append(editar).append(seleccion);
+
+                $(ul).append(li);
+            });
+        }
+
+        function recargarAudioVideo(lista, htmlList, tag, contentPlayer) {
+            var ul = $(htmlList).children('ul');
+            $(ul).empty();
+
+            lista.forEach(function (recurso) {
+                var imgReproduciendo = $('<img>').attr({ 'class': "en-reproduccion", 'src': "../../Content/Resources/General/play.png", 'alt': "Reproduciendo" });
+                var id = $('<input>').attr({ 'type': "hidden", 'class': "id", 'value': recurso.id });
+                var src = $('<input>').attr({ 'type': "hidden", 'class': "src", 'value': recurso.ruta.replace('~', '') });
+
+                var informacion = getHTMLInformacion(recurso.es_compartido, recurso.es_usado, recurso.id);
+                var player = $('<h2 onclick="play(' + tag + ', ' + contentPlayer + ', this.parentElement)">' + recurso.nombre + '</h2>');
+                var div = $('<div>').append(player).append(informacion.compartido).append(informacion.usado);
+
+                var editar = $('<button>').attr({ 'type': "button", 'class': "btn_editar", 'value': "Editar", 'onclick': "editar(" + recurso.id + ", this.parentElement.parentElement)" }).text('Editar');
+                var eliminar = $('<img>').attr({ 'class': "eliminar", 'src': "../../Content/Resources/MasterPage/delete.png", 'alt': "Eliminar Sonido", 'onclick': "eliminarRecurso(" + recurso.id + ", " + recurso.nombre + ", " + recurso.es_usado + ")" });
+                var seleccion = $('<img>').attr({ 'class': "seleccion", 'src': "../../Content/Resources/MasterPage/ok-off.png", 'width': "32px", 'height': "32px" });
+
+                var li = $('<li>').attr('class', 'content').append(imgReproduciendo).append(id).append(src).append(div).append(editar).append(eliminar).append(seleccion);
+
+                $(ul).append(li);
+            });
+        }
+
+        function getHTMLInformacion(esRecCompartido, esRecUsado, idRecurso) {
+            var compartido, usado;
+            if (esRecCompartido) {
+                var img = $('<img>').attr({ 'src': "../../Content/Resources/General/group.png", 'alt': "Compartido", 'width': "20px", 'height': "20px" });
+                compartido = $('<div>').attr('class', 'informacion activo').append(img).append('<h3>Compartido</h3>');
+                $(compartido).on('click', mostrarInstitucionesRecCompartidos);
+            } else {
+                var img = $('<img>').attr({ 'src': "../../Content/Resources/General/user.png", 'alt': "Sin compartir", 'width': "20px", 'height': "20px" });
+                compartido = $('<div>').attr('class', 'informacion inactivo').append(img).append('<h3>Sin compartir</h3>');
+            }
+
+            if (esRecUsado) {
+                var img = $('<img>').attr({ 'src': "../../Content/Resources/General/share-on.png", 'alt': "Usado", 'width': "20px", 'height': "20px" });
+                usado = $('<div>').attr('class', 'informacion activo').append(img).append('<h3>Usado</h3>');
+
+                var ver = $('<img>').attr({ 'src': "../../Content/Resources/General/Ver.png", 'alt': "Ver", 'width': "24px", 'height': "24px" });
+                var cambiar = $('<img>').attr({ 'src': "../../Content/Resources/General/Cambiar.png", 'alt': "Cambiar", 'width': "24px", 'height': "24px" });
+                var li_ver = $('<li>').append(ver).append('<h2>Ver</h2>');
+                var li_cambiar = $('<li>').append(cambiar).append('<h2>Cambiar</h2>');
+
+                var ul = $('<ul>').append(li_ver).append(li_cambiar);
+                var div = $('<div>').append('<div class="triangulo" ></div>').append(ul);
+
+                $(li_ver).on('click', mostrarActividades(idRecurso));
+                $(li_cambiar).on('click', activarCambiarRecurso(idRecurso));
+
+                usado.append(div);
+            } else {
+                var img = $('<img>').attr({ 'src': "../../Content/Resources/General/share-off.png", 'alt': "Sin usar", 'width': "20px", 'height': "20px" });
+                usado = $('<div>').attr('class', 'informacion inactivo').append(img).append('<h3>Sin usar</h3>');
+            }
+
+            return { 'compartido': compartido, 'usado': usado };
+        }
+
+        var recursoSeleccionado = null;
+        var recursoACambiar = -1;
+        function activarCambiarRecurso(idRecurso) {
+            recursoACambiar = idRecurso;
+
+            $('.tabPanel').addClass('cambiar-activo');
+            $('div.content, li.content').on('click', function () {
+                var img = $(this).find('.seleccion');
+
+                if (recursoSeleccionado == this) {
+                    $(this).find('.seleccion').attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+                    recursoSeleccionado = null;
+                } else {
+                    $(this).find('.seleccion').attr('src', "../../Content/Resources/MasterPage/ok.png");
+                    if (recursoSeleccionado != null)
+                        $(recursoSeleccionado).find('.seleccion').attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+
+                    recursoSeleccionado = this;
+                }
+            });
+
+            $('.cambiar').on('click', cambiarRecurso);
+
+            $('.acciones').addClass('modo-cambiar');
+        }
+
+        function cambiarRecurso() {
+            $('.tabPanel').removeClass('cambiar-activo');
+            $('.acciones').removeClass('modo-cambiar');
+
+            $.post('/Recurso/CambiarRecurso', { 'idRecuso': recursoACambiar, 'idRecursoNuevo': $(recursoSeleccionado).find('.id').val() }, function () {
+                $(recursoSeleccionado).find('.seleccion').attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+                recursoSeleccionado = null;
+                recursoACambiar = -1;
+                $('.acciones').addClass('modo-cambiar');
+            });
+        }
+
+        function init() {
+            $('.tabPanel').tabs();
+
+            $('.btn_guardarCambios').css('display', 'none');
+            $('.btn_cancelarCambios').css('display', 'none');
+
+            var params = {
+                'accion': "AutocompletePorRecurso",
+                'controlador': "Recurso",
+                'label': "Label",
+                'value': "Value",
+                'idList': "Id"
+            };
+            $('#reemplazable').load("/Busqueda/AutocompleteConPadre", params);
+        }
+
+        function compartir(recursoId) {
+            $('.dialog_aceptar').unbind();
+
+            $('#dialog').find('.titulo h2').text('Instituciones');
+            $('#dialog').find('.dialog_eliminar').css('display', 'none');
+            $('#dialog').find('#idItem').val(recursoId);
+
+            $.post("/Recurso/GetInstitucionesRecurso?idRecurso=" + $('#dialog').find('#idItem').val(), {}, function (data) { generarHTMLInstituciones(data, $('#dialog').find('#idItem').val()) });
+
+            $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_cancelar' });
+        }
+
+        function generarHTMLInstituciones(data, idRecurso) {
+            if (data.length > 0) {
+                var ul = $('<ul>').attr('class', 'instituciones');
+                data.forEach(function (inst) {
+
+                    var id = $('<input type="hidden" id= "idInst" value="' + inst.Id + '"/>');
+                    var nombre = $('<h2>' + inst.Nombre + '</h2>');
+                    var compartido = $('<input type="hidden" id="idCompartido" value="' + inst.Compartido + '"/>');
+                    var compartidoOriginal = $('<input type="hidden" id="idCompartidoOriginal" value="' + inst.Compartido + '"/>');
+
+                    var img = '';
+                    if (inst.Compartido > 0) {
+                        img = $('<img class="seleccion" src="../../Content/Resources/MasterPage/ok.png" width="32px" height="32px" />');
+                    }
+                    else {
+                        img = $('<img class="seleccion" src="../../Content/Resources/MasterPage/ok-off.png" width="32px" height="32px" />');
+                    }
+
+                    var li = $('<li>').append(id).append(nombre).append(img).append(compartido).append(compartidoOriginal);
+
+                    $(li).on('click', function () {
+                        var idCompartido = $(this)[0].childNodes[3].value;
+                        var idClick = $(this).children('#idInst').val();
+                        if (parseInt(idCompartido) > 0) {
+                            $(li).children('img').attr('src', "../../Content/Resources/MasterPage/ok-off.png");
+                            $(this)[0].childNodes[3].value = 0;
+                        }
+                        else {
+                            $(li).children('img').attr('src', "../../Content/Resources/MasterPage/ok.png");
+                            $(this)[0].childNodes[3].value = 1;
+                        }
+                    });
+
+                    $(ul).append(li);
+                });
+
+                $('#dialog').find('.cuerpo').empty();
+                $('#dialog').find('.cuerpo').append(ul);
+                $('#dialog').find('.dialog_aceptar').on('click', function () {
+
+                    $("#dialog .cuerpo .instituciones li").each(function (index) {
+                        var idCompartidoOriginal = parseInt($(this).find('#idCompartidoOriginal').val());
+                        var idCompartidoNuevo = parseInt($(this).find('#idCompartido').val());
+                        var idInstitucion = parseInt($(this).find('#idInst').val());
+                        debugger;
+                        var idRecurso = parseInt($(this).parent().parent().parent().find('#idItem').val());
+
+                        var accion;
+                        var params;
+
+                        if (idCompartidoOriginal != idCompartidoNuevo) {
+                            if (idCompartidoNuevo == 0) {
+                                accion = "/Recurso/DejarDeCompartirRecurso"
+                                params = { 'recurso': idRecurso, 'institucion': idInstitucion };
+                            }
+                            else {
+                                accion = "/Recurso/CompartirRecurso"
+                                params = { 'recurso': idRecurso, 'institucion': idInstitucion };
+                            }
+                        }
+
+                        $.post(accion, params, function () {
+                        });
+                    });
+
+
+                    $('#dialog').trigger('reveal:close');
+                    $("#imagenes").load('/Recurso/_Imagenes');
+                    $("#sonidos").load('/Recurso/_Sonidos');
+                    $("#videos").load('/Recurso/_Videos');
+
+                });
+            }
+        };
+
+        $(document).ready(init);
+</script>

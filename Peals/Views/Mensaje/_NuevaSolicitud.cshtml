@@ -1,0 +1,32 @@
+﻿<link href="@Url.Content("~/Content/Styles/Mensajes.css")" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.mensaje
+
+ @{Html.BeginForm();}
+<h1 style="padding: 3px; font-size:1em; border-bottom: 2px solid #3966A2; text-align:center">Nueva Solicitud</h1>
+<div style="font-size:0.5em;">@ViewBag.subtitulo</div>
+
+@Html.TextAreaFor(m => m.mensaje1, new { id = "mensajeSolicitud", style = "height:150px; width: 100%;text-align:left;padding:1em;", @class = "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" })
+<input type = "text" id="referencia" name="referencia" value= @ViewBag.referencia style="display:none;">
+<input type = "text" id="referencia2" name="referencia2" value= @ViewBag.referencia2 style="display:none;">
+
+<div id="op_asignacion" style="text-align:center; border-top: 1px solid #3966A2; margin-top:10px">
+    <input type="submit" id="btnEnviarSolicitud" value="Enviar" class="botonesSolicitud" />
+    <input type="button" id="btnCancelarEnviarSolicitud" value="Cancelar" class="botonesSolicitud"/>
+</div>
+ @{Html.EndForm();}
+
+ <script type="text/javascript">
+     $("#mensajeSolicitud").keypress(function () {
+         if ($("#mensajeSolicitud").val().length >= 1999) {
+             alert('Has alcanzado el máximo de caracteres permitidos en un mensaje');
+         }
+     });
+
+     $('input:submit, input:button, button').button();
+
+     $("#btnCancelarEnviarSolicitud").click(function () {
+         $('.reveal-modal').trigger('reveal:close');
+     });
+
+ </script>

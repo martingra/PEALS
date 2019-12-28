@@ -1,0 +1,48 @@
+﻿@if (Request.IsAuthenticated && Request.Cookies["DatosUsuario"] != null)    
+{  
+    <a href="/Mensaje/Mensajes"><img src="../../Content/Resources/MasterPage/centroMensaje.png" /> <div id="cantidadMensajesSinLeer"></div> </a>
+
+    <script type="text/javascript">
+        
+        function mostrarMensajes() {
+                mostrarProgreso = false;
+                $.ajax({
+                    type: "POST",
+                    url: '/Mensaje/cantidadMensajesSinLeer',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#cantidadMensajesSinLeer").text(data.Total);
+                        for (var i in data.Mensajes) {
+                            var mensaje = data.Mensajes[i].Mensaje;
+                            switch (data.Mensajes[i].Tipo) {
+                                case 1:
+                                    alertify.log(data.Mensajes[i].Remitente + " - " + mensaje);
+                                    break;
+                                case 2:
+                                    alertify.success(data.Mensajes[i].Remitente + " - " + mensaje);
+                                    break;
+                                case 3:
+                                    alertify.error(data.Mensajes[i].Remitente + " - " + mensaje);
+                                    break;
+                            }
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/Mensaje/UpdateEstadoMensajes',
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                        });
+                    },
+                    error: function () { }
+                });
+            }
+        
+        
+        $(document).ready(function () {
+            mostrarMensajes();
+            setInterval(mostrarMensajes, 5000); //30 segundos
+        });
+    </script>
+}

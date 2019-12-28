@@ -1,0 +1,206 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Actividad.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+
+<div id="actividad_opciones" class="opciones">
+	<div id="nuevaActividad">
+		<figure>
+			<a href="@Url.Action("CrearActividad", "Actividad")">
+				<img class="imgConBorde" src="@Url.Content("~/Content/Resources/Actividad/NuevaActividad.png")" width="100" height="125" onclick="location.href='@Url.Action("CrearActividad", "Actividad")';" />
+				<figcaption>Nueva Actividad</figcaption>
+			</a>
+		</figure>
+	</div>
+
+	<div id="misRecursos">
+		<figure>
+			<a href="@Url.Action("ListadoRecursos", "Recurso")">
+				<img class="imgConBorde" src="@Url.Content("~/Content/Resources/Actividad/Recursos.png")" width="100" height="125" onclick="location.href='#'" />
+				<figcaption>Mis Recursos</figcaption>
+			</a>
+		</figure>
+	</div>
+</div>
+
+<section class="actividades">
+	<div class="titulo">
+		<img src="@Url.Content("~/Content/Resources/Docente/Actividades.jpg")" width="30px" height="25px"/>
+		<h2>Actividades</h2>
+	</div>
+	<div id="list_Actividades" >
+		<div class ="searchDiv">
+			<input type="text" id="act_buscarNombre" class="buscar" placeholder="Nombre de la actividad" />
+			<button type="button" onclick="buscarActividad()">Buscar</button>
+		</div>
+		<div id="grillaActividades"> @{ Html.RenderAction("_ListadoDeActividades", "Docente"); } </div>
+		<div class="acciones">
+			<button type="button" id="btn_eliminarActividad" onclick="eliminarActividad()" >Eliminar Actividad</button>
+			<button type="button" id="btn_asignarCurso" onclick="asignarCursos()" >Asignar Cursos</button>
+		</div>
+	</div>
+	<div id="list_CursosXActividades">
+		<div class ="searchDiv">
+			<input type="text" id="curso_buscarNombre" class="buscar" placeholder="Nombre del curso" />
+			<button type="button" onclick="buscarCurso()">Buscar</button>
+		</div>
+
+		<div id="grillaCursos"></div>
+	</div>
+</section>
+<div id="dialog_asignacion" class="reveal-modal xlarge"></div>
+
+<div id="dialog_eliminar" class="reveal-modal normal">
+    <h2>¿Estás seguro de eliminar la actividad?</h2>
+    <input type="button" value="Si, estoy seguro" onclick="confirmarEliminarActividad()" />
+    <input type="button" value="Mejor no" onclick="cancelarEliminar();" />
+</div>
+
+<div id="dialog_desvincular" class="reveal-modal normal">
+    <h2>¿Estás seguro de desvincular la actividad del curso?</h2>
+    <input type="button" value="Si, estoy seguro" onclick="confirmarDesvincularCurso()" />
+    <input type="button" value="Mejor no" onclick="cancelarDesvincular();" />
+    <input type="hidden" id="idCursoSeleccionado" />
+</div>
+
+
+<script type="text/javascript">
+	var id_ActSeleccionada;
+	var nombre_ActSeleccionada;
+
+	var pos_ActSeleccionada;
+
+
+	function init() {
+		var row_actividades = $('#gridActividades').find('tbody > tr');
+		row_actividades.bind('click', function (event) {
+		    var id = $(this).find('input:hidden').val();
+		    var nombre = $(this).find('td:nth-child(2)').text();
+
+		    if (id == id_ActSeleccionada) { // si ya habia sido seleccionada
+		        id_ActSeleccionada = -1;
+		        nombre_ActSeleccionada = "";
+
+		        $(this).attr('class', (this.rowIndex % 2 == 1) ? 'webgrid-row-style' : 'webgrid-alternating-row');
+		        $('.acciones').css('display', 'none');
+
+		        $('#list_CursosXActividades').hide();
+		        $('#curso_buscarNombre').empty();
+
+		        $('#list_Actividades').css('border-right', 'none');
+		        $('#list_Actividades').animate({ width: "98%" }, function () { $('.searchDiv').children('input').css('width', '85%'); });
+		    } else { // si no estaba seleccionada
+		        id_ActSeleccionada = id;
+		        nombre_ActSeleccionada = nombre;
+
+		        $(this).attr('class', 'webgrid-selected-row');
+		        $('.acciones').css('display', 'block');
+
+		        buscarCurso();
+		    }
+
+		    if (this.rowIndex != pos_ActSeleccionada) {
+		        var rowAnterior = $('#gridActividades tr:nth(' + pos_ActSeleccionada + ')');
+		        $(rowAnterior).attr('class', (pos_ActSeleccionada % 2 == 1) ? 'webgrid-row-style' : 'webgrid-alternating-row');
+
+		        pos_ActSeleccionada = this.rowIndex;
+		    }
+		});
+
+		$('#list_CursosXActividades').hide();
+	}
+
+
+
+
+	function buscarActividad() {
+		var nombre = $('#act_buscarNombre').val();
+		$.post("/Docente/_ListadoDeActividades", { nombre: nombre }, function (data) {
+			$('#grillaActividades').empty();
+			$('#grillaActividades').append($(data));
+		});
+	}
+
+	function buscarCurso() {
+		var nombre = $('#curso_buscarNombre').val();
+		$.post("/Actividad/_CursosPorActividad", { idActividad: id_ActSeleccionada, nombre: nombre }, function (data) {
+			$('#grillaCursos').empty();
+
+			if (data == "") {
+				$('#list_CursosXActividades').hide();
+				$('#list_Actividades').css('border-right', 'none');
+				$('#list_Actividades').animate({ width: "98%" }, function () { $('.searchDiv').children('input').css('width', '85%'); });
+			}
+			else {
+				$('#grillaCursos').append($(data));
+				$('#list_Actividades').css('border-right', '1px solid gray');
+				$('#list_Actividades').animate({ width: "48%" }, function () { $('#list_CursosXActividades').show(); $('.searchDiv').children('input').css('width', '70%'); });
+			}
+		});
+	}
+
+	function asignarCursos() {
+		$('#dialog_asignacion').empty();
+		$.post("/Actividad/_AsignarActividad", { id_actividad: id_ActSeleccionada, nombre_actividad: nombre_ActSeleccionada, callbackCancelar: "cancelarAsignacion()" }, function (data) {
+		    $('#dialog_asignacion').append(data);
+		    $('#dialog_asignacion').reveal();
+
+		    applyUIStyles();
+		});
+	}
+
+	function desvincularCurso(idCurso) {
+	    $("#idCursoSeleccionado").val(idCurso);
+	    $('#dialog_desvincular').reveal();
+	}
+
+	function cancelarAsignacion() {
+		$('#dialog_asignacion').trigger('reveal:close');
+    }
+
+    function cancelarEliminar() {
+        $('#dialog_eliminar').trigger('reveal:close');
+    }
+
+    function cancelarDesvincular() {
+        $('#dialog_desvincular').trigger('reveal:close');
+    }
+
+	function eliminarActividad() {
+	    $('#dialog_eliminar').reveal();
+	}
+
+	function confirmarEliminarActividad() {
+	    $.post("/Actividad/eliminarActividad?idActividad="+id_ActSeleccionada, function (data) {
+	        if (data)
+	            location.reload();
+	        else
+	            alert('Ha ocurrido un error');
+	    });
+	}
+
+	function confirmarDesvincularCurso() {
+	    $.post("/Actividad/desvincularCurso?idActividad=" + id_ActSeleccionada + "&idCurso=" + $("#idCursoSeleccionado").val(), function (data) {
+	        if (data) {
+	            buscarCurso();
+	            $('#dialog_desvincular').trigger('reveal:close');
+	        }
+	        else {
+	            alert('Ha ocurrido un error');
+	        }
+	    });
+	}
+
+	function existItem(id) {
+		for (var i in ids_actSel) {
+			if (ids_actSel[i] == id)
+				return i;
+		}
+
+		return -1;
+	}
+
+	$(document).ready(init);
+</script>
+

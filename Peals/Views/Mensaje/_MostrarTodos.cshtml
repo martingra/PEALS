@@ -1,0 +1,68 @@
+﻿@{  
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridMensajesTodos" + ViewBag.tipo, ajaxUpdateCallback: "AgregarEventosGridTodos" + ViewBag.tipo);
+    grid.Bind(Model);
+    grid.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 5);
+    
+    if (grid.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			No hay mensajes.
+		</section>
+    }
+    else
+    {         
+        @grid.GetHtml(htmlAttributes: new { id = "gridMensajesTodos" + ViewBag.tipo },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            columns: grid.Columns(
+                             grid.Column(format: (item) => (item.Tipo == "Mensaje" ? Html.Raw("<div class=\"caja_mensaje caja\">M</div>") : item.Tipo == "Solicitud" ? Html.Raw("<div class=\"caja_solicitud caja\">S</div>") : item.Tipo == "Notificacion" ? Html.Raw("<div class=\"caja_notificacion caja\">N</div>") : Html.Raw(""))),
+                             grid.Column(format: (item) => item.TipoEmisor == "Alumno" ? Html.Raw("<div class = \"caja_emisor\"><img src=\"../../Content/Resources/Alumno/Actividades.png\" /></div>") : item.TipoEmisor == "Docente" ? Html.Raw("<div class = \"caja_emisor\"><img src=\"../../Content/Resources/Docente/Docente.png\" /></div>") : item.TipoEmisor == "Administrador" ? Html.Raw("<div class = \"caja_emisor\"><img src=\"../../Content/Resources/MasterPage/Institucion.png\" /></div>") : Html.Raw("")),
+                             grid.Column("Fecha"),
+                             grid.Column("Emisor"),
+                             grid.Column("Titulo"),
+                             grid.Column(format: (item) => item.Direccion == "Enviado" ? Html.Raw("<div class = \"caja_emisor\"><img src=\"../../Content/Resources/Mensajes/mensaje_enviado.png\" /></div>") : item.Direccion == "Recibido" ? Html.Raw("<div class = \"caja_emisor\"><img src=\"../../Content/Resources/Mensajes/mensaje_recibido.png\" /></div>") : Html.Raw("")),
+                             grid.Column(format: @<input type="hidden" name="IDHidden" value="@item.Id"/>),
+                             grid.Column(format: @<input type="text" name="estadoMsj" value="@item.Estado" style = "display:none;"/>)
+                      )
+             )
+    }
+}
+
+<script type="text/javascript">
+    var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+    $(cursos).hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+    );
+
+
+
+    function AgregarEventosGridTodos() {
+        seleccionarMensaje("Todos");
+        pintarMensajes("#gridMensajesTodos");
+    }
+
+    function AgregarEventosGridTodosMensaje() {
+        seleccionarMensaje("TodosMensaje");
+        pintarMensajes("#gridMensajesTodosMensaje");
+    }
+
+    function AgregarEventosGridTodosSolicitud() {
+        seleccionarMensaje("TodosSolicitud");
+        pintarMensajes("#gridMensajesTodosSolicitud");
+    }
+
+    function AgregarEventosGridTodosNotificacion() {
+        seleccionarMensaje("TodosNotificacion");
+        pintarMensajes("#gridMensajesTodosNotificacion");
+    }
+
+</script>

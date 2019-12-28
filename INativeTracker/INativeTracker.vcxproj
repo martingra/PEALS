@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B9159A92-0AE0-423C-924F-E3B12CBF03A6}</ProjectGuid>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <Keyword>ManagedCProj</Keyword>
+    <RootNamespace>TLDLib</RootNamespace>
+    <ProjectName>INativeTracker</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CLRSupport>true</CLRSupport>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\include\opencv</AdditionalIncludeDirectories>
+      <CompileAsManaged>false</CompileAsManaged>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core2410d.lib;opencv_features2d2410d.lib;opencv_highgui2410d.lib;opencv_imgproc2410d.lib;opencv_video2410d.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\3rdparty\cvblobs\blob.cpp" />
+    <ClCompile Include="src\3rdparty\cvblobs\BlobContour.cpp" />
+    <ClCompile Include="src\3rdparty\cvblobs\BlobOperators.cpp" />
+    <ClCompile Include="src\3rdparty\cvblobs\BlobProperties.cpp" />
+    <ClCompile Include="src\3rdparty\cvblobs\BlobResult.cpp" />
+    <ClCompile Include="src\3rdparty\cvblobs\ComponentLabeling.cpp" />
+    <ClCompile Include="src\cmt\CMT.cpp" />
+    <ClCompile Include="src\cmt\common.cpp" />
+    <ClCompile Include="src\cmt\Consensus.cpp" />
+    <ClCompile Include="src\cmt\fastcluster\fastcluster.cpp" />
+    <ClCompile Include="src\cmt\Fusion.cpp" />
+    <ClCompile Include="src\cmt\gui.cpp" />
+    <ClCompile Include="src\cmt\main.cpp" />
+    <ClCompile Include="src\cmt\Matcher.cpp" />
+    <ClCompile Include="src\cmt\Tracker.cpp" />
+    <ClCompile Include="src\imacq\ImAcq.cpp" />
+    <ClCompile Include="src\INativeTracker.cpp" />
+    <ClCompile Include="src\mftracker\BB.cpp" />
+    <ClCompile Include="src\mftracker\BBPredict.cpp" />
+    <ClCompile Include="src\mftracker\FBTrack.cpp" />
+    <ClCompile Include="src\mftracker\Lk.cpp" />
+    <ClCompile Include="src\mftracker\Median.cpp" />
+    <ClCompile Include="src\tld\Clustering.cpp" />
+    <ClCompile Include="src\tld\DetectionResult.cpp" />
+    <ClCompile Include="src\tld\DetectorCascade.cpp" />
+    <ClCompile Include="src\tld\EnsembleClassifier.cpp" />
+    <ClCompile Include="src\tld\ForegroundDetector.cpp" />
+    <ClCompile Include="src\tld\MedianFlowTracker.cpp" />
+    <ClCompile Include="src\tld\NNClassifier.cpp" />
+    <ClCompile Include="src\tld\TLD.cpp" />
+    <ClCompile Include="src\tld\TLDUtil.cpp" />
+    <ClCompile Include="src\tld\VarianceFilter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\3rdparty\cvblobs\blob.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\BlobContour.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\BlobLibraryConfiguration.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\BlobOperators.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\BlobProperties.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\BlobResult.h" />
+    <ClInclude Include="src\3rdparty\cvblobs\ComponentLabeling.h" />
+    <ClInclude Include="src\cmt\CMT.h" />
+    <ClInclude Include="src\cmt\common.h" />
+    <ClInclude Include="src\cmt\Consensus.h" />
+    <ClInclude Include="src\cmt\fastcluster\fastcluster.h" />
+    <ClInclude Include="src\cmt\Fusion.h" />
+    <ClInclude Include="src\cmt\gui.h" />
+    <ClInclude Include="src\cmt\Matcher.h" />
+    <ClInclude Include="src\cmt\Tracker.h" />
+    <ClInclude Include="src\imacq\ImAcq.h" />
+    <ClInclude Include="src\INativeTracker.h" />
+    <ClInclude Include="src\mftracker\BB.h" />
+    <ClInclude Include="src\mftracker\BBPredict.h" />
+    <ClInclude Include="src\mftracker\FBTrack.h" />
+    <ClInclude Include="src\mftracker\Lk.h" />
+    <ClInclude Include="src\mftracker\Median.h" />
+    <ClInclude Include="src\tld\Clustering.h" />
+    <ClInclude Include="src\tld\DetectionResult.h" />
+    <ClInclude Include="src\tld\DetectorCascade.h" />
+    <ClInclude Include="src\tld\EnsembleClassifier.h" />
+    <ClInclude Include="src\tld\ForegroundDetector.h" />
+    <ClInclude Include="src\tld\IntegralImage.h" />
+    <ClInclude Include="src\tld\MedianFlowTracker.h" />
+    <ClInclude Include="src\tld\NNClassifier.h" />
+    <ClInclude Include="src\tld\NormalizedPatch.h" />
+    <ClInclude Include="src\tld\TLD.h" />
+    <ClInclude Include="src\tld\TLDUtil.h" />
+    <ClInclude Include="src\tld\VarianceFilter.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

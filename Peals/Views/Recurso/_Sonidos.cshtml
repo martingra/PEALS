@@ -1,0 +1,73 @@
+﻿@{  if (ViewBag.ListSonidos == null)
+            { 
+               <p>No tienes sonidos cargados.</p>
+            }
+            else
+            {
+               <ul>
+                    @foreach (var audio in ViewBag.ListSonidos)
+                    { 
+                        <li class="content" >
+                            <img class="en-reproduccion" src="../../Content/Resources/General/play.png" alt="Reproduciendo" />
+                            <input type="hidden" class="id" value="@audio.id" />
+                            <input type="hidden" class="src" value="@Url.Content(audio.ruta)" />
+                            <div id="@audio.id">
+                                <h2 class="nombre" onclick="$('.audio-reproductor audio').attr('src', '@Url.Content(audio.ruta)');">@audio.nombre</h2>
+                                @if (audio.recurso_compartido.Count > 0)
+                                {
+                                    <div class="informacion activo" onclick="mostrarInstitucionesRecCompartidos($(this.parentElement.parentElement).children('.id').val())">   
+                                        <img src="../../Content/Resources/General/group.png" alt="Compartido" width="20px" height="20px" />
+                                        <h3>Compartido</h3>
+                                    </div>
+                                }
+                                else
+                                { 
+                                    <div class="informacion inactivo" >
+                                        <img src="../../Content/Resources/General/user.png" alt="Sin compartir" width="20px" height="20px" />
+                                        <h3>Sin compartir</h3>
+                                    </div>
+                                }
+                                
+                                @if (audio.ejercicio_x_recurso.Count > 0)
+                                {
+                                    <div class="informacion activo">
+                                        <img src="../../Content/Resources/General/share-on.png" alt="Usado" width="20px" height="20px" />
+                                        <h3>Usado</h3>
+                                        <div>
+                                            <div class="triangulo" ></div>
+                                            <ul>
+                                                <li onclick="mostrarActividades(@audio.id)">
+                                                    <img src="../../Content/Resources/General/Ver.png" alt="Ver" width="24px" height="24px" />
+                                                    <h2>Ver</h2>
+                                                </li>
+                                                <li onclick="activarCambiarRecurso(@audio.id)">
+                                                    <img src="../../Content/Resources/General/Cambiar.png" alt="Cambiar" width="24px" height="24px" />
+                                                    <h2>Cambiar</h2>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="informacion inactivo">
+                                        <img src="../../Content/Resources/General/share-off.png" alt="Sin usar" width="20px" height="20px" />
+                                        <h3>Sin usar</h3>
+                                    </div>
+                                }
+                            </div>
+                            <img class="eliminar" src="../../Content/Resources/MasterPage/delete.png" alt="Eliminar Sonido" onclick="eliminarRecurso(@audio.id, '@audio.nombre', @audio.ejercicio_x_recurso.Count > 0)" />
+
+                            <button type="button" class="btn_editar" value="Editar" onclick="editar(@audio.id, this.parentElement)">Editar</button>
+                            <button type="button" class="btn_compartir" value="Compartir" onclick="compartir(@audio.id)">Compartir</button>
+                            
+                            <img class="seleccion" src="../../Content/Resources/MasterPage/ok-off.png" width="32px" height="32px" />
+                        </li>
+                    }
+                </ul>
+                <div class="audio-reproductor">
+                    <h2>Reproduciendo </h2><label class="audio-label"></label>
+                    <audio controls="controls" src="" autoplay="autoplay" />
+                </div>
+            }
+        }

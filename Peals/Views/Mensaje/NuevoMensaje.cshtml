@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "Nuevo Mensaje";
+}
+
+@model Peals.Models.mensaje
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<link href="@Url.Content("~/Content/Styles/jquery.validate.css")" rel="stylesheet" type="text/css" />
+
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/radioButtons.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Mensajes.css")" rel="stylesheet" type="text/css" />
+
+
+
+
+
+<div class="titulo" style="width: 900px; float: left;">
+    <h1>Nuevo Mensaje</h1>
+</div>
+
+@{Html.BeginForm();}
+
+    <ul class="errorMessages">
+        <li></li>
+    </ul>
+
+    <div id="cuerpoNuevoMensaje">
+        <div class="seccion">
+            <h1 style="float: left;">
+                Destinatarios</h1>
+            <a class="agregar" href="#">Agregar destinatario</a>
+        </div>
+        <div id="destinatarios">
+            
+            @if (ViewBag.destinatario != "0") {
+                <div class="destinatarioPersonaBox"> <p> @ViewBag.destinatario </p> <a href="#" class="borrarDestinatario"> <img src="../../Content/Resources/MasterPage/delete.png" /> </a> </div>
+            }
+
+        </div>
+       
+        <div class="seccion">
+            <h1 style="float: left;">
+                Mensaje</h1>
+        </div>
+    
+        <div class="cuerpo">
+            <div class="lblAsunto">ASUNTO:</div>
+            @Html.TextBoxFor(m => m.titulo_mensaje, new { id = "asunto", style = "margin-left:15px; width: 765px;", required = "required" })
+        </div>
+
+        <div class="cuerpo">
+            <div class="lblAsunto">MENSAJE:</div>
+            @*@Html.TextAreaFor(m => m.mensaje1, new { id = "mensaje", rows = "12", cols = "150" })*@
+            @Html.TextAreaFor(m => m.mensaje1, new { id = "mensaje", style = "height: 300px; width: 795px;", required = "required" })
+        </div>
+
+        <div class = "cuerpo" >
+            <a href="#" > <img id="enviar" type="submit" src="../../Content/Resources/Mensajes/enviar.png" /> </a>
+@*        <div id="botones">
+            <input id="botonSubmit" type="submit" name="enviarMensaje" value="Enviar Mensaje" />
+        </div>*@
+        </div>
+    </div>
+
+    <!-- Ventana Modal que se muestra al agregar un destinatario -->
+    <div id="modal_agregar_destinatario" class="reveal-modal large">
+        <h1 style="padding: 3px; border-bottom: 2px solid #3966A2; text-align: center">
+            AGREGAR DESTINATARIO</h1>
+        <div class="rbMensaje">
+            <input type="radio" id="r_persona" name="radio" />
+            <label for="r_persona">
+                <span></span>Persona</label>
+        </div>
+        <div class="rbMensaje">
+            <input type="radio" id="r_curso" name="radio" />
+            <label for="r_curso">
+                <span></span>Curso</label>
+        </div>
+        <div style="font-size: 0.55em; margin-top: 12px; float: left; width: 360px;">
+            <label for="i_destinatario">
+                <span></span>Destinatario</label>
+            <input class="ui-autocomplete-input" type="text" id="i_destinatario_persona" name="destinatario"
+                style="width: 200px;" />
+            <input class="ui-autocomplete-input" type="text" id="i_destinatario_curso" name="destinatario"
+                style="width: 200px;" />
+        </div>
+        <div id="agregarDestinatario" style="font-size: 0.55em; margin-top: 12px; float: left;
+            width: 40px;">
+            <a href="#">
+                <img src="../../Content/Resources/MasterPage/ok.png" style="height: 40px; width: 40px;" /></a>
+        </div>
+    </div>
+
+@{Html.EndForm();}
+<script type="text/javascript">
+    var opcion = "";
+    $("#mensaje").keypress(function () {
+        if ($("#mensaje").val().length >= 1999) {
+            alert('Has alcanzado el máximo de caracteres permitidos en un mensaje');
+        }
+    });
+
+    $(".agregar").click(function () {
+        $('#modal_agregar_destinatario').reveal();
+    });
+
+    $("#r_persona").click(function () {
+        $("#i_destinatario_curso").hide();
+        $("#i_destinatario_persona").show();
+        opcion = "PERSONA";
+    });
+
+    $("#r_curso").click(function () {
+        $("#i_destinatario_curso").show();
+        $("#i_destinatario_persona").hide();
+        opcion = "CURSO";
+    });
+
+    $("#i_destinatario_persona").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "AutocompleteDestinatarioPersona", type: "POST", dataType: "JSON",
+                data: {
+                    parametro: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Label,
+                            value: item.Value,
+                            id: item.Id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2//,
+        //            search: function () { $(this).addClass('working'); },
+        //            open: function () { $(this).removeClass('working'); }
+    });
+
+
+    $("#i_destinatario_curso").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "AutocompleteDestinatarioCurso", type: "POST", dataType: "JSON",
+                data: {
+                    parametro: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.Label,
+                            value: item.Value,
+                            id: item.Id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2//,
+        //            search: function () { $(this).addClass('working'); },
+        //            open: function () { $(this).removeClass('working'); }
+    });
+
+
+    $("#agregarDestinatario").click(function () {
+        if (opcion == "PERSONA") {
+            $('#destinatarios').append('<div class="destinatarioPersonaBox"> <p>' + $("#i_destinatario_persona").val() + '</p> <a href="#" class="borrarDestinatario"> <img src="../../Content/Resources/MasterPage/delete.png" /> </a> </div>');
+        }
+        else {
+            $('#destinatarios').append('<div class="destinatarioCursoBox"> <p>' + $("#i_destinatario_curso").val() + '</p> <a href="#" class="borrarDestinatario"> <img src="../../Content/Resources/MasterPage/delete.png" /> </a> </div>');
+        }
+
+        $("#i_destinatario_persona").val("");
+        $("#i_destinatario_curso").val("");
+        $('#modal_agregar_destinatario').trigger('reveal:close');
+    });
+
+
+
+    $(document).ready(function () {
+
+        $("#r_persona").click();
+        var autoSuggestion = document.getElementsByClassName('ui-autocomplete');
+        if (autoSuggestion.length > 0) {
+            autoSuggestion[0].style.zIndex = 1051;
+            autoSuggestion[1].style.zIndex = 1052;
+        }
+    });
+
+
+    $('#destinatarios').on('click', '.borrarDestinatario', function (e) {
+        e.preventDefault();
+        $(this).parent().hide("slow", function () {
+            $(this).remove();
+        });
+    });
+
+    $('#enviar').click(function () {
+        var obj = $(".destinatarioPersonaBox");
+        var personas = [];
+        var cursos = [];
+
+        $.each(obj, function (key, value) {
+            var textoHtml = value.innerHTML;
+            personas.push(textoHtml.split("<p>")[1].split("</p>")[0]);
+        });
+        var obj = $(".destinatarioCursoBox");
+        $.each(obj, function (key, value) {
+            var textoHtml = value.innerHTML;
+            cursos.push(textoHtml.split("<p>")[1].split("</p>")[0]);
+        });
+        var inputPersonas = $("<input>").attr({ "type": "hidden", "name": "personas" }).val(personas);
+        var inputCursos = $("<input>").attr({ "type": "hidden", "name": "cursos" }).val(cursos);
+        $("form").append(inputPersonas);
+        $("form").append(inputCursos);
+        //$("#botonSubmit").click();
+
+        var errorList = $('ul.errorMessages');
+        errorList.empty();
+
+        var form = $("form");
+        var errorList = $('ul.errorMessages', form);
+        var hayError = false;
+
+        if ($("#asunto").val() == "") {
+            errorList.append('<li> Por favor, ingresa un asunto </li>');
+            hayError = true;
+        }
+
+        if ($("#asunto").val().length >40) {
+            errorList.append('<li> Asunto demasiado largo </li>');
+            hayError = true;
+        }
+
+        if ($("#mensaje").val().length >= 1999) {
+            errorList.append('<li> Asunto demasiado largo </li>');
+            hayError = true;
+        }
+
+        if ($("#mensaje").val() == "") {
+            errorList.append('<li> Por favor, ingresa un mensaje </li>');
+            hayError = true;
+        }
+
+        if ($(".destinatarioCursoBox").val() == undefined && $(".destinatarioPersonaBox").val() == undefined) {
+            errorList.append('<li> Por favor, ingresa un destinatario </li>');
+            hayError = true;
+        }
+
+        errorList.show();
+
+        if (!hayError) {
+            $("form").submit();
+        }
+        //$("form").submit();
+    });
+
+</script>

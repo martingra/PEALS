@@ -1,0 +1,395 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Docente.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Mensajes.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "PEALS - DOCENTE";
+}
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<style type="text/css">
+    button
+    {
+        font-size: 0.8em !important;
+    }
+    
+    #modalAgregarAlumno
+    {
+        text-align: center;
+        background-color: #0AA7A2;
+        color: white;
+        font-weight: 900;
+        font-size: 25pt;
+    }
+    
+    #gridAlumnosInstitucion
+    {
+        color: Black;
+        font-size: 15pt;
+        font-weight: normal;
+    }
+</style>
+<div id="dialog" class="reveal-modal xlarge">
+</div>
+<input type='hidden' id='idCursoSeleccionado' />
+<input type='hidden' id='idInstitucionSeleccionada' />
+<div id="docenteInicio">
+    <div id="docente_opciones" class="opciones">
+        <div>
+            <figure>
+                <a title="Modificación, Baja y Alta de Nuevas Actividades" href="@Url.Action("Index", "Actividad")">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/Docente/Actividades.jpg")"/>
+				    <figcaption>Gestión de Actividades</figcaption>
+                </a>
+			</figure>
+        </div>
+        <div>
+            <figure>
+                <a title="Seguimiento de desempeño de los alumnos" href="@Url.Action("DiacOSeguimiento", "Docente")">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" />
+				    <figcaption>Seguimientos de Alumnos</figcaption>
+                </a>
+			</figure>
+        </div>
+        <div>
+            <figure>
+                <a title="Modificar sus Datos" href="@Url.Action("EditarDocente", "Docente")">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/General/Profesor.jpg")"/>
+				    <figcaption>Mis Datos</figcaption>
+                </a>
+			</figure>
+        </div>
+        <div>
+            <figure>
+                <a title="Ver todas las instituciónes de PEALS" href="/Institucion/TodasLasInstituciones?inicio=0">
+				    <img class="imgConBorde" width="100px" height="125px" src="@Url.Content("~/Content/Resources/Docente/masInstituciones.jpg")" />
+				    <figcaption>
+						    Ver todas las Instituciónes de PEALS
+				    </figcaption>
+                </a>
+			</figure>
+        </div>
+        <div id="reportes">
+            <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/MasterPage/reportes.jpeg")" width="100" height="125" onclick="location.href='@Url.Action("Reportes", "Docente")';" />
+               <figcaption><a href="@Url.Action("Reportes", "Docente")">Reportes</a></figcaption>
+           </figure>
+        </div>
+    </div>
+    <div id="docente_actividades">
+        <div class="titulo">
+            <img src="@Url.Content("~/Content/Resources/Docente/Evaluaciones.png")" width="30px" height="25px"/>
+            <h2>
+                Actividades para corregir</h2>
+        </div>
+        <div class="searchDiv">
+            <label for="actividad_buscarPor">
+                Buscar por</label>
+            <select id="actividad_buscarPor" onchange="cambiarAutocomplete(this, $('#reemplazable_actividades'));">
+                <option value="Alumno">Alumno</option>
+                <option value="Actividad">Actividad</option>
+                <option value="Institucion">Institución</option>
+                <option value="Curso">Curso</option>
+            </select>
+            <div id="reemplazable_actividades">
+            </div>
+            <button type="button" onclick="buscarActividades()">
+                Buscar</button>
+        </div>
+        <div id="grillaActividadesPendientes">
+            @{ Html.RenderAction("_ActividadesSinCorregir"); }
+        </div>
+    </div>
+    <div id="docente_cursos">
+        <div class="titulo">
+            <img src="@Url.Content("~/Content/Resources/Docente/MisCursos.jpg")" width="30px" height="28px" />
+            <h2>
+                Mis Cursos</h2>
+        </div>
+        <div class="searchDiv">
+            <label for="curso_buscarPor">
+                Buscar por</label>
+            <select id="curso_buscarPor" onchange="cambiarAutocompleteMisCursos(this, $('#reemplazable_cursos'));">
+                <option value="Institucion">Institución</option>
+                <option value="Curso">Curso</option>
+            </select>
+            <div id="reemplazable_cursos">
+            </div>
+            <button type="button" onclick="buscarCursos();">
+                Buscar</button>
+            <a id="quitarDocente" style="opacity: 0.4;">
+                <img src="../../Content/Resources/General/Cadena.png" alt="Quitar asignación" width="28px"
+                    height="28px" style="margin-top: 10px; margin-left: 10px;" /></a>
+        </div>
+        <div id="grillaCursos" style="width: 95%; margin: 10px">
+            @{Html.RenderAction("_Cursos");}
+        </div>
+        <div id="op_cursos">
+            <button type="button" id="btn_agregarActividades" onclick="mostrarActividades()">
+                Agregar Actividades</button>
+            <button type="button" id="btn_agregarAlumnos" onclick="agregarAlumnos()">
+                Agregar Alumnos</button>
+            <button type="button" id="btn_verAlumnos" onclick="verAlumnos()">
+                Ver Alumnos</button>
+        </div>
+    </div>
+
+    <div id="idAlumnosCurso" class="reveal-modal xlarge"></div>
+
+    <div id="docente_solicitudes">
+        <div class="titulo" style="margin: 5px">
+            <img src="@Url.Content("~/Content/Resources/Docente/Solicitudes.jpg")" width="30px" height="28px"/>
+            <h2>
+                Solicitudes de Inscripción</h2>
+        </div>
+        @{ Html.RenderAction("_SolicitudesPendientes", new { cantidadRegistros = 5 }); }
+    </div>
+    <div id="docente_instituciones">
+        <div class="titulo">
+            <img src="@Url.Content("~/Content/Resources/Docente/Evaluaciones.png")" width="30px" height="25px"/>
+            <h2>
+                Mis instituciones</h2>
+        </div>
+        <div id="grillaMisInstituciones">
+            @{ Html.RenderAction("_InstitucionesDocente"); }
+        </div>
+    </div>
+</div>
+<div id="modalAgregarAlumno" class="reveal-modal xlarge">
+    <!-- Muestro una grilla con los alumnos de la institucion -->
+    @{ Html.RenderAction("_AlumnosInstitucion", "Alumno", new { idInstitucion = 2, idCurso = 1 }); }
+    <!-- Botones-->
+    <input class="dialog_aceptar" type="button" value="Nuevo Alumno" />
+    <input class="dialog_cancelar" type="button" value="Cancelar" />
+</div>
+<div id="dialog_mensajes" class="reveal-modal">
+    <div id="dialog_mensaje">
+    </div>
+    <div id="dialog_acciones">
+        <button type="button" id="btn_cancelar">
+            Mejor no</button>
+        <button type="button" id="btn_aceptar">
+            Sí, estoy seguro</button>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(".dialog_cancelar").click(function () {
+        $("#modalAgregarAlumno").trigger('reveal:close');
+    });
+
+    function cambiarAutocomplete(select, autocomplete) {
+        $(autocomplete).fadeOut();
+
+        var placeHolder = "";
+        switch ($(select).val()) {
+            case "Alumno":
+                placeHolder = "Nombre o E-Mail del Alumno";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_Alumno", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+                break;
+            case "Actividad":
+                placeHolder = "Nombre de la Actividad";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreActividad", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+                break;
+            case "Institucion":
+                placeHolder = "Nombre de la Institución";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreInstitucion", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+            case "Curso":
+                placeHolder = "Nombre del Curso";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("Autocomplete", "Busqueda", new { accion = "Autocomplete_NombreCurso", controlador = "Docente", label = "Label", value = "Value", idList = "Id" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+        }
+    }
+
+    function cambiarAutocompleteMisCursos(select, autocomplete) {
+        $(autocomplete).fadeOut();
+
+        var placeHolder = "";
+        switch ($(select).val()) {
+            case "Institucion":
+                placeHolder = "Nombre de la Institución";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("AutocompleteCustomInput", "Busqueda", new { accion = "Autocomplete_NombreInstitucion", controlador = "Docente", label = "Label", value = "Value", idList = "Id", inputName = "buscarMisCursos" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+            case "Curso":
+                placeHolder = "Nombre del Curso";
+                $(autocomplete).load(
+					'@Html.Raw(@Url.Action("AutocompleteCustomInput", "Busqueda", new { accion = "Autocomplete_NombreCurso", controlador = "Docente", label = "Label", value = "Value", idList = "Id", inputName = "buscarMisCursos" }))',
+					modificarPlaceHolder(placeHolder, autocomplete)
+				);
+
+                break;
+        }
+    }
+
+    function modificarPlaceHolder(placeHolder, autocomplete) {
+        $(autocomplete).fadeIn('slow', function () {
+            $('input', autocomplete).attr('placeholder', placeHolder);
+        });
+    }
+
+    function buscarCursos() {
+        var searchCriteria = $('#curso_buscarPor').val();
+        var searchValue = $('input', '#reemplazable_cursos').val();
+
+        var url = '@Url.Action("_Cursos")' + '?searchCriteria=' + searchCriteria + '&searchValue=' + searchValue;
+        url = url.replace(/ /g, '%20');
+
+        $('#grillaCursos').load(url);
+    }
+
+    function buscarActividades() {
+        var searchCriteria = $('#actividad_buscarPor').val();
+        var searchValue = $('input', '#reemplazable_actividades').val();
+
+        var url = '@Url.Action("_ActividadesSinCorregir")' + '?searchCriteria=' + searchCriteria + '&searchValue=' + searchValue;
+        url = url.replace(/ /g, '%20');
+
+        $('#gridActividadesPendientes').load(url);
+    }
+
+    function mostrarActividades() {
+        var titulo = $('<div>').attr('class', 'titulo').append('<h2>Actividades</h2>');
+        var actividades = $('<div>').load('/Docente/_ActividadesDocente');
+
+        var lfecha = $('<label for="fecha_apertura" >Fecha de Apertura:</label>');
+        var ifecha = $('<input type="text" id="fecha_apertura" name="fecha_apertura" placeholder="dd/mm/aaaa" />');
+        var fecha = $('<div>').attr('class', 'fecha').append(lfecha).append(ifecha);
+
+        var aceptar = $('<button>').attr({ 'type': 'button', 'class': 'dialog_aceptar' }).text('Aceptar');
+        var cancelar = $('<button>').attr({ 'type': 'button', 'class': 'dialog_cancelar' }).text('Cancelar');
+
+        var op_dialog = $('<div class="op_dialog">').append(cancelar).append(aceptar);
+
+        $('#dialog').empty();
+        $('#dialog').append(titulo).append(actividades).append(fecha).append(op_dialog);
+        $('#dialog').reveal({ closeonbackgroundclick: false, dismissmodalclass: 'dialog_cancelar' });
+
+        applyUIStyles();
+    }
+
+    function agregarAlumnos() {
+        $('#modalAgregarAlumno').load('/Alumno/_AlumnosNoCurso?idInstitucion=' + $('#idInstitucionSeleccionada').val() + '&idCurso=' + $('#idCursoSeleccionado').val());
+        $("#modalAgregarAlumno").reveal();
+    }
+
+    function verAlumnos() 
+    {
+        $("#idAlumnosCurso").load("/Alumno/_AlumnosCurso?idCurso=" + $("#gridCursos .webgrid-selected-row").find(".idHidden").val(), function () {
+            $("#idAlumnosCurso").reveal();
+        });
+    }
+
+    var cursos_seleccionados = [];
+
+    function init() {
+        $('#actividad_buscarPor').val('Alumno').change();
+        cambiarAutocomplete($('#actividad_buscarPor'), $('#reemplazable_actividades'));
+        $('#curso_buscarPor').val('Institucion').change();
+        cambiarAutocompleteMisCursos($('#curso_buscarPor'), $('#reemplazable_cursos'));
+
+        var rowActividades = $('#gridActividadesPendientes').find('tr');
+        rowActividades.bind('click', function (event) {
+            window.location.href = "/Docente/corregirActividad?historialActividad=" + $(this).find('#IDHidden').val();
+        });
+
+        var rowCursos = $('#gridCursos').find('tr');
+        rowCursos.bind('click', function (event) {
+            if (this.className != "webgrid-header") {
+                $('#idInstitucionSeleccionada').val($(this).find('.idInstitucionCurso').val());
+                $('#idCursoSeleccionado').val($(this).find('.idHidden').val());
+                rowCursos.removeClass('webgrid-selected-row');
+                $(this).addClass('webgrid-selected-row');
+                $('#docente_cursos #op_cursos').css('display', 'block');
+                $("#quitarDocente").css('opacity', '1');
+                $("#quitarDocente").css('cursor', 'pointer');
+            }
+
+            //		    var id = $(this).find('input:hidden').val();
+            //		    var i;
+            //		    for (i = 0; i < cursos_seleccionados.length; i++) {
+            //		        if (cursos_seleccionados[i] == id) {
+            //		            cursos_seleccionados.splice(i, 1);
+            //		            $(this).removeClass('webgrid-selected-row');
+            //		            if (cursos_seleccionados.length == 0) {
+            //		                $('#docente_cursos #op_cursos').css('display', 'none');
+            //		            }
+
+            //                    return;
+            //		        }
+            //		    }
+
+            //            cursos_seleccionados.push(id);
+            //            $(this).addClass('webgrid-selected-row');
+            //            $('#docente_cursos #op_cursos').css('display', 'block');
+        });
+
+        var rowSolicitudes = $('#gridSolicitudes').find('tr');
+        rowSolicitudes.bind('click', function (event) {
+            alert("Página no Disponible");
+        });
+
+    }
+
+    $(document).ready(init);
+
+    $(".btnAbrir").click(function (e) {
+        e.preventDefault();
+        var idMensaje = $(this).parent().find("input").attr("value");
+        var url = '/Mensaje/_VerSolicitud?idMensaje=' + idMensaje;
+        $('#dialog').load(url, function () {
+            $('#dialog').reveal();
+        });
+
+        //        $(document).ajaxStart(function () {
+        //        }).ajaxStop(function () {
+        //            $('#dialog').reveal();
+        //        });
+    });
+
+    function desvincularInstitucion(idInstitucion) {
+        $('#dialog_mensajes #dialog_mensaje').empty();
+        $('#dialog_mensajes #dialog_mensaje').append("<p>¿Estas seguro que quieres sacar al docente de la Institución?</p>");
+
+        $('#dialog_mensajes #dialog_acciones #btn_cancelar').on('click', function () { $('.reveal-modal').trigger('reveal:close'); });
+        $('#dialog_mensajes #dialog_acciones #btn_aceptar').on('click', function () {
+            $.post("Docente/desvincularInstitucion?idInstitucion=" + idInstitucion, function (data) {
+                location.reload();
+            });
+        });
+
+        $('#dialog_mensajes').reveal();
+    }
+
+    $("#quitarDocente").click(function () {
+        $('#dialog_mensajes #dialog_mensaje').empty();
+        $('#dialog_mensajes #dialog_mensaje').append("<p>¿Estas seguro que quieres sacar al docente de la Institución?</p>");
+
+        $('#dialog_mensajes #dialog_acciones #btn_cancelar').on('click', function () { $('.reveal-modal').trigger('reveal:close'); });
+        $('#dialog_mensajes #dialog_acciones #btn_aceptar').on('click', function () {
+            $.post("Docente/desvincularCurso?idCurso=" + $('#idCursoSeleccionado').val(), function (data) {
+                location.reload();
+            });
+        });
+
+        $('#dialog_mensajes').reveal();
+    });     
+
+</script>

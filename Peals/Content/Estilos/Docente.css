@@ -1,0 +1,146 @@
+@charset "utf-8";
+/* CSS Document */
+
+#docenteInicio{ padding: 20px 0 0 25px;}
+#asignarAlumnoPrincipal {padding: 20px 0 0 25px; width: 100%;}
+
+
+#tituloDocente{ padding: 20px 0 0 25px;}
+
+
+/*Datos Docente*/
+#datosDocente{ text-transform:uppercase; max-width: auto; padding: 10px 0 25px 25px;}
+
+#datosDocente td{ min-width: 220px; max-width: auto; height: 30px;}
+#datosDocente input[type='text'] { min-width: 200px; text-transform: uppercase;}
+#datosDocente input[type='password'] { min-width: 200px;}
+#datosDocente select{ width: 200px;}
+#datosDocente input[type='button']{ width: 200px; text-transform: uppercase;}
+#datosDocente input[type='submit']{ width: 200px; text-transform: uppercase;}
+#datosDocente fieldset{ width: 90%; background-color:#fcfdbb; padding: 10px 0 10px 25px; margin: 0 20px 20px 0;}
+span{ font-size:12px;}
+
+/*Fin Datos Docente*/
+
+
+#botones { width: auto; padding: 10px 0 10px 0; margin-top: -20px;}
+#botones input[type='submit'] { width: 200px; text-transform: uppercase; height: 30px;}
+#botones input[type='button'] { width: 200px; text-transform: uppercase; height: 30px;}
+
+
+/* Gestion de Actividades */
+#gestionActividades{ padding: 20px 0 20px 25px;}
+
+#tituloGestionActividades{}
+
+#contenedorFiltrosImagen{ float:left; width: 100%; margin: 0 0 20px 0;}
+#filtrosActividades{padding: 20px 0 20px 0; float: left; width: 50%; border-right: 1px black dotted;}
+#nuevaActividad{ float:left; vertical-align: middle; text-align:center; width: 40%; padding-top: 30px;}
+
+#tablaActividades table{ border:thin solid black; text-align:center;}
+
+/*Fin Gestion de Actividades*/
+
+/* Crear Actividad */
+
+#imagenesActividad { position:relative; width: 100%; height: 800px; margin: 20px auto 30px 35px;}
+
+.fotoAlineacionIzquierda {
+	width: auto;
+	float:left;
+}
+
+#primerasImagenes{ padding-left: 20px;}
+#segundasImagenes{ width: 750px; padding-left: 145px;}
+
+/* Fin Crear Actividad */
+
+
+
+/* Crear Actividad Varios para cada una*/
+#crearActividad{ margin: 20px 0 20px 25px; }
+#crearActividad input, td, label, select{ margin: 5px;}
+#crearActividad input[type='submit']{ width: 100px; }
+
+#nombreActividad{ padding: 20px 0 20px 0;}
+#nombreActividad img{ padding-bottom: 20px;}
+#nombreActividad input[type='text']{ width: 300px;}
+
+
+#cabeceraActividad img{ padding-bottom: 30px;}
+
+#seleccionSonido{ padding: 20px 0 20px 0;}
+#seleccionSonido img { padding-bottom: 20px;}
+
+#seleccionImagen { padding: 20px 0 20px 0;}
+#seleccionImagen img {padding-bottom: 20px;}
+
+#botonesActividad {
+	width: 100%; padding: 20px 0 20px 200px;
+}
+
+#botonesActividad input[type='submit']{width: 200px; text-transform: uppercase; height: 30px;}
+#botonesActividad input[type='button']{width: 200px; text-transform: uppercase; height: 30px;}
+
+
+#actividadPublica{ width: 50%; float:left; padding: 50px 0 50px 0;}
+#recursoPublico{width: 50%; float:left; padding: 50px 0 50px 0;}
+/* Fin Crear Actividad Varios para cada una*/
+
+
+
+/* Crear Actividad Sonido Reproduccion*/
+#imagenSeleccionada { padding: 20px 0 20px 0;}
+#imagenSeleccionada img {padding-bottom: 20px;}
+/* Fin Crear Actividad Sonido Reproduccion*/
+
+
+
+/* Crear Actividad Sonido Imagenes*/
+#imagenesSeleccionadas { padding: 20px 0 20px 0;}
+#imagenesSeleccionadas img {padding-bottom: 20px;}
+/* Fin Crear Actividad Sonido Imagenes*/
+
+/* Crear Actividad Imagen Texto*/
+#textoAsociado{ padding: 20px 0 25px 0;}
+#textoAsociado img{ padding-bottom: 20px;}
+#textoAsociado input[type='text']{ width:300px;}
+/*Fin Crear Actividad Imagen Texto*/
+
+/* Crear Actividad Escritura En Base Señas */
+#seleccionVideo{ padding: 20px 0 20px 0;}
+#seleccionVideo img {padding-bottom: 20px;}
+#seleccionVideo td { text-align:center; padding: 0 auto 0 auto;}
+
+#videoSeleccionado{ padding: 20px 0 20px 0;}
+#videoSeleccionado img {padding-bottom: 20px;}
+/* Fin Crear Actividad Escritura En Base Señas */
+
+
+/* Docente Asignar Alumno Asignar*/
+#docenteAsignarAlumnoAsignar{ padding: 20px 0 25px 25px;}
+#filtrosAsignarAlumnos {padding: 20px 0 20px 0; float: left;}
+/* Fin Docente Asignar Alumno Asignar*/
+
+
+/* Docente Asignar Alumno Solicitudes*/
+#docenteAsignarAlumnoSolicitudes{ padding: 20px 0 25px 25px;} 
+#docenteAsignarAlumnoSolicitudes table{ margin: 20px 0 25px 0; text-align:center;}  
+/* Fin Docente Asignar Alumno Solicitudes*/
+
+
+/* Docente Seguimiento~Alumnos y Listado */
+#docenteSeguimientoAlumnos{ padding: 20px 0 25px 25px;}
+#filtrosSeguimientoAlumnos{ padding: 20px 0 20px 0; }
+#tablaSeguimientoAlumnos{ margin: 20px 0 25px 0; text-align:center;}
+#desempeñoGeneral{ float:left; vertical-align: middle; text-align:center; width: 30%; padding-top: 5px;}
+#tablaDesempeñoAlumno{ margin: 50px 0 20px 0; text-align:center;}
+/* Fin Docente Seguimiento~Alumnos y Listado */
+
+
+/* Televisor con imagen adentro
+#contenidoImagen{ float: left;}
+#televisor{ position: relative; margin: -280px auto 0 auto;}*/
+
+#contenidoImagenDeletreo{ width: 60%; padding: 20px 0 20px 0; margin: 0 auto 0 auto;}
+#televisor{ position: relative; margin: -280px auto 0 auto;}

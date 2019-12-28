@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .opciones div
+    {
+        float: left;
+        margin-left: 6em;
+        width: 20%;
+    }
+    
+    select
+    {
+        width: 48em;
+        margin-left: 6em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+</style>
+<div id="tituloPagina">
+    <h1>
+        Listado de Seguimiento Docente</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Administre el Seguimiento Docente de su institución para obtener un buen seguimiento de sus
+        alumnos.
+    </h1>
+</div>
+@Html.DropDownList("curso", ViewData["cursos"] as IEnumerable<SelectListItem>)
+<div id="seguimiento_opciones" class="opciones">
+    <div id="verseguimientoActual">
+        <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Administrador/NuevoCurso.png")" width="100" height="125" />
+                <figcaption"><a href="#">Ver Seguimiento Docente Actual</a></figcaption>
+            </figure>
+    </div>
+    <div id="modificarseguimientoActual">
+        <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/General/Profesor.jpg")" width="100" height="125" />
+                <figcaption><a href="#">Modificar Seguimiento Docente Actual</a></figcaption>
+            </figure>
+    </div>
+    <div id="agregarseguimiento">
+        <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" width="100" height="125" />
+               <figcaption><a href="#">Nuevo Seguimiento Docente</a></figcaption>
+           </figure>
+    </div>
+    <div id="resolverSeguimiento">
+        <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" width="100" height="125" />
+               <figcaption><a href="#">Resolver Seguimiento Docente</a></figcaption>
+           </figure>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        cambioCombo();
+    });
+
+    function cambioCombo() {
+        var id_curso = $("#curso").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Seguimiento/TieneSeguimiento',
+            data: JSON.stringify({ idCurso: id_curso }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success:
+                function (data) {
+                    if (data == false) {
+                        $("#verseguimientoActual").show();
+                        $("#modificarseguimientoActual").show();
+                        $("#resolverSeguimiento").show();
+                        $("#agregarseguimiento").hide();
+
+                    }
+                    else {
+                        $("#verseguimientoActual").hide();
+                        $("#modificarseguimientoActual").hide();
+                        $("#resolverSeguimiento").hide();
+                        $("#agregarseguimiento").show();
+                    }
+                },
+            error: function () { alert('error'); }
+        });
+    }
+
+    $("#curso").change(function () {
+        cambioCombo();
+    });
+
+
+
+
+    $("#agregarseguimiento").click(function (e) {
+        e.preventDefault();
+        location.href = '/Seguimiento/NuevoSeguimiento?idCurso=' + $("#curso").val();
+    });
+
+    $("#verseguimientoActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Seguimiento/VerSeguimientoCreado?idCurso=' + $("#curso").val();
+    });
+
+    $("#modificarseguimientoActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Seguimiento/ModificarSeguimiento?idCurso=' + $("#curso").val();
+    });
+
+    $("#resolverSeguimiento").click(function (e) {
+        e.preventDefault();
+        location.href = '/Seguimiento/menuSeguimientoCurso?idCurso=' + $("#curso").val();
+    });
+    
+</script>

@@ -1,0 +1,37 @@
+﻿
+@{
+	var grillaActividadesSinCursoDarBaja = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridActividadesDarBaja");
+	grillaActividadesSinCursoDarBaja.Bind(Model);
+	grillaActividadesSinCursoDarBaja.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grillaActividadesSinCursoDarBaja.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaActividadesSinCursoDarBaja.GetHtml(htmlAttributes: new { id = "gridActividadesDarBaja" },
+			tableStyle: "webgrid",
+			headerStyle: "webgrid-header",
+			footerStyle: "webgrid-footer",
+			alternatingRowStyle: "webgrid-alternating-row",
+			rowStyle: "webgrid-row-style",
+			columns: grillaActividadesSinCursoDarBaja.Columns(
+						grillaActividadesSinCursoDarBaja.Column(columnName: "nombre", header: "Actividad", style: "actividad")
+		))
+	}
+}
+                        
+<script type="text/javascript">
+    var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+    $(cursos).hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+    );
+</script>

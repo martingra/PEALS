@@ -1,0 +1,107 @@
+﻿
+@charset "utf-8";
+/* CSS Document */
+
+#tituloUsuario {
+    color: #0AA7A2;
+    font-size: 3em;
+    padding: 20px 0 0 25px;
+    text-align: center;
+}
+#tituloUsuario h1{ color: #0AA7A2; font-size: xx-large;}
+
+/*Datos Usuario*/
+#datosUsuario{ padding: 10px 0 25px 25px; color: #ecae76;}
+
+#datosUsuario td{ min-width: 220px; height: 30px;}
+
+#datosUsuario select{ width: 200px;}
+#datosUsuario p{ padding-bottom: 15px;}
+#datosUsuario fieldset{  border: solid 1px #ECAE76; width: 95%; background-color: rgba(248,248,248,1); padding: 10px 0 10px 25px; margin: 0 20px 20px 0;}
+span{ font-size:12px;}
+
+/*Fin Datos Usuario*/
+
+/* Botones 
+.submit
+{
+    width: 140px;
+    height: 80px;
+    background-size: 100px 40px;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position:center;
+    border: none;
+    cursor: pointer !important;
+    text-align: center;
+    padding-bottom: 0px; padding-right: 0px;
+    line-height:100px;
+    vertical-align:middle;
+}*/
+
+.boton
+{
+    float:left;
+    margin-left: 10%;
+    margin-bottom:30px;
+    width: 40%;
+}
+
+.submit:hover,
+.submit:active,
+.submit:focus {
+    background-size: 130px 50px;
+}
+
+/*.guardar
+{
+    margin-left: 100px;
+    background-image: url('../Buttons/btn-aceptar.png');
+}
+
+
+.cancelar
+{
+    background-image: url('../Buttons/btn-cancelar.png');
+}*/
+
+#DarBaja
+{
+    clear: both;
+    font-family: 'Oswald', sans-serif;
+    font-size: medium;
+    color: #ecae76;
+    text-align:right;
+    margin:20px 75px 0 0;
+}
+
+#DarBaja a
+{
+    color: #0AA7A2;
+    text-decoration:none;
+}
+
+#DarBaja:hover
+{
+    font-size: larger;
+}
+
+#DarBaja a:hover
+{
+    text-decoration: underline;
+}
+
+
+legend {
+    color:#0AA7A2;
+    font-size: 1.2em;
+}
+    
+#nueva_especialidad{
+    font-size: 1em !important;
+    font-weight: normal !important;
+    height: 2.5em !important;
+    margin-left: 1em;
+    margin-top: 0.3em;
+    width: 8.5em !important;
+}

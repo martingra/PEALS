@@ -1,0 +1,1 @@
+ALTER TABLE historial_actividad ADD institucion int DEFAULT NULL AFTER curso;

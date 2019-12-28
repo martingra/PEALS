@@ -1,0 +1,333 @@
+﻿<style>
+    .datos_a_exportar
+    {
+        clear: both;
+        width: 100%;
+    }
+    
+    #institucion
+    {
+        width: 30%;
+        height: 600px;
+        border-right: 1px solid gray;
+        float: left;
+    }
+    
+    #institucion ul
+    {
+        height: 600px;
+        overflow: auto;
+    }
+    
+    #institucion li
+    {
+        display: block;
+        margin: 10px;
+        border-bottom: 1px solid gray;
+    }
+    
+    #institucion li:hover
+    {
+        cursor: pointer;
+        background: #ffff99;
+    }
+    
+    .agregados
+    {
+        font-weight: bold;
+        color: #3966A2;
+    }
+    
+    #detalle
+    {
+        float: right;
+        width: 65%;
+        height: 600px;
+        margin-right: 30px;
+    }
+    
+    #docentes, #cursos
+    {
+        height: 50%;
+    }
+    
+    #cursos
+    {
+        margin-bottom: 25px;
+    }
+    
+    .acciones
+    {
+        width: 100%;
+        clear: both;
+        padding-top: 30px;
+    }
+    
+    button
+    {
+        margin: 0px 15px 15px 15px;
+        width: 200px;
+        height: 50px;
+    }
+    
+    #btn_asignar, #btn_exportar
+    {
+        float: right;
+        margin-right: 10px;
+        width: 25%;
+    }
+    
+    .select-row
+    {
+        border: 1px solid green !important;
+        background-color: #90EE90 !important;
+    }
+</style>
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/DragAndDrop.js")"></script>
+@{
+    ViewBag.Title = "PEALS - EXPORTAR DATOS";
+}
+<div id="tituloPagina">
+    <h1>
+        Exportar Institucion</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Selecciona una institución junto a los cursos y docentes que quieras asignarle a
+        la misma y haz click en <b>"Asignar"</b> para confirmar.
+    </h1>
+    <h1>
+        Selecciona una institución junto a los cursos y docentes que quieras asignarle a
+        la misma y haz click en <b>"Asignar"</b> para confirmar.</h1>
+    <h1>
+        Cuando termines con las asignaciones haz click en <b>"Exportar y Cerrar"</b>.</h1>
+    <h1>
+        También puedes arrastar los cursos o los docentes a una institución para asignarlos.</h1>
+</div>
+<div class="datos_a_exportar">
+    <div id="institucion">
+        <div class="titulo">
+            <img src="../../Content/Resources/Administrador/Instituciones.png" title="instituciones"
+                width="24px" height="24px" />
+            <h2>
+                Instituciones</h2>
+        </div>
+        @{
+            <ul>
+                @foreach (var ins in Model)
+                {
+                    <li onclick='onRowClickInstitucion(this)'>
+                        <div>
+                            <input type="hidden" id="institucion_id" value='@ins.id'/>
+                            <div id="institucion_nombre">
+                                <b>@ins.nombre</b></div>
+                            <div id="institucion_cursos">
+                                <i>@ins.curso.Count Curso(s)</i><i id="cursos_agregados" class="agregados"></i></div>
+                            <div id="institucion_docentes">
+                                <i>@ins.docente_x_institucion.Count Docente(s)</i><i id="docentes_agregados" class="agregados"></i></div>
+                        </div>
+                    </li> 
+                }
+            </ul>
+        }
+    </div>
+    <div id="detalle">
+        <div id="cursos">
+            <div class="titulo">
+                <img src="../../Content/Resources/Administrador/MisCursos.jpg" title="cursos" width="24px"
+                    height="24px" />
+                <h2>
+                    Cursos</h2>
+            </div>
+            <div id="grillaCursos">
+                @{ Html.RenderAction("_Cursos", new { idInstitucion = ViewBag.institucion.id, filasPorPagina = 5 }); }
+            </div>
+        </div>
+        <div id="docentes">
+            <div class="titulo">
+                <img src="../../Content/Resources/Administrador/PlantelDocente.jpg" title="docentes"
+                    width="24px" height="24px" />
+                <h2>
+                    Docentes</h2>
+            </div>
+            @{ Html.RenderAction("_Docentes", new { idInstitucion = ViewBag.institucion.id, filasPorPagina = 5 }); }
+        </div>
+    </div>
+</div>
+<div class="acciones">
+    <button type="button" id="btn_cancelar">
+        Cancelar</button>
+    <button type="button" id="btn_exportar" onclick="exportar()">
+        Exportar y Cerrar</button>
+    <button type="button" id="btn_asignar" onclick="asignar()">
+        Asignar</button>
+</div>
+<script type="text/javascript">
+    /***********************************************************************/
+    /**************** VARIABLES GLOBALES - CONSTRUCTORES *******************/
+    /***********************************************************************/
+    // variables para controlar los objetos html que han sido seleccionados.
+    var institucionHtml, cursosHtml = [], docentesHtml = [], listaHtml = [];
+    function structHtml(institucion, cursos, docentes){
+        this.institucion = institucion;
+        this.cursos = cursos;
+        this.docentes = docentes;
+    }
+
+    // variables para controlar los objectos que se pasan al servidor.
+    var idInstitucion= -1, idCursos= [], idDocentes= [], listaExp = [];
+    function structExp(idInstitucion, idCursos, idDocentes){
+        this.idInstitucion = idInstitucion;
+        this.idCursos = idCursos;
+        this.idDocentes = idDocentes;
+    };
+
+    function init() {
+        // agrego los eventos
+        var instituciones = document.querySelectorAll('li', '#institucion');
+        $(instituciones).setDnD(dropEndCallback);
+
+        $('#docentes').find('th:nth-child(2), td:nth-child(2)').remove();
+        var docentes = document.querySelectorAll('#gridDocentes tbody > tr');
+        $(docentes).setDnD();
+        $(docentes).bind('click', function () { onRowClick(this, idDocentes, docentesHtml); });
+
+        updatedGridCursosCallback();
+    }
+
+    function updatedGridCursosCallback(){
+        $('#gridCursos thead tr, #gridCursos tbody tr').find('th:nth-child(3), td:nth-child(3), th:nth-child(4), td:nth-child(4), th:nth-child(7), td:nth-child(7), th:last-child, td:last-child').remove();
+        var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+        $(cursos).setDnD();
+        $(cursos).bind('click', function () { onRowClick(this, idCursos, cursosHtml); });
+    }
+
+    /********************************************************************/
+    /****************** EVENTOS CLICK - BOTONES *************************/
+    /********************************************************************/
+    function asignar(){
+    debugger;
+        if (idInstitucion != -1 && (idCursos.length > 0 || idDocentes.length > 0)){
+            listaExp.push(new structExp(idInstitucion, idCursos, idDocentes));
+
+            listaHtml.push(new structHtml(institucionHtml, cursosHtml, docentesHtml));
+            for (var i in cursosHtml){
+                cursosHtml[i].remove();
+            }
+
+            $('#cursos_agregados', $(institucionHtml)).text((cursosHtml.length == 0)? "" : " + " + cursosHtml.length);
+            $('#docentes_agregados', $(institucionHtml)).text((docentesHtml.length == 0)? "" : " + " + docentesHtml.length);
+            
+            institucionHtml = "";
+            cursosHtml= [];
+            docentesHtml = [];
+
+            idInstitucion = -1;
+            idCursos = [];
+            idDocentes = [];
+
+            $.each(".select-row", function( index, value ) {
+              debugger;
+              $(this).removeClass("select-row");
+            });
+
+        }
+        else {
+            alert('Debes seleccionar una institución y al menos un curso o un docente');
+        }
+    }
+
+    function exportar() {
+        $.post('/Institucion/EliminarInstitucion', 
+            { idInstitucion: @ViewBag.institucion.id, datos: JSON.stringify(listaExp) }, 
+            function (succes){
+                if (succes) location.href = '@Url.Action("Index", "Administrador")';
+        });
+    }
+    
+    /********************************************************************/
+    /****************** EVENTOS CLICK - LISTA Y TABLAS ******************/
+    /********************************************************************/
+    function onRowClick(row, idList, htmlList){
+        var id = $(row).find('input[type=hidden]').val();
+        var pos = existItem(idList, id);
+        if (pos == -1){
+            $(row).attr('class', 'select-row'); 
+            idList.push(id);
+            htmlList.push($(row));
+        }else {
+            $(row).attr('class', (row.rowIndex % 2 == 0)? 'webgrid-alternating-row' : 'webgrid-row-style'); 
+            idList.splice(pos, 1);
+            htmlList.splice(pos, 1);
+        }
+    }
+    
+    function onRowClickInstitucion(instSeleccionada){
+        if (institucionHtml != null) $(institucionHtml).attr('class', "");
+        $(instSeleccionada).attr('class', 'select-row');
+
+        institucionHtml = instSeleccionada;
+
+        var id = $('input[type=hidden]', $(instSeleccionada)).val();
+        idInstitucion = id;
+    }
+
+    function dropEndCallback(element, data) {
+        institucionHtml = element;
+
+        var id = $('input[type=hidden]', $(element)).val();
+        var idData = $(data).find('input[type=hidden]').val();
+        var posInstitucion = getPosInstitucion(id);
+
+        if (posInstitucion == -1){
+            idInstitucion = id;
+            if (data.parentElement.parentElement.id == "gridCursos")
+                addItem(data, idData, idCursos, cursosHtml);
+            else
+                addItem(data, idData, idDocentes, docentesHtml);
+
+            asignar();
+        } else {
+            if (data.parentElement.parentElement.id == "gridCursos")
+                addItem(data, idData, listaExp[posInstitucion].idCursos, listaHtml[posInstitucion].cursos);
+            else
+                addItem(data, idData, listaExp[posInstitucion].idDocentes, listaHtml[posInstitucion].docentes);
+
+            $('#cursos_agregados', $(institucionHtml)).text((listaHtml[posInstitucion].cursos.length == 0)? "" : " + " + listaHtml[posInstitucion].cursos.length);
+            $('#docentes_agregados', $(institucionHtml)).text((listaHtml[posInstitucion].docentes.length == 0)? "" : " + " + listaHtml[posInstitucion].docentes.length);
+        }
+    }
+
+    /********************************************************************/
+    /********************** FUNCIONES AUXILIARES ************************/
+    /********************************************************************/
+    function addItem(data, idData, idList, htmlList){
+        if (existItem(idList, idData) == -1){
+            $(data).attr('class', 'select-row'); 
+            idList.push(idData);
+            htmlList.push($(data));
+        }
+    }
+
+    // Función auxiliar para controlar los elementos dentro de un array.
+    function existItem(lista, id) {
+        for (var i in lista) {
+            if (lista[i] == id)
+                return i;
+        }
+
+        return -1;
+    }
+
+    function getPosInstitucion(id){
+        for (var i in listaExp){
+            if (listaExp[i].idInstitucion == id) return i;
+        }
+
+        return -1;
+    }
+
+    $(document).ready(init);
+</script>

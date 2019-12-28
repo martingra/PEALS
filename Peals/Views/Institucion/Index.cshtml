@@ -1,0 +1,512 @@
+﻿<link href="@Url.Content("~/Content/Styles/Institucion.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = ViewBag.Institucion;
+}
+<style type="text/css">
+    .webgrid-selected-row
+    {
+        border: 2px dashed black;
+    }
+    
+    #grillaCursos
+    {
+        color: white;
+    }
+    
+    #listaDocentes
+    {
+        margin-top: 2em;
+    }
+</style>
+<script type="text/javascript" src="@Url.Content("~/Scripts/DragAndDrop.js")"></script>
+<section id="body_institucion">
+	<p>Selecciona cursos y arrastralos hacia un docente para asignarselos.</p>
+	<div id="plantelDocente" class="listaDocentes">
+		<div class="titulo">
+			<img src="@Url.Content("~/Content/Resources/Administrador/PlantelDocente.jpg")" width="30px" height="25px"/>
+			<h2>Plantel Docente</h2>
+		</div>
+		<div class ="docentes_buscarDiv">
+			<div id="reemplazable_docentes"></div> 
+			<div><button type="button" class="buscar" onclick="onClickBuscarDocentes()" >Buscar</button></div>
+		</div>
+		<div id="listaDocentes">@{ Html.RenderAction("_Docentes", new { idInstitucion = ViewBag.IDInstitucion, presentarComoLista = true }); }</div>
+	</div>
+	<div id="cursosDeLaInstitucion" class="listaCursos">
+		<div class="titulo">
+			<img src="@Url.Content("~/Content/Resources/Administrador/MisCursos.jpg")" width="30px" height="25px"/>
+			<h2>Cursos</h2>
+		</div>
+		<div id="grillaCursosCompleta">
+			<div>
+				<div class="cursos_burcarDiv">
+					<select id="cursos_burcarPor" name="cursos_burcarPor">
+						<option value="Nombre">Nombre</option>
+						<option value="Turno">Turno</option>
+						<option value="Nivel">Nivel</option>
+						<option value="Docente">Docente</option>
+					</select>
+					<div id="reemplazable_cursos"></div>
+					@Html.DropDownList("turno", null, "TODOS", new { id = "buscarPorTurno" })
+					@Html.DropDownList("nivel", null, "TODOS", new { id = "buscarPorNivel" })
+					<button type="button" onclick="onClickBuscarCursos();">Buscar</button>
+				</div>
+				<div id="op_cursos">
+					<a id="quitarDocente" style="opacity:0.4"><img src="../../Content/Resources/General/Cadena.png" title="Quitar asignación" width="28px" height="28px" style="margin-right:10px"/></a>
+					<a id="onClickEliminarCurso" style="opacity:0.4"><img src="../../Content/Resources/General/Eliminar.jpg" title="Eliminar curso" width="28px" height="28px" style="margin-left:10px"/></a>
+				</div>
+			</div>
+			<div>
+				<div id="estados" style="float:left; width:90%">
+					<div id="estado_docenteConfirmado" style="float:left; width:30%; text-align:center"><canvas id="confirmado" width="15%" height="15%" style="background-color:#66BE73; margin-right:3%;" />Confirmado</div>
+					<div id="estado_docenteAConfirmar" style="float:left; width:40%; text-align:center"><canvas id="aConfirmar" width="15%" height="15%" style="background-color:#F8A43D; margin-right:3%;" />Esperando confirmación</div>
+					<div id="estado_docenteSinAsignar" style="float:left; width:30%; text-align:center"><canvas id="sinAsignar" width="15%" height="15%" style="background-color:#F58558; margin-right:3%;" />Sin Asignar</div>
+				</div>
+			</div>
+			<div id="grillaCursos" style="clear:both">@{Html.RenderAction("_Cursos", new { idInstitucion = ViewBag.IDInstitucion });}</div>
+		</div>
+	</div>
+
+	<div id="dialog_asignaciones" class="reveal-modal">
+		<h1 style="padding: 3px; border-bottom: 2px solid #3966A2; text-align:center">Confirmar Asignaciones</h1>
+		<p>Estas asignando cursos a:</p>
+		<h2 id="docente" align="center" style="padding:10px"></h2>
+		<p style="padding:10px"> los siguientes cursos:</p>
+		<table id="cursos" class="webgrid">
+			<thead class="webgrid-header"><tr>
+				<th scope="col">Año</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Turno</th>
+				<th scope="col">Nivel</th>
+				<th scope="col">Docente</th>
+				<th><!--Id--></th>
+                <th></th>
+                <th></th>
+			</tr></thead>
+			<tbody></tbody>
+		</table>
+		<p style="padding:15px; font-size:15px"><i>Las asignaciones se harán efectivas cuando el docente acepte las mismas.</i></p>
+		<p style="font-size:15px">Si quieres, puedes añadir un mensaje para el docente.</p>
+		<textarea id="mensaje_asignacionCurso" style="width:100%; height: 8em; cursor: text;font: inherit;outline: medium none;text-align: left;"></textarea>
+		<div id="op_asignacion" style="text-align:center; border-top: 1px solid #3966A2; margin-top:10px">
+			<button type="button" style="width:150px; margin:10px 50px 0px 0px" onclick="confirmarAsignaciones();">Aceptar</button>
+			<button type="button" style="width:150px" onclick="$('.reveal-modal').trigger('reveal:close');">Cancelar</button>
+		</div>
+	</div>
+</section>
+<div id="dialog_mensajes" class="reveal-modal">
+    <div id="dialog_mensaje">
+    </div>
+    <div id="dialog_acciones">
+        <button type="button" id="btn_cancelar">
+            Mejor no</button>
+        <button type="button" id="btn_aceptar">
+            Sí, estoy seguro</button>
+    </div>
+</div>
+<script type="text/javascript">
+	/********************************************************************/
+	/******************** VARIABLES GLOBALES ****************************/
+	/********************************************************************/
+	var dragSrcEl = new Array(); // array que guarda los cursos que se encuentran seleccionados.
+	var docenteSeleccionado; // objeto que contiene el id, nombre y mail.
+	var filtroSeleccionado;
+
+    // Agrega los eventos.
+	function init() {
+        applyUIStyles();
+
+		// Agrego los eventos de Drag And Drop
+		var docentes = document.querySelectorAll('#plantelDocente li');
+		$(docentes).setDnD(dropEndCallback);
+	   
+		if($(cursos).length > 0){
+			updatedGridCursosCallback();
+		}
+		else{
+			$('#grillaCursosCompleta').empty();
+			$('#grillaCursosCompleta').append('<section class="mensaje-sinInfo"><i>No tienes cursos registrados. Crea uno haciendo click en <b>"Agregar Cursos"</b> y asígnaselo a un docente para que pueda empezar a crear actividades.</i></section>');
+		}
+
+		$('#reemplazable_docentes').fadeOut();
+		var params = { 
+			'accion': "AutocompletePorDocenteNombre", 
+			'controlador': "Institucion",
+			'label': "Label",
+			'value': "Value",
+			'idList': "Id",
+            'inputName' : "buscarDocenteNombre",
+			'idEntidad': @ViewBag.IDInstitucion 
+		};
+		$('#reemplazable_docentes').load("/Busqueda/AutocompleteConPadreCustomInput", params, modificarPlaceHolder("Nombre del docente", $('#reemplazable_docentes')));
+
+		$("#cursos_burcarPor").on('change', cambiarAutocompleteCursos);
+		$("#cursos_burcarPor").val("Nombre");
+		cambiarAutocompleteCursos();
+	}
+
+	/********************************************************************/
+	/************************* CLICK EVENTS *****************************/
+	/********************************************************************/
+	function onClickBuscarCursos(){
+		var params = { 'idInstitucion': @ViewBag.IDInstitucion, 'criterioBusqueda': $("#cursos_burcarPor").val(), 'valorBusqueda': $(filtroSeleccionado).val() };
+		$.get('/Institucion/_Cursos', params, function(data){
+			$('#grillaCursos').empty();
+			$('#grillaCursos').append(data);
+			updatedGridCursosCallback();
+		});
+	}
+
+	function onClickBuscarDocentes(){
+		var params = { 'idInstitucion': @ViewBag.IDInstitucion, 'presentarComoLista': true, 'criterioBusqueda': 'Nombre', 'valorBusqueda': $("#buscarDocenteNombre").val() };
+		$('#listaDocentes').load('/Institucion/_Docentes', params, function() {
+            // Agrego los eventos de Drag And Drop
+		    var docentes = document.querySelectorAll('#plantelDocente li');
+		    $(docentes).setDnD(dropEndCallback);
+        });
+	}
+
+    function onClickRowCursos(event) {
+		var pos, id = $('input[type=hidden]', $(this)).val(); // obtengo el índice de la fila seleccionada. Empieza en 1.
+
+		if ((pos = existItem(id)) > -1) { // si ya habia sido seleccionada
+			dragSrcEl.splice(pos, 1);
+			$(this).attr('class', (this.rowIndex % 2 == 1) ? 'webgrid-row-style' : 'webgrid-alternating-row');
+		} else { // si no estaba seleccionada
+			dragSrcEl.push({ 'id': id, 'obj': $(this).clone() });
+            $(this).attr('class', 'webgrid-selected-row');
+		}
+
+		// controlo las acciones que se pueden hacer con la seleccion de un curso.
+		if (dragSrcEl.length > 0) { // hay por lo menos un curso seleccionado.
+			// activo los links de las imágenes y les quito la transparencia.
+
+            $('a[id=onClickEliminarCurso]', $('#op_cursos')).attr('onclick', 'onClickEliminarCurso()').css({ 'opacity': '1', 'cursor': 'pointer' });
+
+            var hayAsignado = false;
+            for (var id in dragSrcEl){
+                if(dragSrcEl[id].obj[0].attributes[2].value.contains("rgb(102, 190, 115)")) {
+                    hayAsignado = true;
+                }
+            }
+
+            if(hayAsignado) {
+			    $('a[id=quitarDocente]', $('#op_cursos')).attr('onclick', 'onClickQuitarDocenteCurso()').css({ 'opacity': '1', 'cursor': 'pointer' });
+			    //$('a[id=onClickEliminarCurso]', $('#op_cursos')).attr('onclick', 'onClickEliminarCurso()').css({ 'opacity': '1', 'cursor': 'pointer' });
+            }
+		} else { // no hay cursos seleccionados.
+			// quito los links de las imágenes y les agrego transparencia. 
+			$('a[id=quitarDocente]', $('#op_cursos')).removeAttr('onclick').css({ 'opacity': '0.4', 'cursor': 'default' });
+			$('a[id=onClickEliminarCurso]', $('#op_cursos')).removeAttr('onclick').css({ 'opacity': '0.4', 'cursor': 'default' });
+		}
+	}
+
+    function quitarDocenteInstitucion(idDocente) {
+        $('#dialog_mensajes #dialog_mensaje').empty();
+        $('#dialog_mensajes #dialog_mensaje').append("<p>¿Estas seguro que quieres sacar al docente de la Institución?</p>");
+        
+        $('#dialog_mensajes #dialog_acciones #btn_cancelar').on('click', function() { $('.reveal-modal').trigger('reveal:close'); });
+        $('#dialog_mensajes #dialog_acciones #btn_aceptar').on('click', function() { 
+            $.post("/Institucion/SacarDocenteDeInstitucion", { idInstitucion: @ViewBag.IDInstitucion, idDocente: idDocente }, function(data){
+                $('.reveal-modal').trigger('reveal:close'); 
+                if (data == 'True'){
+                    //location = location.substring(0, location.lenght - 1);
+                    location.reload();
+                }
+            });
+        });
+
+        $('#dialog_mensajes').reveal();
+    }
+
+    function onClickQuitarDocenteCurso(){
+        $('#dialog_mensajes #dialog_mensaje').empty();
+        $('#dialog_mensajes #dialog_mensaje').append("<p>¿Estas seguro que quieres desasociar al docente del curso? </p>");
+        
+        $('#dialog_mensajes #dialog_acciones #btn_cancelar').on('click', function() { $('.reveal-modal').trigger('reveal:close'); });
+        $('#dialog_mensajes #dialog_acciones #btn_aceptar').on('click', function() { 
+            var ids = [];
+            for (var id in dragSrcEl){
+                ids.push(dragSrcEl[id].id);
+            }
+
+            $.post("/Institucion/SacarDocenteDeCurso", { idInstitucion: @ViewBag.IDInstitucion, idCursos: JSON.stringify(ids) }, function(data){
+                if (data != null){
+                    $('#grillaCursos').empty();
+			        $('#grillaCursos').append(data);
+			        updatedGridCursosCallback();
+                }
+
+                $('.reveal-modal').trigger('reveal:close'); 
+            });
+        });
+
+        $('#dialog_mensajes').reveal();
+    }
+
+    function onClickEliminarCurso(){
+        $('#dialog_mensajes #dialog_mensaje').empty();
+        $('#dialog_mensajes #dialog_mensaje').append("<p>¿Estas seguro que quieres cerrar los cursos seleccionados?</p>");
+        
+        $('#dialog_mensajes #dialog_acciones #btn_cancelar').on('click', function() { $('.reveal-modal').trigger('reveal:close'); });
+        $('#dialog_mensajes #dialog_acciones #btn_aceptar').on('click', function() { 
+            var ids = [];
+            for (var id in dragSrcEl){
+                ids.push(dragSrcEl[id].id);
+            }
+
+            $.post("/Institucion/EliminarCursos", { idInstitucion: @ViewBag.IDInstitucion, idCursos: JSON.stringify(ids) }, function(data){
+                if (data != null){
+                    $('#grillaCursos').empty();
+			        $('#grillaCursos').append(data);
+			        updatedGridCursosCallback();
+                }
+
+                $('.reveal-modal').trigger('reveal:close'); 
+            });
+        });
+
+        $('#dialog_mensajes').reveal();
+    }
+
+    /********************************************************************/
+	/*************************** CALLBACKS ******************************/
+	/********************************************************************/
+	// Esta función es llamada cuando se producen actualizaciones en la grilla de los cursos
+	function updatedGridCursosCallback(){
+        var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+
+		$(cursos).setDnD(dropEndCallback);
+
+		// agrego el evento click a las fila de la table cursos
+		$(cursos).bind('click', onClickRowCursos);
+		$("<span class='blob'><h2>Descripción</h2><p></p></span>").insertAfter('td:last-child', $(cursos));
+		$('#gridCursos').find('th:nth-child(3), td:nth-child(3)').css('display', 'none');
+        $('#gridCursos').find('th:nth-child(4), td:nth-child(4)').remove();
+		$(cursos).hover(
+			function () {
+				var descripcion = $(this).find('td:nth-child(3)').text();
+				$(this).find('p', 'td:last-child ').text(descripcion);
+				$(this).find('.blob').css('display', 'block');
+			},
+			function () {
+				$(this).find('.blob').css('display', 'none');
+		    }
+		);
+
+
+        $(cursos).each(function (index, node) {
+            var id = $('input[type=hidden]', $(node)).val();
+            if (existItem(id) > -1) {
+                   $(node).attr('class', 'webgrid-selected-row');
+            }
+        });
+
+        $('#gridCursos thead a, #gridCursos tfoot a').on('click', function(event){ 
+            event.preventDefault();
+
+            var href = $(this).attr("onclick");
+
+            var queryString = '?idInstitucion=' + @ViewBag.IDInstitucion + '&' + href.substring(href.indexOf('?') + 1, href.indexOf(',') - 1);
+            var requestUrl = '/Institucion/_Cursos' + queryString.replace(/\\u0026/g, "&");
+                    
+            $("#grillaCursos").load(requestUrl, updatedGridCursosCallback); 
+        });
+	}
+
+    function dropEndCallback(element, data) {
+		if (element.parentElement == data.parentElement) return;
+
+		var docente, curso;
+		if ($('div', data).text() == "") {
+			docente = element;
+			curso = data;
+		} else {
+			docente = data;
+			curso = element;
+		}
+
+		// separo los datos del docente.
+		docenteSeleccionado = {
+			'id': $('input[type=hidden]', docente).val(),
+			'nombre': $('div[id=docente_nombre]', docente).text(),
+			'mail': $('div[id=docente_mail]', docente).text()
+		};
+
+		// cargo los datos del docente.
+		var asignaciones = $('#dialog_asignaciones');
+		$('#docente', asignaciones).text(docenteSeleccionado.nombre + " <" + docenteSeleccionado.mail + ">");
+
+		// veo si el elemento que esta siendo dragueado, existe en el array. En caso de no existir, lo agrego.
+		var id = $('input[type=hidden]', $(curso)).val();
+		if (existItem(id) == -1) {
+			$(curso).attr('class', 'webgrid-selected-row');
+
+			dragSrcEl.push({ 'id': id, 'obj': $(curso).clone() });
+		}
+
+		// limpio la tabla y empiezo a cargar los cursos.
+		$('#cursos tbody', asignaciones).empty();
+		var row;
+		for (var itemPos in dragSrcEl) {
+			row = dragSrcEl[itemPos].obj;
+
+			// quito las imágenes de los costados y elimino la propiedad draggable
+			$('img', row).remove();
+			$('.blob', row).remove();
+			$(row).attr('class', '');
+			$(row).attr('onclick', '').unbind('click');
+			$(row).removeAttr('draggable');
+
+			// agrego el curso a la tabla
+			$('#cursos tbody', asignaciones).append(row);
+		}
+
+		// muestro la ventana modal y desactivo los click en el background.
+        var hayPendienteOAsignado = false;
+        $(".webgrid-selected-row").each(function () {
+               if($(this).css('background-color') == $("#confirmado").css('backgroundColor') || $(this).css('background-color') == $("#aConfirmar").css('backgroundColor')) { //esta pendiente o asignado
+                    hayPendienteOAsignado  = true;
+               }
+        });
+
+        if (hayPendienteOAsignado == false) {
+            asignaciones.reveal({ closeonbackgroundclick: false });
+        }
+        else {
+            alert('No puedes asignar cursos pendientes o asignados. Elimina la asignación o la solicitud e intenta de nuevo.');
+            $(curso).attr('class', 'webgrid-row-style');
+            dragSrcEl.splice(existItem(id), 1);
+        }
+		
+	}
+
+    /********************************************************************/
+	/*************************** AUXILIARES *****************************/
+	/********************************************************************/
+	// Función auxiliar para controlar los elementos dentro de un array.
+	function existItem(id) {
+		for (var i in dragSrcEl) {
+			if (dragSrcEl[i].id == id)
+				return i;
+		}
+
+		return -1;
+	}
+
+	function confirmarAsignaciones() {
+        //llamamos por ajax a un metodo en el controlador de institucion que mande una solicitud al docente por cada uno de los cursos incluidos en la solicitud.
+		    var inputsCursos = $("#cursos>tbody>tr>td:nth-child(7)>input");
+            var idsCursos = "";
+            var separador = "";
+                $.each( inputsCursos, function( key, value ) {
+                    idsCursos = idsCursos + separador + $(this).val();
+                    separador = "|";
+                });
+
+            var docente = $("#dialog_asignaciones>h2").text();
+            docente = docente.split('<')[1].split('>')[0];
+            var msj = $("#mensaje_asignacionCurso").val();
+
+            var ruta = "/Institucion/enviarSolCursosADocentes?cursos=" + idsCursos +"&mailDocente="+ docente + "&mensaje=" + msj;
+            location.href= ruta;
+	}
+
+	function mostrarFiltros(reemplazable, bucarPorTurno, buscarPorNivel) {
+		$('#reemplazable_cursos').css('display', reemplazable);
+		$('#buscarPorTurno').css('display', bucarPorTurno);
+		$('#buscarPorNivel').css('display', buscarPorNivel);
+	}
+
+	function cambiarAutocompleteCursos() {
+		$('#reemplazable_cursos').fadeOut();
+		var params = { 
+			'accion': "", 
+			'controlador': "Institucion",
+			'label': "Label",
+			'value': "Value",
+			'idList': "Id",
+            'idEntidad': "@ViewBag.IDInstitucion"
+		};
+
+		switch ($("#cursos_burcarPor").val()) {
+			case "Nombre":
+				params.accion = "AutocompletePorCursoNombre";
+                params.inputName = "buscarCursoNombre";
+				$('#reemplazable_cursos').load("/Busqueda/AutocompleteConPadreCustomInput", params, modificarPlaceHolder("Nombre del Curso", $('#reemplazable_cursos')));
+				mostrarFiltros('block', 'none', 'none');
+				break;
+			case "Docente":
+				params.accion = "AutocompletePorCursoDocente";
+                params.inputName = "buscarCursoDocente";
+				$('#reemplazable_cursos').load("/Busqueda/AutocompleteConPadreCustomInput", params, modificarPlaceHolder("Nombre del Docente", $('#reemplazable_cursos')));
+				mostrarFiltros('block', 'none', 'none');
+				break;
+			case "Turno":
+				filtroSeleccionado = $('#buscarPorTurno');
+				mostrarFiltros('none', 'block', 'none');
+				break;
+			case "Nivel":
+				filtroSeleccionado = $('#buscarPorNivel');
+				mostrarFiltros('none', 'none', 'block');
+				break;
+		}
+	}
+
+	function modificarPlaceHolder(placeHolder, autocomplete) {
+		$(autocomplete).fadeIn('slow', function () {
+			filtroSeleccionado = $('input', autocomplete);
+			$(filtroSeleccionado).attr('placeholder', placeHolder);
+		});
+	}
+
+	$(document).ready(init);
+</script>
+<script type="text/javascript">
+    var btnImagenOnClick = 1;
+    var btnVideoOnClick = 2;
+    var btnSeleccionado;
+
+    function dropEndFileCallback(element, files) {
+        var video = $('#info_urlVideo');
+        if (element.id == "video") {
+            btnSeleccionado = btnVideoOnClick;
+            $('#info_urlVideo').files = files;
+        } else {
+            btnSeleccionado = btnImagenOnClick;
+            $('#info_urlImagen').files = files;
+        }
+
+        handleFileSelect(null, files);
+    }
+
+    function handleFileSelect(event, files) {
+        var f = (event != null) ? event.target.files[0] : files[0];
+        var reader = new FileReader();
+
+        reader.onload = (function (theFile) {
+            return function (e) {
+                if (btnSeleccionado == btnImagenOnClick) {
+                    document.getElementById('div_BoxBackground').style.display = 'none';
+                    document.getElementById('imgSeleccionada').src = e.target.result;
+                    document.getElementById('imgSeleccionada').style.display = 'block';
+                } else {
+                    document.getElementById('video').src = e.target.result;
+                }
+            };
+        })(f);
+
+        // Leo la imagen como un data URL.
+        reader.readAsDataURL(f);
+    }
+
+    function fileSelectDelegate(btnClick, idFireClickEvent) {
+        btnSeleccionado = btnClick;
+        $(idFireClickEvent).click();
+    }
+
+    $("#info_btnCrearVideo").click(function () {
+        var url = "/Recurso/_GrabarVideo";
+        window.open(url, '_blank');
+    });
+</script>

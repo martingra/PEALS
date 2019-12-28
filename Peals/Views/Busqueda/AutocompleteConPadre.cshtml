@@ -1,0 +1,35 @@
+﻿<style>
+.ui-autocomplete {
+    background: #ffffff; 
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    z-index: 500;
+} 
+</style>
+<input type="text" id="buscar" name="buscar" class="ui-autocomplete-input" autocomplete="off" style="vertical-align:top;" />
+<script type="text/javascript" language="javascript">
+    var isHoverSelect = false;
+    $("#buscar").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "@ViewBag.accion", type: "POST", dataType: "JSON",
+                data: {
+                    parametro: request.term,
+                    idEntidad: @ViewBag.idEntidad
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.@ViewBag.label,
+                            value: item.@ViewBag.value,
+                            id: item.@ViewBag.id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2
+    });
+</script>
+

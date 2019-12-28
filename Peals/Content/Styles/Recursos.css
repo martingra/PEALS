@@ -1,0 +1,175 @@
+﻿.buscar { float: left; width: 60%; margin-bottom: 10px; border-right: 1px solid #CCCCCC }
+.buscar input { width: 72% }
+.buscar button { font-size: 1em !important; margin-top: 1px; }
+
+.text-button { float:left; margin-left: 30px; margin-right: 10px; color: #0AA7A2;}
+.text-button img { width: 20px; margin-top: 10px;}
+.text-button b { font-size: 1.3em; }
+.text-button:hover { text-decoration: underline; cursor: pointer;}
+
+.acciones { padding: 20px; margin-bottom: 40px; }
+.acciones button{ display: none; width: 250px; font-size: 1em !important; }
+.subir_archivo, .cambiar, .mostrar { float: right; }
+.cancelar { float: left; }
+
+.modo-compartir > .cancelar { display: block; }
+.modo-compartir > .mostrar { display: block; }
+.modo-cambiar > .cancelar { display: block; }
+.modo-cambiar > .cambiar { display: block; }
+
+.tabPanel { clear: both; }
+.tabPanel > div { clear: both; overflow: hidden; }  
+
+.content { overflow: hidden; }
+.content:hover { box-shadow: 0px 0px 10px 1px gray; }
+/*ul .content:last-child{ border-bottom: 1px solid rgba(0, 0, 0, 0); border-right: 1px solid rgba(0, 0, 0, 0); }*/
+.content .en-reproduccion{ width: 24px; height: 24px; float:left; margin-right: 10px; margin-top: 11px; visibility: hidden; cursor: pointer; }
+.content div h2 { font-size: 1.3em; float: left; width: 100%}
+
+.content .informacion{ float: left; }
+.content .informacion:first-child { width: 120px; padding-right: 15px; border-right: 1px solid #CCCCCC; }
+.content .informacion:last-child { width: 100px;  margin-left: 1%; }
+.content .informacion img, .informacion h3 { float: left; margin:1px; font-size: 0.9em; }
+
+.inactivo { color: gray; }
+.activo { cursor: pointer; color: #0AA7A2; }
+.activo:hover > h3 { text-decoration: underline; }
+
+.activo div{ 
+    position:absolute;
+    display: none; 
+    clear: both;
+    width: 160px;
+    color: white;
+    margin-top: 12px;
+    z-index:2;
+}
+.activo div .triangulo 
+{
+    position: relative;
+    display: block;
+    width: 0px;
+    height: 0px;
+    margin-left: 30px;
+    border-style: solid;
+    border-width: 0px 10px 10px 10px;
+    border-color: transparent transparent #465857 transparent;
+}
+.activo div ul { position: relative; width: 160px; background-color: #465857; border-radius: 5px; padding: 5px; margin-left: -40px; overflow: hidden}
+.activo div ul li:first-child h2 { width: 40px;  border-right: 1px solid gray; font-size: 0.9em;}
+.activo div ul li img{ float: left; }
+.activo div ul li:last-child h2{ width: 30px; margin-right: 5px; font-size: 0.9em;}
+.activo:hover > div { display: block; }
+
+
+.eliminar { cursor: pointer; }
+.eliminar:hover {background-color: rgba(255, 0, 0, .5); border-radius: 7px; }
+.eliminar:active {background-color: rgba(255, 0, 0, 1); border-radius: 10px; }
+
+.audio-reproductor { width: 100%; margin-top: 10px; }
+.audio-reproductor h2 { float: left; width: 15%; }
+.audio-reproductor audio { width: 100%; margin-top: 10px }
+.video-reproductor { float: left; width: 48% }
+.video-reproductor label { width: 100%; }
+.video-reproductor video { width: 100%; }
+
+.background-tipo-imagen { background-color:#AE61A7; }
+.background-tipo-sonido { background-color:#F3865B; }
+.background-tipo-video { background-color:#65BC74; }	
+.default-tipo-recurso {
+    float: left;
+	height:30px;
+	width:30px;
+	text-align:center;
+	color:White;
+	font-size:14pt;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.seleccion { display: none }
+.recursos-seleccionados { display: none }
+
+.compartir-activo > ul li:nth-last-child(2){ display: none }
+.compartir-activo, .cambiar-activo > div .btn_editar { display: none; }
+.compartir-activo, .cambiar-activo > div .eliminar { display: none; }
+.compartir-activo, .cambiar-activo > div .seleccion { display: block; float: right; margin-top: 15px; margin-right: 10px;}
+.compartir-activo, .cambiar-activo > div .content { cursor: pointer; }
+.compartir-activo > ul .recursos-seleccionados { display: block }
+
+.recursos-seleccionados div { float: right; width:100px; height: 25px; }
+
+.list-imagenes .content { float: left; width: 47%; margin:1%; height: 150px; border: 1px solid gray !important;  }
+.list-imagenes .content:hover > .imagen { border: 1px solid black; border-radius: 10px; }
+.list-imagenes .content .detalle h2:hover  { text-decoration: underline; }
+.list-imagenes .content:nth-child(2n+1){ border-right: 1px solid black; }
+.list-imagenes .content:last-child{ border-bottom: 1px solid rgba(0, 0, 0, 0); border-right: 1px solid rgba(0, 0, 0, 0); }
+/*.list-imagenes .content:nth-last-child(2){ border-bottom: 1px solid rgba(0, 0, 0, 0) !important; }*/
+.list-imagenes .content .imagen { float: left; width: 28%; height: 130px; margin-left: 10px; margin-top: 10px; }
+.list-imagenes .content .detalle{float: left;width: 61%;height: 60%;margin-left: 10px;margin-top: 10px; }
+.list-imagenes .content .detalle h2 { max-width: 80%; margin-right: 10px; }
+.list-imagenes .content button { margin-left: 10px;margin-right: 25px;width: 25%;font-size: 1em !important; }
+.list-imagenes .content .eliminar { margin-top: 5px }
+
+.list-sonidos .content { border: 1px solid gray; margin: 1%; }
+.list-sonidos .content > div { float: left; width: 77%; cursor: pointer; padding: 3px;  }
+.list-sonidos .content h2 { font-size: 1.3em; margin-left: -10px; padding-left: 10px;}
+.list-sonidos .content h2:hover { text-decoration: underline; }
+.list-sonidos .content div .nombre { border-left: 1px solid #BBBBBB; }
+.list-sonidos .content button { float: left; width: 110px; margin-left: 5px; margin-right: 10px; margin-top: 15px; font-size: 1em !important; }
+
+.list-sonidos .content .eliminar { float: right;
+    height: 28px;
+    margin: 0.5%; }
+
+.list-videos ul { float: left; width: 52%  }
+.list-videos .content { border: 1px solid gray; margin: 1%; }
+.list-videos .content > div { float: left; width: 58%; cursor: pointer; padding: 3px;}
+.list-videos .content h2 { font-size: 1.3em; margin-left: -10px; padding-left: 10px;}
+.list-videos .content h2:hover { text-decoration: underline; }
+.list-videos .content div .nombre { border-left: 1px solid #BBBBBB; }
+.list-videos .content button { float: left; width: 110px; margin-left: 5px; margin-right: 10px; margin-top: 15px; font-size: 1em !important; }
+.list-videos .content .eliminar { float: right;
+    height: 28px;
+    margin: 1%;
+    width: 28px; }
+
+.li-base { display: none; }
+
+.list-recientes li { border-bottom: 1px solid gray; padding: 10px; overflow: hidden;}
+.list-recientes li input[type="file"] { display:none; }
+.list-recientes li input { float: left; width: 57% }
+.list-recientes li h3 { float: left; width: 7%; padding: 8px 10px  0 10px }
+.list-recientes li progress { float: left; width: 15%; height: 30px; margin-top: 3px;}
+.list-recientes li img { float: left; padding: 0 0px  0 10px; margin-top: 3px; cursor: pointer }
+
+.reveal-modal .cuerpo { margin-left: 5px; padding-top: 10px; overflow: hidden; }
+.reveal-modal .dialog-acciones{ padding-top: 20px; margin-left: 5px; text-align:center }
+.reveal-modal .dialog-acciones button { font-size: 1em !important; width: 150px; float: left;}
+.reveal-modal .dialog-acciones .dialog_cancelar { float: left; }
+.reveal-modal .dialog-acciones .dialog_eliminar { float: right; }
+.reveal-modal .dialog-acciones .dialog_aceptar { float: right; }
+.reveal-modal .dialog-acciones button { text-size: 1em !important; }
+.reveal-modal .instituciones { color: #1470C5; }
+.reveal-modal .instituciones li { border-bottom: 1px solid black;
+    cursor: pointer;
+    float: left;
+    padding: 5px;
+    width: 95%; }
+.reveal-modal .instituciones li:last-child { border-bottom: none; }
+.reveal-modal .instituciones li h2 { float: left; width: 90% }
+.reveal-modal .instituciones li .seleccion { float: right; width: 28px; height: 28px; display: block; margin-top: -5px;}
+.cargadoConExito 
+{
+    background-color:#63B772;
+}
+
+.ocultar 
+{
+    display: none;
+}
+
+#recargable 
+{
+    float: left;
+}

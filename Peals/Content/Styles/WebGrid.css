@@ -1,0 +1,52 @@
+.webgrid { width: 100%; background-color: #fff2eb}
+.webgrid a { color: white; }
+
+.webgrid th, .webgrid td { text-align: center }
+.webgrid td { padding: 5px;}
+.webgrid a { color: white; }
+
+.webgrid-header
+{
+    background-color: #09A5A0;
+    height: 40px;
+}
+
+.webgrid-alternating-row
+{
+    background-color: #fdd3be;
+}
+
+.webgrid-row-style:hover, 
+.webgrid-alternating-row:hover
+{
+    cursor: pointer;
+    background: #ecbf78;
+}
+
+.webgrid-editar a 
+{
+    visibility:hidden;
+    background-color: transparent;
+}
+
+.webgrid-editar:hover
+{
+    border-left:1px inset gray;
+}
+
+.webgrid-footer
+{
+    background-color: #e8eef4;
+    border-top: 2px solid #3966A2;
+    height: 30px;
+}
+
+
+.webgrid-footer a {
+    color: blue;
+}
+
+.webgrid-selected-row { 
+    background-color: #a5bd82;
+    cursor: pointer;
+}

@@ -1,0 +1,200 @@
+﻿<style>
+    .datos_a_exportar
+    {
+        clear: both;
+        width: 100%;
+        float:left;
+        height:auto;
+    }
+    
+    #institucion
+    {
+        width: 30%;
+        height: auto;
+        border-right: 1px solid gray;
+        float: left;
+    }
+    
+    #institucion ul
+    {
+        height: auto;
+        overflow: auto;
+    }
+    
+    #institucion li
+    {
+        display: block;
+        margin: 10px;
+        border-bottom: 1px solid gray;
+    }
+    
+    #institucion li:hover
+    {
+        cursor: pointer;
+        background: #ffff99;
+    }
+    
+    .agregados
+    {
+        font-weight: bold;
+        color: #3966A2;
+    }
+    
+    #detalle
+    {
+        float: right;
+        width: 65%;
+        height: auto;
+        margin-right: 30px;
+    }
+    
+    #docentes, #cursos
+    {
+        height: auto;
+        float:left;
+        width: 100%;
+    }
+    
+    #cursos
+    {
+        margin-bottom: 25px;
+    }
+    
+    .acciones
+    {
+        width: 100%;
+        clear: both;
+        padding-top: 30px;
+    }
+    
+    button
+    {
+        margin: 0px 15px 15px 15px;
+        width: 200px;
+        height: 50px;
+    }
+    
+    #btn_asignar, #btn_exportar
+    {
+        float: right;
+        margin-right: 10px;
+        width: 25%;
+    }
+    
+    .select-row
+    {
+        border: 1px solid green !important;
+        background-color: #90EE90 !important;
+    }
+</style>
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/DragAndDrop.js")"></script>
+@{
+    ViewBag.Title = "PEALS - EXPORTAR DATOS";
+}
+<div id="tituloPagina">
+    <h1>
+        Exportar Institucion</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Seleccione la institución a la que desea exportar los docentes y cursos listados
+        a continuación.
+    </h1>
+</div>
+<div class="datos_a_exportar">
+    <div id="institucion">
+        <div class="titulo">
+            <img src="../../Content/Resources/Administrador/Instituciones.png" title="instituciones"
+                width="24px" height="24px" />
+            <h2>
+                Instituciones</h2>
+        </div>
+        @{
+            <ul>
+                @foreach (var ins in Model)
+                {
+                    <li onclick='onRowClickInstitucion(this)'>
+                        <div>
+                            <input type="hidden" id="institucion_id" value='@ins.id'/>
+                            <div id="institucion_nombre">
+                                <b>@ins.nombre</b></div>
+                            <div id="institucion_cursos">
+                                <i>@ins.curso.Count Curso(s)</i><i id="cursos_agregados" class="agregados"></i></div>
+                            <div id="institucion_docentes">
+                                <i>@ins.docente_x_institucion.Count Docente(s)</i><i id="docentes_agregados" class="agregados"></i></div>
+                        </div>
+                    </li> 
+                }
+            </ul>
+        }
+    </div>
+    <div id="detalle">
+        <div id="cursos">
+            <div class="titulo">
+                <img src="../../Content/Resources/Administrador/MisCursos.jpg" title="cursos" width="24px"
+                    height="24px" />
+                <h2>
+                    Cursos</h2>
+            </div>
+            <div id="grillaCursos">
+                @{ Html.RenderAction("_Cursos", new { idInstitucion = ViewBag.institucion.id, filasPorPagina = 5 }); }
+            </div>
+        </div>
+        <div id="docentes">
+            <div class="titulo">
+                <img src="../../Content/Resources/Administrador/PlantelDocente.jpg" title="docentes"
+                    width="24px" height="24px" />
+                <h2>
+                    Docentes</h2>
+            </div>
+            @{ Html.RenderAction("_Docentes", new { idInstitucion = ViewBag.institucion.id, filasPorPagina = 5 }); }
+        </div>
+    </div>
+</div>
+<div class="acciones">
+    <button type="button" id="btn_cancelar">
+        Cancelar</button>
+    <button type="button" id="btn_exportar" onclick="exportar()">
+        Exportar y Cerrar</button>
+</div>
+<script type="text/javascript">
+    var idInstitucion = -1;
+    function onRowClickInstitucion(instSeleccionada) {
+        //borramos la seleccionada
+        $("#institucion li").each(function (index) {
+            $(this).removeClass('select-row');
+        });
+
+        $(instSeleccionada).attr('class', 'select-row');
+        var id = $('input[type=hidden]', $(instSeleccionada)).val();
+        idInstitucion = id;
+    }
+
+    function exportar() {
+        if(idInstitucion == -1) {
+            alert('Seleccione una institución destino');
+        }
+        else {
+            $.post('/Institucion/EliminarInstitucion', 
+            { idInstitucion: @ViewBag.institucion.id, idInstitucionNueva: idInstitucion }, 
+            function (succes){
+                if (succes) location.href = '@Url.Action("Index", "Administrador")';
+             });
+        }
+    }
+
+//    function exportar() {
+//        if(var idInstitucion == -1) {
+//            alert('Seleccione una institución destino');
+//        }
+//        else {
+//            $.post('/Institucion/EliminarInstitucion', 
+//            { idInstitucion: @ViewBag.institucion.id, idInstitucionNueva: idInstitucion }, 
+//            function (succes){
+//                if (succes) location.href = '@Url.Action("Index", "Administrador")';
+//             });
+//        }
+//    }
+</script>

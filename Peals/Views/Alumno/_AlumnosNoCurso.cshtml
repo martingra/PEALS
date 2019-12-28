@@ -1,0 +1,104 @@
+﻿<style type="text/css">
+    #divSearch 
+    {
+        float: left;
+        margin-bottom: 0.5em;
+        text-align: left;
+        width: 100%;
+    }
+    
+    #btnBuscar 
+    {
+        font-size: 0.8em !important;
+        padding: 0 !important;
+        width: 15%;
+    }
+    
+    #textoBuscar 
+    {
+        font-size: 0.6em !important;
+    }
+</style>
+
+
+
+<div id="explicacionTituloPagina">
+    <h1 style="font-size: 0.9em;">
+        Alumnos de P.E.A.L.S no inscriptos en el curso.
+    </h1>
+</div>
+
+<div id="divSearch">
+    <input id="textoBuscar"  class="ui-autocomplete-input" type="text" /> <input type="button" id="btnBuscar" value="Buscar" onClick="buscar()"/>
+</div>
+
+@{
+    var grillaAlumnosInstitucion = new WebGrid(canPage: true, rowsPerPage: 10, canSort: false, ajaxUpdateContainerId: "gridAlumnosInstitucion");
+    grillaAlumnosInstitucion.Bind(Model);
+    grillaAlumnosInstitucion.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 5);
+
+    if (grillaAlumnosInstitucion.TotalRowCount == 0)
+    {
+    <section style="text-align: center; padding: 20px">
+			@ViewBag.Alumnos_DefaultMessage
+		</section>
+    }
+    else
+    {
+    @grillaAlumnosInstitucion.GetHtml(htmlAttributes: new { id = "gridAlumnosInstitucion" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+                    columns: grillaAlumnosInstitucion.Columns(
+                        grillaAlumnosInstitucion.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                        grillaAlumnosInstitucion.Column(columnName: "nombre", header: "Nombre", style: "institucion"),
+                        grillaAlumnosInstitucion.Column(columnName: "apellido", header: "Apellido", style: "nivel"),
+                        grillaAlumnosInstitucion.Column(header: "", format: item => (item.solicitudes > 0) ?
+                        Html.Raw("<img src='" + Url.Content("~/Content/Resources/General/esperando.png") + "' widht='24px' height='24px' />") :
+                        Html.Raw("")),
+                        grillaAlumnosInstitucion.Column(columnName: "mail", header: "Mail", style: "nivel")
+            )
+        )
+    }
+}
+<input type='hidden' id='idCurso' value = @ViewBag.curso />
+<script type="text/javascript">
+    $(document).ready(function () {
+        var alumnoSeleccionado = $('#gridAlumnosInstitucion').find('tbody > tr');
+        alumnoSeleccionado.bind('click', function (event) {
+                var mail = $(this).find('td:nth-child(5)').text();
+                $('#modalAgregarAlumno').load('/Mensaje/_NuevaSolicitudAAlumno?mail=' + mail + '&idCurso=' + $("#idCurso").val());
+        });
+
+
+        $("#gridAlumnosInstitucion a").bind('click', function (event) {
+            event.preventDefault();
+        });
+    });
+
+
+
+    $(document).ajaxComplete(function () {
+        var alumnoSeleccionado = $('#gridAlumnosInstitucion').find('tbody > tr');
+        alumnoSeleccionado.bind('click', function (event) {
+                var mail = $(this).find('td:nth-child(5)').text();
+                $('#modalAgregarAlumno').load('/Mensaje/_NuevaSolicitudAAlumno?mail=' + mail + '&idCurso=' + $("#idCurso").val());
+        });
+
+        $("#gridAlumnosInstitucion a").bind('click', function (event) {
+            event.preventDefault();
+        });
+    });
+
+    function buscar() {
+        $('#modalAgregarAlumno').load("/Alumno/_AlumnosNoCurso?idInstitucion="+ @ViewBag.institucion + "&idCurso="+ @ViewBag.curso + "&filtro=" + $("#textoBuscar").val());
+    }
+
+
+</script>

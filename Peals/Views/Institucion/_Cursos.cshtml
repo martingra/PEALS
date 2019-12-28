@@ -1,0 +1,105 @@
+﻿@{  
+    string tipoUsuario = Request.Cookies["DatosUsuario"].Values["tipoUsuario"];
+
+    var grid = new WebGrid(canPage: true, rowsPerPage: ViewBag.cursosPorPagina, canSort: true, ajaxUpdateContainerId: "gridCursos", ajaxUpdateCallback: "callBackGrilla");
+    grid.Bind(Model);
+    grid.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+
+    if (grid.TotalRowCount == 0)
+    {
+    <section style="text-align: center; padding: 20px; color:#F58457;">
+            @ViewBag.Cursos_DefaultMessage
+        </section>
+    }
+    else
+    {            
+    @grid.GetHtml(htmlAttributes: new { id = "gridCursos" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            columns: grid.Columns(
+                        grid.Column(columnName: "Ano", header: "Año", format: item => string.Concat(item.ano, item.division)),
+                        grid.Column("Nombre"),
+                        grid.Column("Descripcion"),
+                        grid.Column(format: (item) => tipoUsuario == "Alumno" ? Html.Raw("<div class=\"blob\"><h2>Inscripción</h2><p>Haz click para solicitar inscripción a este curso</p></div>") : Html.Raw("")),
+                        grid.Column("Turno"),
+                        grid.Column("Nivel"),
+                        grid.Column(columnName: "Docente", header: "Docente", format: @<span class="divDocente">@item.docente</span>),
+                        grid.Column(format: @<input type="hidden" id="idHidden" name="IDHidden" value="@item.Id"/>),
+                        grid.Column(style: "webgrid-editar", format: (item) => (ViewBag.esAdmin) ? Html.Raw("<a id='editarCurso' href='" + @Url.Action("EditarCurso", "Curso", new { idCurso = item.Id }) + "'><img id='img_editarCurso' src='../../Content/Resources/General/Editar.png' alt='Editar curso' width='24px' height='24px' /></a>") : Html.Raw("")),
+                        grid.Column(format: @<input type="hidden" id="SolicitudHidden" name="SolicitudHidden" value="@item.Solicitud"/>)
+            )
+        )
+    }
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        
+        callBackGrilla();
+
+    });
+
+
+    function callBackGrilla() {
+        setTimeout(
+          function () {
+
+              var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+              $(cursos).hover(
+                function () { $(this).find('.blob').css('display', 'block'); $(this).find('img').css('visibility', 'visible'); },
+                function () { $(this).find('.blob').css('display', 'none'); $(this).find('img').css('visibility', 'hidden'); }
+            );
+
+
+              $("#gridCursos" + " tr:not(:first)").each(function () {
+                  if ($(this).hasClass("webgrid-footer")) {
+                  }
+                  else if ($(this).find("#SolicitudHidden").val() != 0) {
+                      $(this).css("background-color", "#F8A43D"); //azul: esperando confirmacion
+                      $(this).find('.divDocente').append("<div class='webgrid-editar'> <a id='eliminarMensaje' href='/Mensaje/EliminarMensaje?idMensaje=" + $(this).find('#SolicitudHidden').val() + "'><img id='img_eliminarSolicitud' src='../../Content/Resources/General/Eliminar.jpg' alt='Eliminar solicitud' width='24px' height='24px' /></a></div>");
+                  }
+                  else {
+                       if ($(this).find(".divDocente").text() == '') { //no hay docente, entonces no esta asignada ni pendiente
+                           $(this).css("background-color", "#F58558"); //rojo: sin asignar
+                       }
+                       else { //hay docente, entonces esta asignada
+                           $(this).css("background-color", "#66BE73");
+                       }
+                  }
+
+
+//                  else if ($(this).find("#SolicitudHidden").val() != 0) {
+//                      if ($(this).find(".divDocente").text() == '') { //no hay docente definido pero si una solicitud, entonces esta esperando confirmacion
+//                          $(this).css("background-color", "#2B8EE3"); //azul: esperando confirmacion
+//                          $(this).find('.divDocente').append("<div class='webgrid-editar'> <a id='eliminarMensaje' href='/Mensaje/EliminarMensaje?idMensaje=" + $(this).find('#SolicitudHidden').val() + "'><img id='img_eliminarSolicitud' src='../../Content/Resources/General/Eliminar.jpg' alt='Eliminar solicitud' width='24px' height='24px' /></a></div>");
+//                      }
+//                      else { //hay docente definido y una solicitud, entonces ya esta asignado
+//                          $(this).css("background-color", "#79B02A");
+//                      }
+//                  }
+//                  else {
+//                      $(this).css("background-color", "#CF4747"); //rojo: sin asignar
+//                  }
+                  //                  else if ($(this).find(".divDocente").text() == '') {
+                  //                      $(this).css("background-color", "#CF4747"); //rojo: sin asignar
+                  //                  }
+                  //                  else {
+                  //                      $(this).css("background-color", "#79B02A"); //verde: confirmado
+                  //                  }
+              });
+
+          }, 500);
+
+
+    }
+
+    
+</script>

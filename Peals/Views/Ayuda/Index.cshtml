@@ -1,0 +1,30 @@
+﻿<link href="@Url.Content("~/Content/Styles/Ayuda.css")" rel="stylesheet" type="text/css" />
+
+<h3 id="titulo_manual">Manual del Usuario</h3>
+<div id="sidebar">
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Indice"         }); }
+</div>
+<div id="paginas">
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Introduccion"   }); }
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Conceptos"      }); }
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Administrador"  }); }
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Docente"        }); }
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Alumno"         }); }
+    @{ Html.RenderAction("GetPartialView", new { nombre = "_Reportes"       }); }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(init());
+
+    function goToByScroll(id) {
+        id = id.replace("link", "");
+        $('html,body').animate({ scrollTop: $("#" + id).offset().top }, 'slow');
+    }
+
+    function init() {
+        $("#sidebar > ul > li > a").click(function (e) {
+            e.preventDefault();
+            goToByScroll($(this).attr("id"));
+        });
+    }
+</script>

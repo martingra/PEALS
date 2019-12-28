@@ -1,0 +1,245 @@
+﻿<link href="@Url.Content("~/Content/Styles/Informacion.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+
+@{
+    ViewBag.Title = "PEALS - " + @ViewBag.Institucion;
+    
+    string urlFoto = (ViewBag.UrlFoto == null) ? "~/Content/Resources/Uploads/sin_imagen.jpg" : ViewBag.UrlFoto;
+}
+
+
+
+<input type="hidden" id="tipoUsuario" value=@ViewBag.tipoUsuario />
+
+<div id="accordion">
+    <h3>INFORMACIÓN GENERAL</h3>
+    <div style = "width:auto;">
+        <div id="info_body">
+            <div id="info_encabezado">
+                @ViewBag.Encabezado
+            </div>
+            <div id="info_viewImg">
+                <img id="imgSeleccionada" width="80%" src="@Url.Content(urlFoto)" />
+                <table>
+                    <tbody>
+                        <tr><td>Telefono:</td><td>@ViewBag.Telefono</td></tr>
+                        <tr><td>Domicilio:</td><td>@ViewBag.Domicilio</td></tr>
+                        <tr><td>Localidad:</td><td>@ViewBag.Localidad</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="info_introduccion" style="width:100%">@Html.Raw(ViewBag.Introduccion)</div>
+            <div id="info_contenido">@Html.Raw(ViewBag.Contenido)</div>
+
+            @{
+                if (ViewBag.UrlVideo != null && ViewBag.UrlVideo != "")
+                { 
+                    <div id="info_video">
+                        <video id="video" controls="controls">
+                            <source src="@Url.Content(ViewBag.UrlVideo)"></source>
+                        </video>
+                    </div>
+                }
+            }
+        </div>
+        
+        @if (ViewBag.tipoUsuario == "Docente" && ViewBag.perteneceAInstitucion == false)
+        {
+            <div style="float:right; margin-top:2em;" id="enviarSolicitudInscripcionInstitucion"><a href="#">Solicitar Inscripción <img style="float:right; height:22px;" src="../../Content/Resources/General/flechaRara.png" /> <img style="float:right; height:22px;" src="../../Content/Resources/General/flechaRara.png" /></a></div>
+        }
+        
+        @if (ViewBag.tipoUsuario == "Docente" && ViewBag.perteneceAInstitucion == true)
+        {
+            <div style="float:right; margin-top:2em; color:Green;">Ya formas parte de esta institución</div>
+        }
+        
+        @if (ViewBag.tipoUsuario == "Alumno" && ViewBag.perteneceAInstitucion == true)
+        {
+            <div style="float:right; margin-top:2em; color:Green;">Ya formas parte de esta institución</div>
+        }
+    </div>
+    
+    <h3>Cursos</h3>
+    <div>
+             <div class ="busquedaAutocomplete">
+	            <label for="searchCriteria">Buscar por</label>
+	            <select id="searchCriteria" name="searchCriteria">
+		            <option value="Mostrar Todas">Mostrar Todos</option>
+                    <option value="Nombre">Nombre Curso</option>
+		            <option value="Docente">Nombre Docente Institución</option>
+	            </select>
+            <div id="reemplazable"></div> 
+            <div><button type="button" id="btnBuscar" style="vertical-align:top;" onclick="recargarGrilla()" >Buscar</button></div>
+            </div>
+
+        <div id = "grillaCursos" style = "float:left; margin-top:20px;">
+        @{Html.RenderAction("_Cursos", "Institucion", new { idInstitucion = ViewBag.idInstitucion });}
+    </div>
+    </div>
+
+    <h3>Docentes</h3>
+        <div>
+             <div class ="busquedaAutocompleteDocente">
+	            <label for="searchCriteriaDocente">Buscar por</label>
+	            <select id="searchCriteriaDocente" name="searchCriteriaDocente">
+		            <option value="Mostrar Todos">Mostrar Todos</option>
+                    <option value="Nombre">Nombre Docente</option>
+		        <option value="Mail">Mail Docente</option>
+	            </select>
+            <div id="reemplazableDocente"></div> 
+            <div><button type="button" id="btnBuscarDocente" style="vertical-align:top;" onclick="recargarGrillaDocente()" >Buscar</button></div>
+            </div>
+
+        <div id="grillaDocentes" style = "float:left; margin-top:20px; width: 100%;">
+            @{Html.RenderAction("_Docentes", "Institucion", new { idInstitucion = ViewBag.idInstitucion });}
+        </div>
+    </div>
+</div>
+
+
+<div id="modal_solicitud_inscripcion" class="reveal-modal">
+    
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        //Inicializacion del componente acordion de jquery ui
+        $('#accordion').accordion({
+            collapsible: true,
+            navigation: true,
+            clearStyle: true,
+            heightStyle: "content",
+            icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" },
+            animate: true
+
+        });
+    });
+
+    $(document).ready(function () {
+       
+        var cambiarAutocomplete = function () {
+            $('#reemplazable').fadeOut();
+                var criterio = $("#searchCriteria").val();
+                if (criterio == "Nombre") {
+                    var accion = 'AutocompletePorCursoNombre';
+                    var controlador = 'Institucion';
+                    var label = 'Label';
+                    var value = 'Value';
+                    var idList = 'Id';
+                    var idEntidad = @ViewBag.idInstitucion;
+
+                    var url = '/Busqueda/AutocompleteConPadre?accion='+ accion +'&controlador='+ controlador +'&label='+ label +'&value='+ value +'&idList='+ idList +'&idEntidad='+ idEntidad;
+                url = url.replace(/ /g, '%20');
+                    $('#reemplazable').load(url);
+                    $('#reemplazable').fadeIn();
+                }
+            else if (criterio == "Docente") {
+                    var accion = 'AutocompletePorCursoDocente';
+                    var controlador = 'Institucion';
+                    var label = 'Label';
+                    var value = 'Value';
+                    var idList = 'Id';
+                    var idEntidad = @ViewBag.idInstitucion;
+
+                    var url = '/Busqueda/AutocompleteConPadre?accion='+ accion +'&controlador='+ controlador +'&label='+ label +'&value='+ value +'&idList='+ idList +'&idEntidad='+ idEntidad;
+                url = url.replace(/ /g, '%20');
+                    $('#reemplazable').load(url);
+                    $('#reemplazable').fadeIn();
+                }
+        };
+
+        var cambiarAutocompleteDocente = function () {
+            $('#reemplazableDocente').fadeOut();
+                var criterio = $("#searchCriteriaDocente").val();
+                if (criterio == "Nombre") {
+                    var accion = 'AutocompletePorDocenteNombre';
+                    var controlador = 'Institucion';
+                    var label = 'Label';
+                    var value = 'Value';
+                    var idList = 'Id';
+                    var idEntidad = @ViewBag.idInstitucion;
+
+                    var url = '/Busqueda/AutocompleteConPadre?accion='+ accion +'&controlador='+ controlador +'&label='+ label +'&value='+ value +'&idList='+ idList +'&idEntidad='+ idEntidad;
+                    url = url.replace(/ /g, '%20');
+                    $('#reemplazableDocente').load(url);
+                    $('#reemplazableDocente').fadeIn();
+                }
+                else if (criterio == "Mail") {
+                    var accion = 'AutocompletePorDocenteMail';
+                    var controlador = 'Institucion';
+                    var label = 'Label';
+                    var value = 'Value';
+                    var idList = 'Id';
+                    var idEntidad = @ViewBag.idInstitucion;
+
+                    var url = '/Busqueda/AutocompleteConPadre?accion='+ accion +'&controlador='+ controlador +'&label='+ label +'&value='+ value +'&idList='+ idList +'&idEntidad='+ idEntidad;
+                    url = url.replace(/ /g, '%20');
+                    $('#reemplazableDocente').load(url);
+                    $('#reemplazableDocente').fadeIn();
+                }
+        };
+
+        $("#searchCriteria").on('change', cambiarAutocomplete);
+        $("#searchCriteriaDocente").on('change', cambiarAutocompleteDocente);
+
+        $(this).find('option').each(function (index, node) {
+            if (node.value == $('#hideSearchCriteria').val())
+                node.setAttribute('selected', 'selected');
+            else
+                node.removeAttribute("selected");
+        });
+
+        var cursoSeleccionado = $('#gridCursos').find('tbody > tr');
+        cursoSeleccionado.bind('click', function (event) {
+            if ($("#tipoUsuario").val() == "Alumno") {
+                idCurs = $(this).find('input[type=hidden]').val();
+                var nombre = $(this).find('td:first').text();
+                //cargo por ajax la partial view de solicitud de curso para pasarle los parametros correctos
+            
+                //var data = { 'idCurso': idCurs };
+                $('#modal_solicitud_inscripcion').load('/Mensaje/_NuevaSolicitudACurso?idCurso='+idCurs);
+            
+                //muestro la pantalla de solicitud de inscripcion
+                $('#modal_solicitud_inscripcion').reveal();
+            }
+    });
+
+        $("#enviarSolicitudInscripcionInstitucion").click(function(e) {
+            e.preventDefault();
+            $('#modal_solicitud_inscripcion').load('/Mensaje/_NuevaSolicitudAInstitucion?idInstitucion='+@ViewBag.idInstitucion);
+            $('#modal_solicitud_inscripcion').reveal();
+        });
+
+        var docenteSeleccionado = $('#gridDocentes').find('tbody > tr');
+        docenteSeleccionado.bind('click', function (event) {
+            idInst = $(this).find('input[type=hidden]').val();
+            var nombre = $(this).find('td:first').text();
+
+            //redireccionar con el html  action a un ver curso
+        });
+    });
+
+
+    function recargarGrilla() {
+         var criterioBusqueda = $("#searchCriteria").val();
+         var valorBusqueda = $("#buscar").val();
+         var idInstitucion = @ViewBag.idInstitucion;
+         var url = '/Institucion/_Cursos?idInstitucion=' + idInstitucion + '&criterioBusqueda=' + criterioBusqueda + '&valorBusqueda=' + valorBusqueda;
+         url = url.replace(/ /g, '%20');
+
+        $('#grillaCursos').load(url);
+    }
+
+    function recargarGrillaDocente() {
+         var criterioBusqueda = $("#searchCriteriaDocente").val();
+         var valorBusqueda = $(".busquedaAutocompleteDocente #buscar").val();
+         var idInstitucion = @ViewBag.idInstitucion;
+         var url = '/Institucion/_Docentes?idInstitucion=' + idInstitucion + '&criterioBusqueda=' + criterioBusqueda + '&valorBusqueda=' + valorBusqueda;
+         url = url.replace(/ /g, '%20');
+        $('#grillaDocentes').load(url);
+    }
+
+</script>

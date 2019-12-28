@@ -1,0 +1,186 @@
+.gallery-conteiner{ clear: both; }
+
+/*#region Navegacion */
+
+.navigation { float: left; width: 37%; margin-top: 5px; }
+.navigation a { text-decoration: none; color: #777; }
+.navigation a:hover { text-decoration: underline !important; }
+
+/*Buscar*/
+.navigation .thumb-filter input{ width: 65%; }
+
+/*Thumbs*/
+.navigation ul.thumbs{ width: 100%; height: 350px; }
+.navigation ul.thumbs li { float: left; margin: 5px 10px 5px 0;	}
+.navigation ul.thumbs li .caption { display: none }
+.navigation a.thumb {
+	padding: 2px;
+	display: block;
+	border: 1px solid #ccc;
+	margin-bottom: 10px;
+}
+
+.navigation ul.thumbs li.selected a.thumb { background: #000; }
+.navigation a.thumb:focus { outline: none; }
+.navigation ul.thumbs img {
+	border: none;
+	display: block;
+	width: 80px;
+	height: 60px;
+}
+
+/*Paginacion*/
+.navigation .pagination a, .pagination span.current, .pagination span.ellipsis {
+	display: block;
+	float: left;
+	margin-right: 2px;
+	padding: 4px 7px 2px 7px;
+	border: 1px solid #ccc;
+}
+
+.navigation .pagination a:hover {
+	background-color: #eee;
+	text-decoration: none;
+}
+
+.navigation .pagination span.current {
+	font-weight: bold;
+	background-color: #000;
+	border-color: #000;
+	color: #fff;
+}
+
+.navigation .pagination span.ellipsis {
+	border: none;
+	padding: 5px 0 3px 2px;
+}
+
+/*#endregion*/
+
+/*#region Galeria */
+
+.gallery { float:right; width: 60%; height: 450px; }
+.gallery a { text-decoration: none; color: #777; }
+.gallery a:hover { text-decoration: underline; }
+
+.gallery .controls { text-align: right;}
+.gallery .controls a { padding: 10px;}
+
+.gallery .slideshow-container{
+    width: 100%;
+    height: 70%;
+    background-color: rgba(120, 120, 120, 0.5);
+    border: 2px solid gray;
+    border: 1px solid black;
+    text-align: center; 
+}
+
+.gallery .slideshow-container .loader {
+	background-image: url('loader.gif');
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 90%;
+	height: auto;
+	z-index:3;
+}
+.gallery .slideshow-container .slideshow{
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery .slideshow-container .slideshow img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.caption-container {
+    width: 458px;
+	background-color: rgba(50, 50, 50, 1);
+	padding: 12px;
+	border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+	color: #ccc;
+}
+
+.caption-container .image-title {
+	font-weight: bold;
+	font-size: 1.4em;
+	width: 79%;
+	float: left;
+}
+.caption-container .subido_por{ width: 79%; float: left; }
+.caption-container .reportar{
+    margin-left: 60px;
+    margin-top: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.caption-container .reportar:hover { opacity: 1 }
+
+/*#endregion*/
+
+/*#region Acciones */
+
+.acciones { width: 100%; clear: both; }
+#btn_cancelar { float: left; width: 150px; }
+#btn_seleccionar { float: right; width: 150px; }
+
+/*#endregion*/
+
+.video-navigation { float: left; width: 37%; margin-top: 5px; }
+
+.video-navigation a,
+.sound-navigation a { text-decoration: none; color: #1470C5}
+.video-navigation ul.thumbs li,
+.sound-navigation ul.thumbs li {
+    border-bottom: 1px solid gray;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.video-navigation ul.thumbs li:hover,
+.sound-navigation ul.thumbs li:hover
+{
+    font-weight: bold;
+	background-color:  #f3e9c0;
+}
+
+.video-navigation .caption,
+.sound-navigation .caption { display: none }
+.sound-gallery 	{
+    background-color: rgba(50, 50, 50, 1);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.sound-gallery .caption-container {background-color: transparent; }
+.sound-gallery .caption-container .image-title{
+    width: 50%;
+    float: left;
+    font-size: small;
+}
+.sound-gallery .caption-container .subido_por{
+    width: 50%;
+    float: right;
+    font-size: small;
+}
+
+.sound-gallery audio{
+    width: 89%;
+    height: 35px;
+    margin: 5px;
+    border-radius: 0px;
+}
+.sound-gallery .reportar{ 
+    float: right;
+    margin-top: 15px;
+    margin-right: 7px;
+}
+
+.gallery .slideshow-container .slideshow video{
+    height: 100%;
+    width: 100%;
+    border-radius: 0px;
+}

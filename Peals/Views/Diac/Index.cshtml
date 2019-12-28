@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .opciones div
+    {
+        float: left;
+        margin-left: 6em;
+        width: 20%;
+    }
+    
+    select
+    {
+        width: 48em;
+        margin-left: 6em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+</style>
+<div id="tituloPagina">
+    <h1>
+        Listado de D.I.A.C</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Administre el D.I.A.C. de su institución para obtener un buen seguimiento de sus
+        alumnos.
+    </h1>
+</div>
+@Html.DropDownList("institucion", ViewData["institucion"] as IEnumerable<SelectListItem>)
+<div id="diac_opciones" class="opciones">
+    <div id="verDiacActual">
+        <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Administrador/NuevoCurso.png")" width="100" height="125" />
+                <figcaption"><a href="#">Ver D.I.A.C. Actual</a></figcaption>
+            </figure>
+    </div>
+    <div id="modificarDiacActual">
+        <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/General/Profesor.jpg")" width="100" height="125" />
+                <figcaption><a href="#">Modificar D.I.A.C. Actual</a></figcaption>
+            </figure>
+    </div>
+    <div id="agregarDiac">
+        <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" width="100" height="125" />
+               <figcaption><a href="#">Nuevo D.I.A.C.</a></figcaption>
+           </figure>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        cambioCombo();
+    });
+    
+    function cambioCombo() {
+        var id_institucion = $("#institucion").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/Diac/TieneDiac',
+            data: JSON.stringify({ idInstitucion: id_institucion }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success:
+                function (data) {
+                    if (data == false) {
+                        $("#verDiacActual").show();
+                        $("#modificarDiacActual").show();
+                        $("#agregarDiac").hide();
+
+                    }
+                    else {
+                        $("#verDiacActual").hide();
+                        $("#modificarDiacActual").hide();
+                        $("#agregarDiac").show();
+                    }
+                },
+            error: function () { alert('error'); }
+        });
+    }
+
+    $("#institucion").change(function () {
+        cambioCombo();
+    });
+
+
+
+
+    $("#agregarDiac").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/NuevoDiac?idInstitucion=' + $("#institucion").val();
+    });
+
+    $("#verDiacActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/VerDiacCreada?idInstitucion=' + $("#institucion").val();
+    });
+
+    $("#modificarDiacActual").click(function (e) {
+        e.preventDefault();
+        location.href = '/Diac/ModificarDiac?idInstitucion=' + $("#institucion").val();
+    });
+    
+</script>

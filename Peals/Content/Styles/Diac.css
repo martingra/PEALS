@@ -1,0 +1,208 @@
+﻿body
+{
+    overflow: auto;
+}
+
+#menuAgregar
+{
+    background-color: #ADD8E6;
+    border: 5px solid #ECAE76;
+    border-radius: 80px;
+    float: left;
+    height: 9em;
+    margin-bottom: 3em;
+    margin-left: 5em;
+    padding-top: 2em;
+    width: 50em;
+    overflow: auto;
+}
+
+#cuerpoDiac, #cuerpoSeguimiento
+{
+    background-color: #ADD8E6;
+    border: 5px solid #ECAE76;
+    border-radius: 80px;
+    float: left;
+    height: auto;
+    margin-bottom: 3em;
+    margin-left: 5em;
+    padding-top: 2em;
+    width: 50em;
+    overflow: auto;
+}
+
+
+#agregarGrupo
+{
+    background-image: url("../../Content/Resources/Diac/agregarGrupo.png");
+    overflow: auto;
+}
+
+
+#agregarItem
+{
+    background-image: url("../../Content/Resources/Diac/agregarItem.png");
+    overflow: auto;
+}
+
+.elementoAgregable
+{
+    border: 3px solid #0AA7A2;
+    border-radius: 15px;
+    float: left;
+    height: 6.3em;
+    margin-bottom: 2em;
+    width: 14em;
+    background-color: White;
+    margin-left: 7em;
+    overflow: auto;
+}
+
+.fieldsetGrupo
+{
+    margin-left: 3em;
+    width: 44em;
+    float: left;
+    padding: 10px 0 10px 10px !important;
+}
+
+.txtTitulo
+{
+    width: 20em;
+}
+
+.btnItem
+{
+    width: 4em;
+}
+
+.borrar
+{
+    float: right;
+    height: 20px;
+    margin-right: 3px;
+    width: 20px;
+}
+
+legend
+{
+    margin-left: 0.7em;
+}
+
+.borrarGrupo
+{
+    height: 19px;
+    margin-left: -45.7em;
+    margin-top: 3px;
+    position: absolute;
+    width: 19px;
+}
+
+.divGrupo
+{
+    float: left;
+    width: 48.5em;
+}
+
+.divItem
+{
+    margin-bottom: 0.5em;
+    float: left;
+    width: 100%;
+}
+
+.botonAceptar
+{
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.botonesModal
+{
+    width: 100%;
+    float: left;
+}
+
+.botonesModal input
+{
+    float: left;
+    margin-left: 3em;
+    margin-top: 1em;
+    width: 8em;
+}
+
+.textAreaModal
+{
+    height: 10em;
+    width: 32.5em;
+}
+
+.botonItemConTexto
+{
+    border: 2px solid #008000;
+    padding: 0 !important;
+    border-radius: 7px;
+    margin-right: 0em !important;
+}
+
+#inputOpcion
+{
+    float: left;
+    margin-left: 2em;
+    width: 19em;
+}
+
+#agregarOpcion
+{
+    float: left;
+    margin-left: 1em;
+    margin-top: -0.3em;
+    width: 5em;
+}
+
+#divOpciones
+{
+    float: left;
+    margin-bottom: 1em;
+    margin-left: 2em;
+    margin-top: 1em;
+    width: 29em;
+}
+
+.opcionParticular
+{
+    background-color: #99FF99;
+    border: 3px solid #000000;
+    border-radius: 9px;
+    float: left;
+    height: auto;
+    margin-left: 1em;
+    padding: 0.5em 0.1em 0.5em 0.5em;
+    width: 26em;
+    margin-top: 0.5em;
+    word-wrap: break-word;
+}
+
+.opcionParticular img
+{
+    float: right;
+    height: 20px;
+    margin-right: -0.2em;
+    margin-top: -0.5em;
+    width: 20px;
+}
+
+.divTxtDescripcion
+{
+    float: left;
+    margin-right: 1em;
+    margin-top: 1em;
+    text-align: right;
+    width: 40%;
+}
+
+.btnAyuda, .btnOpciones 
+{
+    margin-right: 0 !important;
+    padding: 0 !important;
+}

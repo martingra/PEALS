@@ -1,0 +1,38 @@
+﻿@*<div class="tituloGrillaBaja">Se borrar&aacute; la inscripci&oacute;n a las siguientes instituciones:</div>*@
+@{
+	var grillaInstitucionesDarBaja = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridInstituciones");
+    grillaInstitucionesDarBaja.Bind(Model);
+    grillaInstitucionesDarBaja.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grillaInstitucionesDarBaja.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px; color:#F58457;">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaInstitucionesDarBaja.GetHtml(htmlAttributes: new { id = "gridInstituciones" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+            columns: grillaInstitucionesDarBaja.Columns(
+                        grillaInstitucionesDarBaja.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                        grillaInstitucionesDarBaja.Column(columnName: "nombre", header: "Institución", style: "institucion")
+            )
+        )
+    }
+}      
+<script type="text/javascript">
+    var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+    $(cursos).hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+    );
+</script>

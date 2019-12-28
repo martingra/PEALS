@@ -1,0 +1,47 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+
+
+@{
+	var grilla = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridResolucionesCurso");
+	grilla.Bind(Model);
+	grilla.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grilla.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grilla.GetHtml(htmlAttributes: new { id = "gridResolucionesCurso" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+                    columns: grilla.Columns(
+                            grilla.Column(format: @<input id="idAlumno" type="hidden" name="IDHidden" value="@item.usuario.id"/>),
+                            grilla.Column(columnName: "usuario.nombre", header: "Nombre  Alumno", style: "nombreAlumno"),
+                            grilla.Column(columnName: "usuario.apellido", header: "Apellido Alumno", style: "apellidoAlumno"),
+                            grilla.Column(columnName: "usuario.mail", header: "Mail Alumno", style: "mailAlumno"),
+                            grilla.Column(columnName: "fecha", header: "Fecha", style: "fecha")
+            )
+        )
+    }
+}         
+
+
+<script type="text/javascript">
+
+    $("#gridResolucionesCurso td").on("click", function () {
+        var idAlumno = $(this).parent().find("#idAlumno").val();
+        $("#seleccionarVersion").load("/LlenadoSeguimiento/_SeleccionarVersion?idCurso=" + @ViewBag.curso + "&idAlumno=" + idAlumno + "&identificador=@ViewBag.identificador");
+        $("#seleccionarVersion").reveal();
+    });
+
+</script>

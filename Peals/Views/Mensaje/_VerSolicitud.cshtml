@@ -1,0 +1,60 @@
+﻿
+@model Peals.Models.mensaje
+
+ @{Html.BeginForm();}
+
+ <input type="hidden" value=@ViewBag.idMensaje name="idCurso" />
+
+<h1 style="padding: 3px; border-bottom: 2px solid #3966A2; text-align:center">Responder Solicitud</h1>
+<div style="font-size:0.5em;">@ViewBag.subtitulo</div>
+<textarea id="mensajeAlumno" name="mensajeAlumno" style="height:150px; width: 100%;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" >@Model.mensaje1</textarea>
+
+<div id="op_asignacion" style="text-align:center; border-top: 1px solid #3966A2; margin-top:10px">
+<p style="font-size:15px">Por favor, ingresa un mensaje para el solicitante con los motivos de tu decisión.</p>
+<textarea id="mensajeRespuesta" name="mensajeRespuesta" style="height:150px; width: 100%; text-align:left; padding:1em;" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"></textarea>
+
+<div id="op_asignacion" style="text-align:center; border-top: 1px solid #3966A2; margin-top:10px">
+<div style="width:100%; margin-top:15px;">
+      <input type="button" value="Aceptar" id="btnAceptar" />
+      <input type="button" value="Rechazar" id="btnRechazar" />
+</div>
+
+<div style="width:100%; padding-top:20px;">
+    <input type="button" value="Cancelar" id="btnCancelar" />
+</div>
+ @{Html.EndForm();}
+
+
+  <script type="text/javascript">
+
+      $("#btnCancelar").click(function () {
+          $('.reveal-modal').trigger('reveal:close');
+      });
+
+      $("#btnAceptar").click(function () {
+          var decision = $("<input>").attr({ "type": "hidden", "name": "decision" }).val('aceptar');
+          $("form").append(decision);
+          $("form").submit();
+      });
+
+      $("#btnRechazar").click(function () {
+          var decision = $("<input>").attr({ "type": "hidden", "name": "decision" }).val('rechazar');
+          $("form").append(decision);
+          $("form").submit();
+      });
+
+      $("#mensajeRespuesta").keypress(function () {
+          if ($("#mensajeRespuesta").val().length >= 1999) {
+              alert('Has alcanzado el máximo de caracteres permitidos en un mensaje');
+          }
+      });
+
+      $("#mensajeAlumno").attr("disabled", "disabled");
+
+      $(document).ready(function () {
+          $('input').button();
+          $('#mensajeRespuesta').button();
+      });
+ </script>
+
+

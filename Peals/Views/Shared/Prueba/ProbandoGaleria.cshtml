@@ -1,0 +1,82 @@
+﻿<link href="@Url.Content("~/Content/Styles/Galeria.css")" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Galeria de Archivos";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.galleriffic.js")"></script>
+
+<div id="gallery" class="gallery">
+    <div id="controls" class="controls"></div>
+    <div class="slideshow-container">
+        <div id="loading" class="loader"></div>
+        <div id="slideshow" class="slideshow"></div>@*
+        <div id="caption" class="caption-container"></div>*@
+    </div>
+</div>
+<div id="thumbs" class="navigation">
+    <ul class="thumbs noscript">
+        @foreach (var imagen in ViewBag.videos) { 
+            <li>
+                <a class="thumb" href="@Url.Content(@imagen.ruta)" title="@imagen.nombre">
+                    <img src="@Url.Content(@imagen.ruta)" alt="@imagen.nombre" />
+                </a>
+                <div class="caption">
+                    <div class="image-title">@imagen.nombre</div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+<script type="text/javascript">
+    function init() {
+        var gallery = $('#thumbs').galleriffic({
+            numThumbs: 24,
+            imageContainerSel: '#slideshow',
+            controlsContainerSel: '#controls',
+            captionContainerSel: '#caption',
+            loadingContainerSel: '#loading',
+            fileType: 'video',
+            onSlideChange: slideChange,
+            onTransitionOut: transitionOut,
+            onTransitionIn: transitionIn,
+            onPageTransitionOut: pageTransitionOut,
+            onPageTransitionIn: pageTransitionIn
+        });
+    }
+
+    function slideChange(prevIndex, nextIndex) {
+        this.find('ul.thumbs').children()
+                            .eq(prevIndex).fadeTo('fast', 0.67).end()
+                            .eq(nextIndex).fadeTo('fast', 1.0);
+    }
+
+    function transitionOut(slide, caption, isSync, callback) {
+        slide.fadeTo(this.getDefaultTransitionDuration(isSync), 0.0, callback);
+        caption.fadeTo(this.getDefaultTransitionDuration(isSync), 0.0);
+    }
+
+    function transitionIn(slide, caption, isSync) {
+        var duration = this.getDefaultTransitionDuration(isSync);
+        slide.fadeTo(duration, 1.0);
+
+        // Position the caption at the bottom of the image and set its opacity
+        var slideImage = slide.find('img');
+        caption.width(slideImage.width())
+               .css({
+                   'bottom': Math.floor((slide.height() - slideImage.outerHeight()) / 2),
+                   'left': Math.floor((slide.width() - slideImage.width()) / 2) + slideImage.outerWidth() - slideImage.width()
+               })
+               .fadeTo(duration, captionOpacity);
+    }
+
+    function pageTransitionOut(callback) {
+        this.fadeTo('fast', 0.0, callback);
+    }
+
+    function pageTransitionIn() {
+        this.fadeTo('fast', 1.0);
+    }
+
+    $(document).ready(init());
+</script>

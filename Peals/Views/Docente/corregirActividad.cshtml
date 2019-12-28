@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "PEALS - Resultado";
+}
+<style type="text/css">
+    .image-effect-rotation
+    {
+        border: 4px solid #ecae76;
+        float: left;
+        height: 30em;
+        margin-bottom: 5%;
+        perspective: 800px;
+        width: 40%;
+        background-color:lightgreen;
+    }
+    
+    .botonera input
+    {
+        margin-bottom: 2em;
+    }
+    
+    .image-effect-rotation .share-button
+    {
+        border-radius: 2px;
+        color: #ffffff;
+        display: inline-block;
+        margin-left: 6%;
+        margin-top: 5%;
+        padding: 12px;
+        text-decoration: none;
+        width: 80%;
+    }
+    .share-side div
+    {
+        background-color: #e8ab74;
+        color: White;
+        width: 100%;
+    }
+    
+    
+
+    .image-effect-rotation .share-via-facebook
+    {
+        background-color: #3b5998;
+    }
+
+    .image-effect-rotation .share-via-twitter
+    {
+        background-color: #00aced;
+    }
+
+    .image-effect-rotation .share-via-google
+    {
+        background-color: #d34836;
+    }
+
+    .image-effect-rotation .share-via-flicker
+    {
+        background-color: #4D7423;
+    }
+
+    .image-effect-rotation .share-via-boton5
+    {
+        background-color: #AD62A7;
+    }
+
+    .image-effect-rotation .share-via-boton6
+    {
+        background-color: #FAA43F;
+    }
+    
+    .botonera 
+    {
+        width: 100%;
+        float:right;
+    }
+
+    
+</style>
+@model Peals.Models.historial_actividad
+@{
+    string usoAyudaActividad = (bool)Model.uso_ayuda_actividad ? "" : "No ";
+    string usoAyudaConsigna = (bool)Model.uso_ayuda_consigna ? "" : "No ";
+
+    string calificacionDocente = "";
+
+    if (Model.calificacion_docente == null || Model.calificacion_docente == 0)
+    {
+        calificacionDocente = "N/C";
+    }
+    else
+    {
+        calificacionDocente = Model.calificacion_docente.ToString() + "%";
+    }
+}
+
+@{ Html.BeginForm("corregirActividad", "Docente", FormMethod.Post); }
+<input type="hidden" id="idHistorialActividad" name="historialActividad" value="@ViewBag.HistorialActividad" />
+<div id="tituloPagina">
+    <h1>
+        Resultado Resolución Actividad: "@Model.actividad1.nombre"</h1>
+</div>
+<div id="explicacionTituloPagina" style="text-align: center;">
+    <h1>
+        Actividad realizada el @Model.fecha_realizacion
+    </h1>
+    <h1>
+        Actividad realizada en @Model.institucion1.nombre
+    </h1>
+    <h1>
+        Calificación del Sistema: @Model.calificacion_sistema
+    </h1>
+</div>
+
+<div class="image-effect-rotation">
+    <div id='alumnoInstituciones' class="share-button share-via-facebook">
+        <i class="fa fa-facebook"></i>Cantidad de Ejercicios: @Model.totalEjercicios</div>
+    <div id='alumnoCursos' class="share-button share-via-twitter">
+        <i class="fa fa-twitter"></i>Ejercicios no resueltos: @Model.ejerciciosNoResueltos</div>
+    <div id='alumnoActividades' class="share-button share-via-google">
+        <i class="fa fa-google"></i>Cantidad de Intentos: @Model.intentos</div>
+    <div id='resolucionActividadesAlumno' class="share-button share-via-flicker">
+        <i class="fa fa-flicker"></i>Tiempo resolución: @Model.tiempo</div>
+    <div id='resolucionActividadesAlumno' class="share-button share-via-boton5">
+        <i class="fa fa-boton5"></i>@usoAyudaConsigna usó ayuda consigna</div>
+    <div id='resolucionActividadesAlumno' class="share-button share-via-boton6">
+        <i class="fa fa-boton6"></i>@usoAyudaActividad usó ayuda actividad</div>
+</div>
+
+<div style="float:right;">
+    <img src="@ViewBag.imgCritSistema" width="500" alt="Calificacion Sistema" />
+</div>
+
+<div id="divCampos">
+    
+    <div style="width:100%; float:left;"> 
+        <textarea id="txtMensaje" name="mensaje" style="width:80%; margin-left:10%; height:5em;"></textarea>
+        <div style="float: right; width:37%;margin-top:1em; margin-bottom:2em;">Calificación: <input type="text" id="txtCalificacionDocente"  name="calificacion" value="100"/></div>
+    </div>
+</div>
+
+<div class="botonera">
+    
+    <input type="submit" id="btnGuardarResultado" value="Guardar Calificación Docente" />
+    <input type="button" id="btnEnviarMensaje" value="Enviar mensaje al alumno" />
+    <input type="button" id="btnTerminar" value="Cancelar" />
+</div>
+
+@{ Html.EndForm(); }
+<script type="text/javascript">
+
+    $("#btnEnviarMensaje").click(function () {
+        window.open('/Mensaje/NuevoMensaje?idDestinatario=@Model.alumno', '_blank'); 
+    });
+
+    $("#btnTerminar").click(function () {
+        window.location.href = "/Docente/index";
+    });
+
+</script>

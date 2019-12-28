@@ -1,0 +1,113 @@
+﻿<link href="@Url.Content("~/Content/Styles/Usuario.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Administrador.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+<style type="text/css" >
+.contenedor 
+{
+    border: 3px solid #0aa7a2;
+    border-radius: 1em;
+    padding: 1em;
+    width: 90%;
+    margin-bottom:1em;
+}
+
+</style>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+@{
+    ViewBag.Title = "PEALS - DAR BAJA ADMINISTRADOR";
+}
+<div id="tituloUsuario">
+    <h1>A continuaci&oacute;n se dar&aacute; de baja al administrador</h1>
+</div>
+@*Pongo aca arriba el div oculto porque cuando se presiona el boton exportar la pantalla vuelve al principio*@
+<div id="div_mensajes" class="reveal-modal">
+    <p id="mensaje"></p>
+    <div>
+        <input type="text" id="txtMailAdmin" />
+    </div>
+    <div id="acciones_mensaje">
+        <button type="button" id="btnAceptar">Aceptar</button>
+        <button type="button" id="btnCancelar">Cancelar</button>
+    </div>
+    <div>
+        <p id="msgError"></p>
+    </div>
+</div>
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+    <fieldset>
+        @{Html.RenderAction("DarBajaUsuario", "Usuario");}
+        <div id="grillas">
+            <div id="grillaInstitucionesDarBaja" class="contenedor">
+                <p>Se borrar&aacute; la inscripci&oacute;n a las siguientes instituciones:</p>
+                @{Html.RenderAction("_InstitucionesAdministrador");}
+            </div>
+            <div id="grillaDocentesDarBaja" class="contenedor"">
+            <p>Los siguientes docentes quedar&aacute;n desvinculados de las instituciones:</p>
+                @{Html.RenderAction("_DocentesAdministrador");}
+            </div>
+            <div id="grillaAlumnosDarBaja" class="contenedor"">
+            <p>Los siguientes alumnos quedar&aacute;n desvinculados de las instituciones:</p>
+                @{Html.RenderAction("_AlumnosAdministrador");}
+            </div>
+            <div id="grillaCursosDarBaja" class="contenedor"">
+                <p>Los siguientes cursos se ver&aacute;n afectados de la siguiente forma:</p>
+                <p>Aquellos que posean actividades que fueron realizadas, ser&aacute;n desvinculados de la instituci&oacute;n y del docente.
+                Esto provocar&aacute; que el docente del curso quede sin la posibilidad de continuar creando y realizando actividades.</p>
+                <p>Aquellos cursos que no posean actividades realizadas ser&aacute;n eliminados junto con las actividades que no pertenezcan a otros cursos.</p>
+                @{Html.RenderAction("_CursosAdministrador");}
+            </div>
+        </div>
+    </fieldset>
+       <div class="boton" style="width: 20%">
+            <input class="submit guardar" type="submit" value="Aceptar" />       
+       </div>
+    @{Html.EndForm();}
+       <div class="boton" style="width: 20%">
+               <input type="button" value="Exportar" onclick="exportarAdministrador()" />
+        </div>
+        <div class="boton" style="width: 20%">
+               <input type="button" onclick="location.href='@Url.Action("Index", "Administrador")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+</div>        
+
+<script type="text/javascript">
+    function exportarAdministrador() {
+        var mensaje = $('#mensaje', '#div_mensajes');
+
+        $(mensaje).text("Por favor, ingrese el mail del Administrador que será responsable de las Instituciones a su cargo:");
+
+        $('#btnCancelar', '#div_mensajes').on('click', function () { $('.reveal-modal').trigger('reveal:close'); });
+
+        $('#btnAceptar', '#div_mensajes').on('click', function () {
+            var mail = $("#txtMailAdmin").val();
+
+            if (mail == '') {
+                document.getElementById('msgError').innerHTML = "Por favor, ingrese un correo electrónico.";
+            }
+            else {
+                var action = '@Url.Action("EsUsuarioAdministradorRegistrado", "Administrador")';
+                var params = { email: mail };
+                $.getJSON(action,
+                    params,
+                    function (data) {
+                        if (data.Success) {
+                            location.href = '@Url.Action("exportarAdministrador", "Administrador")' + '?mailAdministrador=' + mail;
+                            $('.reveal-modal').trigger('reveal:close');
+                        }
+                        else
+                            document.getElementById('msgError').innerHTML = "Por favor, ingrese el correo electrónico de un usuario Administrador registrado.";
+                        }
+                );
+
+
+            }
+
+        });
+
+        $('#div_mensajes').reveal();
+    }
+</script>

@@ -1,0 +1,45 @@
+﻿@{
+	var grillaCursosDarBaja = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridCursosDarBaja");
+	grillaCursosDarBaja.Bind(Model);
+	grillaCursosDarBaja.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grillaCursosDarBaja.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaCursosDarBaja.GetHtml(htmlAttributes: new { id = "gridCursosDarBaja" },
+			tableStyle: "webgrid",
+			headerStyle: "webgrid-header",
+			footerStyle: "webgrid-footer",
+			alternatingRowStyle: "webgrid-alternating-row",
+			rowStyle: "webgrid-row-style",
+			columns: grillaCursosDarBaja.Columns(
+						grillaCursosDarBaja.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+						grillaCursosDarBaja.Column(columnName: "institucion1.nombre", header: "Institución", style: "institucion"),
+                        grillaCursosDarBaja.Column(columnName: "nivel1.nombre", header: "Nivel", style: "nivel"),
+						grillaCursosDarBaja.Column(
+							columnName: "ano",
+							header: "Año",
+							format: item => string.Concat(item.ano, item.division)
+						),
+						grillaCursosDarBaja.Column(columnName: "nombre", header: "Nombre", style: "nombre"),
+						grillaCursosDarBaja.Column(format: @<div class="blob"><h2>Descripción</h2><p>@item.descripcion</p></div>)
+			)
+		)
+	}
+}      
+<script type="text/javascript">
+    var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+    $(cursos).hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+    );
+</script>

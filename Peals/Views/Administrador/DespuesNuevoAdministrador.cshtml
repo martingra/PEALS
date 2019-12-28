@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "PEALS - EXITO";
+}
+
+<p>
+Ya estas registrado en el sistema como Administrador!
+</p>
+
+<div>
+    <div class = "fotoAlineacionIzquierda">
+        <a href=" @Url.Action("Index", "Institucion")">
+            <img src = "@Url.Content("~/Content/Recursos/Administrador/volverMenuAdministrador.png")" />
+        </a>
+    </div>
+
+    <div class = "fotoAlineacionDerecha">
+        <a href=" @Url.Action("NuevaInstitucion", "Institucion")">
+            <img src = "@Url.Content("~/Content/Recursos/Administrador/crearInstitucion.png")" />
+        </a>
+    </div>
+</div>

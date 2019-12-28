@@ -1,0 +1,343 @@
+﻿@{
+    ViewBag.Title = "Resolucion";
+}
+@model List<Peals.Models.item>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Diac.css")" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    .txtUnaLinea
+    {
+        width: 40%;
+    }
+    
+    select
+    {
+        width: 44.5%;
+    }
+    
+    .btnAyuda
+    {
+        float: right;
+        height: 3em !important;
+        margin-right: 0.5em !important;
+        width: 10% !important;
+    }
+    
+    .txtMultiplesLineas
+    {
+        height: 8em;
+        width: 19.5em;
+    }
+    
+    #textAreaAyuda
+    {
+        opacity: 1 !important;
+    }
+    
+    .btnConAdjunto 
+    {
+        width:40%;
+    }
+</style>
+<div id="tituloPagina">
+    <h1>
+        RESOLUCIÓN</h1>
+</div>
+<div id="explicacionTituloPagina">
+    <h1>
+        Se presenta a continuación el formulario a llenar para completar la resolución del
+        alumno << @ViewBag.nombreAlumno >> en el curso << @ViewBag.nombreCurso >> de la
+        Institución << @ViewBag.nombreInstitucion >> .</h1>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    <div id="cuerpoDiac">
+    </div>
+    <div class="botonAceptar">
+        <input id="crearDiac" type="submit" value="Aceptar" />
+        <input type="hidden" name="idDiac" value= @ViewBag.idDiac />
+        <input type="hidden" name="idAlumno" value= @ViewBag.idAlumno />
+        <input type="hidden" name="idCurso" value= @ViewBag.idCurso />
+    </div>
+</form>
+
+<!-- AYUDA ----------------------------------------------------------------------->
+<div id="modal_ayuda" class="reveal-modal normal">
+    <div id="tituloPagina">
+        <h1 style="border-bottom: solid 3px;">
+            Ayuda
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Consejos del autor</h1>
+    </div>
+    <textarea id='textAreaAyuda' class="textAreaModal"> Ingrese el texto aqui </textarea>
+    <div class="botonesModal">
+        <input type="button" id="btnCerrarModalAyuda" value="Cerrar" />
+    </div>
+</div>
+<script>
+   function pintarBotonesAyuda() {
+        var botones = $(".btnAyuda");
+        $.each(botones, function (key, value) {
+            if( $(this).parent().find('.hiddenAyuda').val()) {
+                $(this).addClass('botonItemConTexto');
+            }
+            else {
+                $(this).hide();
+            }
+        });
+   }
+
+   function pintarBotonesOpciones() {
+        var botones = $(".hiddenOpciones");
+        $.each(botones, function (key, value) {
+            if( $(this).val()) {
+                 $(this).parent().find('.btnOpciones').show();
+                $(this).parent().find('.btnOpciones').addClass('botonItemConTexto');
+            }
+        });
+   }
+
+    $(document).ready(function () {
+        $(document).trigger( "ajaxSend" );
+
+         @{
+             String grupoAnterior = "";
+             Int32 contador = 1;
+
+             foreach (var ite in Model)
+             {
+                <text>
+                    var tipoDeDiac = "";
+                    var htmlElemento = "";
+                </text>
+
+
+                <text>
+                    var opciones = "";
+
+                        $.ajax({
+                            type: "POST",
+                            url: '/Diac/ObtenerOpciones',
+                            data: JSON.stringify({ idItem: @ite.id }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            async: false,
+                            success:
+                                function (data) {
+                                    opciones = data;
+                                },
+                            error: function () { alert('error'); }
+                        });
+                 </text>
+
+
+                 switch (ite.tipoItem)
+                 {
+                     case (int)TipoDiac.unaLinea:
+                         <text> 
+                            tipoDeDiac = "Una línea"; 
+                            htmlElemento = "<input type='hidden' class='tipoItemHidden' value='unaLinea' /> <input type='text' class='txtUnaLinea' />";
+                         </text>
+                         
+                         break;
+                     case (int)TipoDiac.multiplesLineas:
+                         <text> 
+                            tipoDeDiac = "Multiples líneas";
+                            htmlElemento = "<input type='hidden' class='tipoItemHidden' value='multilinea' /> <textarea class='txtMultiplesLineas' />";
+                         </text>
+                         break;
+                     case (int)TipoDiac.conOpciones:
+                         <text> 
+                            tipoDeDiac = "Con opciones";
+                            htmlElemento = "<input type='hidden' class='tipoItemHidden' value='opciones' /> <select class='selConOpciones'>"
+                            var contador = 0;
+                            var opcionesArray = opciones.split("|");
+                            opcionesArray.forEach(function(entry) {
+                                htmlElemento = htmlElemento + "<option value='" + entry + "'>" + entry + "</option>";
+                                contador ++;
+                            });
+
+                            htmlElemento = htmlElemento + "</select>";
+
+                         </text>
+                         break;
+                     case (int)TipoDiac.conAdjunto:
+                         <text> 
+                            tipoDeDiac = "Con Adjunto";
+                            htmlElemento = "<input type='hidden' class='tipoItemHidden' value='adjunto' /> <input type='file' name='adjunto' class='btnConAdjunto' value = '...'/>";
+                            
+                         </text>
+                         break;
+                 }
+
+
+                 if (grupoAnterior == "")
+                 {
+
+                     //es el primer item: agregamos todo
+                    <text>
+                        var identificadorFieldset = 'fieldsetGrupo grupo' + @contador;
+                        var identificadorFieldsetConClase = '.fieldsetGrupo.grupo' + @contador;
+                        $("#cuerpoDiac").append("<div class='divGrupo'> <fieldset class='" + identificadorFieldset + "'> <legend> <input type='text' class='tituloGrupo' value='@ite.grupo' /> </legend> </fieldset>  </div>"); 
+
+                        $(identificadorFieldsetConClase).append("<div class='divItem item" + @contador + "'> <input type='hidden' class='idItem' value=' @ite.id ' /> <div class='divTxtDescripcion'> @ite.descripcion :</div>" + htmlElemento + "<input  class='btnItem btnAyuda' type='button' value='Ayuda'/> <input type='hidden' class='hiddenAyuda' value='@ite.ayuda'/> <input type='hidden' class='hiddenOpciones' value='" + opciones  + "'/> <a href='#'> <img class='borrar' src='../../Content/Resources/MasterPage/delete.png'></a> </div>");
+                        var idItem = '.item' + @contador + ' select';
+                        $(idItem).val(tipoDeDiac);
+                    </text>
+                 }
+                 else if (grupoAnterior == ite.grupo)
+                 {
+                     //es un item de un grupo que ya tenemos.. agrego solo el item
+                     <text>
+                        $(identificadorFieldsetConClase).append("<div class='divItem item" + @contador + "'> <input type='hidden' class='idItem' value=' @ite.id ' /> <div class='divTxtDescripcion'> @ite.descripcion :</div> " + htmlElemento + " <input  class='btnItem btnAyuda' type='button' value='Ayuda'/> <input type='hidden' class='hiddenAyuda' value='@ite.ayuda'/> <input type='hidden' class='hiddenOpciones' value='" + opciones  + "'/> <a href='#'> <img class='borrar' src='../../Content/Resources/MasterPage/delete.png'></a> </div>");
+                        var idItem = '.item' + @contador + ' select';
+                        $(idItem).val(tipoDeDiac);
+                    </text>
+                 }
+                 else
+                 {
+                     //es un item de un grupo nuevo.. agrego todo
+                    <text>
+                        var identificadorFieldset = 'fieldsetGrupo grupo' + @contador;
+                        var identificadorFieldsetConClase = '.fieldsetGrupo.grupo' + @contador;
+                        $("#cuerpoDiac").append("<div class='divGrupo'> <fieldset class='" + identificadorFieldset + "'> <legend> <input type='text' class='tituloGrupo' value='@ite.grupo' /> </legend> </fieldset> </div>"); 
+
+                        $(identificadorFieldsetConClase).append("<div class='divItem item" + @contador + "'> <input type='hidden' class='idItem' value=' @ite.id ' /> <div class='divTxtDescripcion'> @ite.descripcion :</div> " + htmlElemento + "  <input  class='btnItem btnAyuda' type='button' value='Ayuda'/> <input type='hidden' class='hiddenAyuda' value='@ite.ayuda'/> <input type='hidden' class='hiddenOpciones' value='" + opciones  + "'/> <a href='#'> <img class='borrar' src='../../Content/Resources/MasterPage/delete.png'></a> </div>");
+                        var idItem = '.item' + @contador + ' select';
+                        $(idItem).val(tipoDeDiac);
+                    </text>
+                 }
+
+                 grupoAnterior = ite.grupo;
+                 contador++;
+             }
+
+    
+            }
+
+            $(document).trigger( "ajaxComplete" );
+
+            pintarBotonesAyuda();
+            pintarBotonesOpciones();
+            $(".borrar").hide();
+            $("input[type=text]").prop('disabled', true);
+            $("input[type=text]").css('opacity', 1);
+
+            $(".selConOpciones").val($(".selConOpciones option:first").val());
+            $(".txtUnaLinea").prop('disabled', false);
+            $("#textAreaAyuda").prop('disabled', true);
+            $('.btnConAdjunto').button();
+    });
+   
+
+        function cargarOpciones(contenido) {
+        $.each(contenido.split("|"), function (key, value) {
+            $("#divOpciones").append("<div class='opcionParticular'> <a class='borrarOpcion' href='#'><img src='../../Content/Resources/MasterPage/delete.png'></a> " + value + "</div>")
+        });
+    }
+
+    $('#cuerpoDiac').on('click', '.btnOpciones', function (e) {
+        itemClickeado = $(this);
+        e.preventDefault();
+
+        if ($(this).parent().find('.hiddenOpciones').val() != "") {
+            cargarOpciones($(this).parent().find('.hiddenOpciones').val());
+        }
+
+        $("#modal_opciones").reveal();
+    });
+
+    $('#cuerpoDiac').on('click', '.btnAyuda', function (e) {
+        itemClickeado = $(this);
+        e.preventDefault();
+
+        if ($(this).parent().find('.hiddenAyuda').val() != "") {
+            $('#textAreaAyuda').val($(this).parent().find('.hiddenAyuda').val());
+        }
+
+        $("#modal_ayuda").reveal();
+    });
+
+
+       $("#btnCerrarModalOpciones").click(function () {
+        if (itemClickeado.parent().find('.hiddenOpciones').val() != "") {
+            itemClickeado.parent().find('.btnOpciones').addClass('botonItemConTexto');
+        }
+        else {
+            itemClickeado.parent().find('.btnOpciones').removeClass('botonItemConTexto');
+        }
+
+        $('#modal_opciones').trigger('reveal:close');
+        limpiarOpciones();
+    });
+
+        $("#btnCerrarModalAyuda").click(function () {
+        if (itemClickeado.parent().find('.hiddenAyuda').val() != "") {
+            itemClickeado.parent().find('.btnAyuda').addClass('botonItemConTexto');
+        }
+        else {
+            itemClickeado.parent().find('.btnAyuda').removeClass('botonItemConTexto');
+        }
+
+        itemClickeado = "";
+        $('#modal_ayuda').trigger('reveal:close');
+    });
+
+
+
+
+
+
+    $("#crearDiac").click(function() {
+            var resultado = [];
+
+            var items = $('.divItem');
+
+            var idItem = "";
+            var tipoItem = "";
+            var resolucion = "";
+
+            $.each(items, function (key, value) {
+                idItem = $(this).find('.idItem').val().trim();
+                tipoItem = $(this).find('.tipoItemHidden').val().trim();
+
+                if(tipoItem == 'unaLinea'){
+                    resolucion = $(this).find(".txtUnaLinea").val();
+                }
+                else if (tipoItem == 'multilinea'){
+                    resolucion = $(this).find('.txtMultiplesLineas').val(); 
+                }
+                else if (tipoItem == 'opciones'){
+                    resolucion = $(this).find('.selConOpciones').val();
+                }
+                else{ //adjunto
+                    resolucion = $(this).find('.btnConAdjunto').val();
+                }
+
+                var item = new Object();
+                item.id = idItem;
+                item.tipoItem = tipoItem;
+                item.resolucion = resolucion;
+
+                resultado.push(item);
+                
+            });
+
+
+        var datosJson = JSON.stringify(resultado);
+
+        var inputJson = $("<input>").attr({ "type": "hidden", "name": "inputJson" }).val(datosJson);
+        $("form").append(inputJson);
+
+        var inputIdentificador = $("<input>").attr({ "type": "hidden", "name": "inputIdentificador" }).val("@ViewBag.identificador");
+        $("form").append(inputIdentificador);
+
+        $("form").submit();
+    });
+
+</script>

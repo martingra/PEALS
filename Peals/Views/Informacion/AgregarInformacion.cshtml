@@ -1,0 +1,111 @@
+﻿<link href="@Url.Content("~/Content/Styles/Informacion.css")" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.informacion 
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/AudioVideo.js")"></script> 
+
+@{Html.BeginForm("AgregarInformacion", "Informacion", FormMethod.Post, new { id= "form_informacion" });}
+    <div id="info_body">
+        <div>
+            <div>
+                @Html.LabelFor(m => m.encabezado, "Escribe el encabezado con que se presentara tu institución.")
+            </div>
+            @Html.TextBoxFor(m => m.encabezado, new { id = "info_encabezado", name="info_encabezado", style="width:100%" })
+        </div>
+        <div id="info_img">
+            <div id="div_background">
+                <div id="div_BoxBackground">
+                    <p id="info_TextImagen">Agrega una foto que represente a la institución.</p>
+                </div>
+                <img id="imgSeleccionada" width="100%" height="100%" src="" style="display:none"/>
+            </div>
+            <button type="button" id="info_btnBuscarImagen" style="font-size: 1em !important; margin-left: 22px; margin-top: 2px; width: 80%;" onclick="fileSelectDelegate(btnImagenOnClick, $('#info_urlImagen'));">
+                Buscar Imágen
+            </button>
+            <input type="file" id="info_urlImagen" name="imagen" style="display:none;" onchange="handleFileSelect(event);" />
+        </div>
+        <div>
+            <div>
+                @Html.LabelFor(m => m.introduccion, "Escribe una breve introducción a modo de presentación.")
+            </div>
+            @Html.TextAreaFor(m => m.introduccion, new { id = "info_introduccion", rows = "9" })
+        </div>
+        <div id="info_contenido">
+            <div>
+                @Html.LabelFor(m => m.contenido, "Escribe todo lo que tengas para decir sobre tu institución.")
+            </div>
+            @Html.TextAreaFor(m => m.contenido, new { id = "info_contenido", rows = "17" })
+        </div>
+        <div id="info_video">
+            <div>
+                @Html.LabelFor(m => m.video, "También puedes agregar un video de la institución. Si tienes uno, puedes agregarlo haciendo click en \"Buscar\". Si no tienes un video, pero dispones de una WebCam, puedes crearlo ahora mismo haciendo click en \"Crear\"")
+            </div>
+            <video id="video" controls="controls" >
+                <source src=""></source>
+            </video>
+            <div id="info_videoOp">
+                <button type="button" id="info_btnBuscarVideo" onclick="fileSelectDelegate(btnVideoOnClick, $('#info_urlVideo'));">Buscar</button>
+                <button type="button" id="info_btnCrearVideo">Crear</button>@*
+                <button type="button" id="record" onclick="startRecording()">Grabar</button>
+                <button type="button" id="record" onclick="stopRecording()">Parar</button>*@
+            </div>
+            <input type="file" id="info_urlVideo" name="video" style="display:none;" onchange="handleFileSelect(event, null);" />
+        </div>
+    </div>
+@{ Html.EndForm(); }
+<script type="text/javascript">
+    var btnImagenOnClick = 1;
+    var btnVideoOnClick  = 2;
+    var btnSeleccionado;
+
+    function dropEndFileCallback(element, files) {
+        var video = $('#info_urlVideo');
+        if (element.id == "video") {
+            btnSeleccionado = btnVideoOnClick;
+            $('#info_urlVideo').files = files;
+        } else {
+            btnSeleccionado = btnImagenOnClick;
+            $('#info_urlImagen').files = files;
+        }
+
+        handleFileSelect(null, files);
+    }
+
+    function handleFileSelect(event, files) {
+        var f = (event != null)? event.target.files[0] : files[0];
+        var reader = new FileReader();
+
+        reader.onload = (function (theFile) {
+            return function (e) {
+                if (btnSeleccionado == btnImagenOnClick) {
+                    document.getElementById('div_BoxBackground').style.display = 'none';
+                    document.getElementById('imgSeleccionada').src = e.target.result;
+                    document.getElementById('imgSeleccionada').style.display = 'block';
+                } else {
+                    document.getElementById('video').src = e.target.result;
+                }
+            };
+        })(f);
+
+        // Leo la imagen como un data URL.
+        reader.readAsDataURL(f);
+    }
+
+    function fileSelectDelegate(btnClick, idFireClickEvent){
+        btnSeleccionado = btnClick;
+        $(idFireClickEvent).click();
+    }
+
+//    function agregarEventos(){
+//        $('#div_background').setFileDnD(dropEndFileCallback, false);
+//        $('video').setFileDnD(dropEndFileCallback, false);
+//        $('#info_btnCrearVideo').click(crearVideo);
+//    }
+
+    //    $(document).ready(agregarEventos);
+
+    $("#info_btnCrearVideo").click(function () {
+        var url = "/Recurso/_GrabarVideo";
+        window.open(url, '_blank');
+    });
+</script>

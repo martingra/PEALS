@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+#registrarse{ float: left; height: 400px; width: 30%; padding: 30px 0 20px 20px; margin: 20px 0 20px 10px;
+border-right:thin; border-right-color: black; border-right-style: solid; 
+}
+
+#ingresar{ float: left; width: 50%; height: 500px; padding: 30px 50px 0 30px; margin: 20px 20px 0 20px;
+}
+
+.formulario{ margin-left: 20px;}
+
+#inicioSesion{ z-index: 1; position: relative; margin-top: -260px; margin-left: 50px; color:#FFF;} /*el z index estaba en 100.. lo cambie para q no se superponga con la ayuda */
+
+#fondoInicioSesion{ width: 320px; height: 257; z-index: 1;}
+
+.submit { width: 80px; height: 80px;}
+
+#ayuda { padding-top:60%;}

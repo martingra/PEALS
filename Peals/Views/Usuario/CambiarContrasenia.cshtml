@@ -1,0 +1,83 @@
+﻿<link href="@Url.Content("~/Content/Styles/jquery.validate.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Usuario.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+
+@model Peals.Models.usuario
+           
+@{
+    ViewBag.Title = "PEALS - CAMBIAR CONTRASEÑA";
+    ViewBag.error = ViewBag.error;
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script> 
+<input type="hidden" id="error" value= "@ViewBag.error" />
+<div id="tituloUsuario">
+    <h1>Cambio de contraseña</h1>
+</div>
+
+<ul class="errorMessages"></ul>
+
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+
+  <fieldset>
+  <legend align="left">Datos del Usuario</legend>
+            <table div="tablaUsuarioDocente">
+                <tbody>
+                 <tr>
+                	<td>Contraseña Actual:</td>
+                    <td>@Html.TextBoxFor(m => m.contrasena, new { type = "password" })</td>
+                </tr>                
+                <tr>
+                	<td>Nueva Contraseña:</td>
+                    <td><input type="password" name="nuevaContrasena" id="nuevaContrasena"></td>
+                </tr>
+                <tr>
+                	<td>Repetir Nueva Contraseña:</td>
+                    <td><input type="password" name="repNuevaContrasena" id="repNuevaContrasena"></td>
+                </tr>
+                    <tr>
+                        <td>
+                            <div id="botones">
+                                <input id="guardarAlumno" type="button" name="guardar" value="Actualizar Mis Datos" />
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+    </fieldset>
+
+    @{Html.EndForm();}
+
+</div>
+
+
+<script type="text/jscript">
+    $("#guardarAlumno").click(function () {
+        if ($("#contrasena").val() == '' || $("#nuevaContrasena").val() == '' || $("#repNuevaContrasena").val() == '') {
+            alert('Debe ingresar todos los datos para continuar');
+        }
+        else if ($("#repNuevaContrasena").val() != $("#nuevaContrasena").val()) {
+            alert('La nueva contraseña no concide con la repetición de la misma.');
+        }
+        else {
+            $("form").submit();
+        }
+    });
+
+
+
+
+    $(document).ready(function () {
+          if ( $("#error").val() == '') {
+            $(".errorMessages").hide();
+          } 
+          else {
+            $(".errorMessages").show();
+            $(".errorMessages").append('<li>' + $("#error").val() + '</li>');
+          }
+          
+    });
+</script>

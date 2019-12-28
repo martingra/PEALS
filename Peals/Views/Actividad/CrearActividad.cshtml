@@ -1,0 +1,262 @@
+﻿<link href="@Url.Content("~/Content/Styles/ActividadDisenio.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/ActividadGaleria.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/CriterioSolucion.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Galeria.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/Galerias.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+
+@{ ViewBag.Title = "Creador de Actividades"; }
+
+<div id="creacion" class="group" >
+    <div class="panel_izquierda">
+        <ul class="menu_vertical">
+            <li><p>EJERCICIOS</p><img src="../../Content/Resources/MasterPage/Agregar.png" alt="Agregar Ejercicio" width="24px" height="24px" onclick="agregarEjercicio()" /></li>
+        </ul>
+    </div>
+    <div class="panel_centro">
+        <div id="area_disenio">
+            <div class="area_titulo"><h2>DISEÑO</h2></div>
+            <div class="contenido_ejercicio scrollbar-ext"></div>
+            <div id="zoom_panel">
+                <img src="../../Content/Resources/Actividad/zoom_in.png" alt="ACERCAR" onclick="onZoomIn();"  />
+                <img src="../../Content/Resources/Actividad/zoom_out.png" alt="ALEJAR" onclick="onZoomOut();" />
+            </div>
+            <div class="panel_derecha">
+                <ul class="herramientas">
+                    <li onclick="agregarImagen(false);">
+                        <img src="../../Content/Resources/Actividad/select_arrow.png" width="48px" height="48px" />
+                        <img src="../../Content/Resources/Actividad/Imagen.png" width="48px" height="48px" alt="Agregar Imágen"/>
+                    </li>
+                    <li onclick="agregarTexto();">
+                        <img src="../../Content/Resources/Actividad/select_arrow.png" width="48px" height="48px" />
+                        <img src="../../Content/Resources/Actividad/Texto.png" width="48px" height="48px" alt="Agregar Texto" />
+                    </li>
+                    <li onclick="agregarAudio(false);">
+                        <img src="../../Content/Resources/Actividad/select_arrow.png" width="48px" height="48px" />
+                        <img src="../../Content/Resources/Actividad/Audio.png" width="48px" height="48px" alt="Agregar Audio" />
+                    </li>
+                    <li onclick="agregarVideo(false);">
+                        <img src="../../Content/Resources/Actividad/select_arrow.png" width="48px" height="48px" />
+                        <img src="../../Content/Resources/Actividad/Video.png" width="48px" height="48px" alt="Agregar Video"/>
+                    </li>
+                </ul>
+                <div id="panel_recursos">
+                    <div id="titulo">
+                        <input type="text" id="txt_buscarRecurso" />
+                        <button id="btn_buscarRecurso" onclick="buscarRecurso()">BUSCAR</button>
+                        <div id="btn_cargarPC" onclick="cargarPC()">
+                            <img alt="Buscar en PC" src="../../Content/Resources/Actividad/PC.png" width="24px" height="24px" />
+                            <h2>Buscar en PC</h2>
+                        </div>
+                    </div>
+                    <div id="contenido_recursos">
+
+                    </div>
+                    <div id="content_foot">
+                        <button id="btn_agregarRecursos" onclick="agregarRecursosSeleccionados()">AGREGAR</button>
+                        <div id="paginacion"></div>
+                        <button id="btn_CerrarGaleria" onclick="cerrarGaleria()">CANCELAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="area_solucion">
+            <div class="area_titulo"><h2>SOLUCIÓN</h2></div>
+            <div id="tipos_soluciones">
+                <ul>
+                    <li onclick="responderSeleccionando();">
+                        <img src="../../Content/Resources/Actividad/SolucionOpciones.png" width="32px" height="32px" alt="Agregar Imágen"/>
+                        <label>OPCIONES</label>
+                    </li>
+                    <li onclick="responderEscribiendo();">
+                        <img src="../../Content/Resources/Actividad/SolucionEscribir.png" width="32px" height="32px" alt="Agregar Imágen"/>
+                        <label>ESCRIBIR</label>
+                    </li>
+                    <li onclick="responderConSenias();">
+                        <img src="../../Content/Resources/Actividad/SolucionSenia.png" width="32px" height="32px" alt="Agregar Imágen"/>
+                        <label>SEÑAS</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="contenido_solucion">
+                <div id="solucion_seleccion" class="temp">
+                    <div id ="panel_drag">
+                        <h3>SELECCIONA EL RECURSO CORRECTO</h3>
+                    </div>
+                    <div id="panel_img">
+                    </div>
+                </div>
+                <div id="solucion_escribir" class="temp">
+                    <h3>ESCRIBE LA RESPUESTA</h3>
+                    <input type="text" id="rTexto" onchange="onInputSolucionChange()" />
+                    <div class="cb_personalizado div_deletreo">
+                        <input type="checkbox" id="rDeletreo" onclick="onDeletreoClick()"/>
+                        <label for="rDeletreo" >Mostrar Deletreo</label>
+                    </div>
+                </div>
+                <div id="solucion_senias" class="temp">
+                    <h3>SELECCIONA LA SEÑA</h3>
+
+                    <div id="divSenias" class="reveal-modal"></div>
+
+                    <input type="text" id="select_senias" style="disabled:'disabled'; opacity:1;" /> <input type="button" value="..." onclick="$('#divSenias').reveal();"/>
+                    @*<select id="select_senias">
+                      <option value="default">-- --</option>
+                      @foreach (var item in ViewBag.Senias) 
+                      {
+                        <option value="@item.id">@item.clase</option>  
+                      }
+                    </select>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="presentacion" class="temp">
+    <div class = "left">
+        <h2>¿Qu&eacute; nombre tendra la actividad?</h2>
+        <input type="text" id="act_nombre" name="nombre" placeholder="Nombre de la Actividad" />
+
+        <div id="pAct_explicacion">
+            <h2>Explica como ser&aacute; la actividad.</h2>
+            <textarea id="texto_explicacion" placeholder="Haz click para empezar a escribir los pasos..." ></textarea>
+            <h3>*Esto le servir&aacute; al alumno para saber que es lo que tiene que hacer.</h3>
+        </div>
+    </div>
+    <div class="right">
+        <h2>Tambi&eacute;n puedes agregar un video para una mejor comprensi&oacute;n</h2>
+
+        <video width="100px" height="100px" id="video" controls="controls" >
+                <source src=""></source>
+            </video>
+            <div id="info_videoOp">
+                <button type="button" id="info_btnBuscarVideo" onclick="fileSelectDelegate(btnVideoOnClick, $('#info_urlVideo'));">Buscar</button>
+                <button type="button" id="info_btnCrearVideo">Crear</button>
+            </div>
+            <input type="file" id="info_urlVideo" name="video" style="display:none;" onchange="handleFileSelect(event, null);" />
+    </div>
+
+    <div id="criterio_correccion">
+        <h2>Criterio de evaluación</h2>
+        <div id="criterio">
+            <label>Criterio</label>
+            <select id="select_criterio">
+                <option value="0">-- --</option>
+                @foreach (var item in ViewBag.Criterios) 
+                {
+                    <option value="@item.id">@item.nombre</option>  
+                }
+            </select>
+            <div id="btn_nuevoCriterio" onclick="nuevoCriterio()">
+                <img alt="Agregar Criterio" src="../../Content/Resources/MasterPage/Agregar.png" width="24px" height="24px" />
+                <h2>Nuevo Criterio</h2>
+            </div>
+        </div>
+        <fieldset id="intervalos">
+            <legend>Intervalos</legend>
+            <div id="intervalo">
+                <div><label>Nombre</label><input type="text" id="txt_nombre" /></div>
+                <div>
+                    <label>Valor</label><input type="number" id="txt_hasta" class="spinner" />
+                    <button name="agregarIntervalo" type="button" id="btn_agregarIntervalo" onclick="agregarIntervalo()">Agregar</button>
+                </div>
+            </div>
+            <div id="editar_intervalo">
+                <div id="btn_editarCriterio" onclick="editarCriterio()">
+                    <img alt="Editar Criterio" src="../../Content/Resources/General/Editar.png" width="24px" height="24px" />
+                    <h2>Modificar</h2>
+                </div>
+                <div id="btn_guardarCriterio" onclick="guardarCriterio()">
+                    <img alt="Agregar Criterio" src="../../Content/Resources/General/save.png" width="24px" height="24px" />
+                    <h2>Guardar</h2>
+                </div>
+            </div>
+            <div id="timeline_container">
+                <div id="timeline">
+                    <h1>0</h1>
+                    <span id="line"></span>
+                    <ul></ul>
+                    <h1>100</h1>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div> <!-- Fin Presentación -->
+
+<section id="botones">
+    <div id="panel_1" >
+        <button name="siguiente" type="button" id="btn_siguiente" value="Siguiente" onclick="siguiente()">Siguiente</button>
+    </div>
+    <div id="panel_2" class="temp">
+        <button name="anterior" type="button" id="btn_anterior" value="Anterior" onclick="volver()">Anterior</button>	    
+        <button name="guardar" type="submit" id="btn_guardar" value="Guardar" onclick="guardar()">Guardar</button>
+        <button name="vistaPrevia" type="submit" id="btn_vistaPrevia" class="temp" value="Vista Previa" onclick="verVistaPrevia()">Vista Previa</button>
+    </div>
+</section>
+
+<div id="dialog" class="temp">
+    <div id="mensaje">
+        <p>GUARDANDO. ESTO PUEDE LLEVAR VARIOS MINUTOS, POR FAVOR ESPERE.</p>
+        <div id="anim_line"></div>
+    </div>
+</div>
+
+<div id="dialog_recursoCriterio" class="reveal-modal">
+    <div id="titulo">
+        <h2>SELECCIONA UNA IMÁGEN</h2>
+        <div id="btn_cargarPC" class="close-reveal-modal" onclick="cargarCriterioPC()">
+            <img alt="Buscar en PC" src="../../Content/Resources/Actividad/PC.png" width="24px" height="24px" />
+            <h2>Buscar en PC</h2>
+        </div>
+    </div>
+    <div id="contenido_recursosCriterio"></div>
+</div>
+<input type="file" id="file" class="temp" onchange="obtenerURLDisco(event)" />
+
+<div id="guardar-actividad" class="temp">
+    <img src="../../Content/Resources/Actividad/logo_completo.gif" />
+    <h1>GUARDANDO...</h1>
+</div>
+
+<script type="text/javascript">
+    var btnVideoOnClick = 2;
+
+    $(document).ready(function () {
+        $("#divSenias").load("/Actividad/_Senias");
+        $('#select_senias').attr('disabled', 'disabled');
+    });
+
+    function fileSelectDelegate(btnClick, idFireClickEvent) {
+        btnSeleccionado = btnClick;
+        $(idFireClickEvent).click();
+    }
+
+    function handleFileSelect(event, files) {
+        var f = (event != null) ? event.target.files[0] : files[0];
+        var reader = new FileReader();
+
+        reader.onload = (function (theFile) {
+            return function (e) {
+                document.getElementById('video').src = e.target.result;
+            };
+        })(f);
+        reader.readAsDataURL(f);
+    }
+
+    $("#info_btnCrearVideo").click(function () {
+        var url = "/Recurso/_GrabarVideo";
+        window.open(url, '_blank');
+    });
+</script>
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/Solucion.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/Recurso.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/Ejercicio.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/Actividad.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/Criterio.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/ManagerRecursos.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Actividad/UIManager.js")"></script>
+

@@ -1,0 +1,679 @@
+﻿@{
+    ViewBag.Title = "Preparar Entorno";
+}
+<script src="@Url.Content("~/Scripts/jquery.signalR-1.1.4.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/signalr/hubs")"></script>
+<style type="text/css">
+    
+    .consejos, .calibracion
+    {
+        display: none;
+    }
+    
+    .consejoImagen
+    {
+        text-align: center;
+    }
+    
+    .consejoImagen img
+    {
+        width: 15em;
+    }
+    
+    .visorVideo
+    {
+        text-align: center;
+        float:left;
+        width:100%;
+    }
+    
+    #btnSiguienteCalibracion2, #btnSiguienteCalibracion3, #btnSiguienteCalibracion4
+    {
+        display: none;
+    }
+    
+    #imgRestart
+    {
+        border-radius: 6em;
+        cursor: pointer;
+        float: right;
+    }
+    
+    #divSeniaARealizar
+    {
+        background-image: url("../../Content/Resources/Actividad/fondoPizarronNegro.jpg");
+        border: 0.2em solid black;
+        border-radius: 1em;
+        margin-bottom: 2em;
+        margin-left: 15%;
+        text-align: center;
+        width: 70%;
+        color: White;
+        padding-top: 1em;
+        float: left;
+        display:none;
+    }
+    
+    #divSeniaARealizar div
+    {
+        float: left;
+        width: 100%;
+        margin-bottom: 2em;
+    }
+    
+    #btnSaltearEjercicio 
+    {
+        display:none;
+    }
+    
+    #explicacionTituloPagina img 
+    {
+        width:50px;
+        height: 50px;
+        margin: 0;
+    }
+</style>
+<div id="pantallaInicial">
+    <div id="tituloPagina">
+        <h1>
+            Actividad Señas
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            El siguiente ejercicio utiliza nuestro intérprete automático de señas. Para obtener
+            los mejores resultados, te recomendamos revisar nuestros consejos. Si no, puedes
+            ir directamente a la calibración del entorno para realizar el ejercicio:
+        </h1>
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnConsejos" value="Consejos" />
+        <input type="button" class="btnCalibracion" value="Calibración" />
+        <input type="button" id="btnResolverEjercicio" class="btnResolverActividad" value="Iniciar Actividad" />
+    </div>
+</div>
+<div id="consejos1" class="consejos">
+    <div id="tituloPagina">
+        <h1>
+            Consejos 1 / 5
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Alejate lo suficiente de la cámara web para asegurarte que veamos todas las señas
+            que hagas
+        </h1>
+    </div>
+    <div class="consejoImagen">
+        <img src="../../Content/Resources/Actividad/alejate.png" alt="Alejate" />
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnAnteriorConsejo1" value="Anterior" />
+        <input type="button" id="btnSiguienteConsejo1" value="Siguiente" />
+        <input type="button" class="btnCalibracion" value="Calibración" />
+    </div>
+</div>
+<div id="consejos2" class="consejos">
+    <div id="tituloPagina">
+        <h1>
+            Consejos 2 / 5
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Fondos simples mejoran sustancialmente los resultados del intérprete de señas. Evita
+            paredes con muchos adornos y de colores fuertes, principalmente colores rojos.
+        </h1>
+    </div>
+    <div class="consejoImagen">
+        <img src="../../Content/Resources/Actividad/fondo.jpg" alt="Fondo" />
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnAnteriorConsejo2" value="Anterior" />
+        <input type="button" id="btnSiguienteConsejo2" value="Siguiente" />
+        <input type="button" class="btnCalibracion" value="Calibración" />
+    </div>
+</div>
+<div id="consejos3" class="consejos">
+    <div id="tituloPagina">
+        <h1>
+            Consejos 3 / 5
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Evita usar ropa roja o con muchos detalles o dibujos.
+        </h1>
+    </div>
+    <div class="consejoImagen">
+        <img src="../../Content/Resources/Actividad/remera.png" alt="Remera" />
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnAnteriorConsejo3" value="Anterior" />
+        <input type="button" id="btnSiguienteConsejo3" value="Siguiente" />
+        <input type="button" class="btnCalibracion" value="Calibración" />
+    </div>
+</div>
+<div id="consejos4" class="consejos">
+    <div id="tituloPagina">
+        <h1>
+            Consejos 4 / 5
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            La luz es muy importante. Evita trabajar en lugares dónde la luz es irregular. La
+            luz natural suele causar malos efectos, asique evita estar muy cerca de puertas
+            y ventanas.
+        </h1>
+    </div>
+    <div class="consejoImagen">
+        <img src="../../Content/Resources/Actividad/luz.png" alt="Luz" />
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnAnteriorConsejo4" value="Anterior" />
+        <input type="button" id="btnSiguienteConsejo4" value="Siguiente" />
+        <input type="button" class="btnCalibracion" value="Calibración" />
+    </div>
+</div>
+<div id="consejos5" class="consejos">
+    <div id="tituloPagina">
+        <h1>
+            Consejos 5 / 5
+        </h1>
+    </div>
+    <div id="explicacionTituloPagina">
+        <h1>
+            Intenta no moverte demasiado. En caso de un movimiento brusco, baja tus brazos 20
+            segundos y luego vuelve a intentarlo.
+        </h1>
+    </div>
+    <div class="consejoImagen">
+        <img src="../../Content/Resources/Actividad/quieto.png" alt="Quieto" />
+    </div>
+    <div class="botonera">
+        <input type="button" id="btnAnteriorConsejo5" value="Anterior" />
+        @*<input type="button" id="btnSiguienteConsejo5" value="Siguiente" />*@
+        <input type="button" class="btnCalibracion" value="Calibración" />
+        <input type="button" class="btnResolverActividad" value="Iniciar Actividad" />
+    </div>
+</div>
+<div id="calibracionGeneral" class="calibracion">
+    <div class="calibracion1 calibracion">
+        <div id="tituloPagina">
+            <h1>
+                Calibración 1 / 4
+            </h1>
+        </div>
+        <div id="explicacionTituloPagina">
+            <h1>
+                Vamos a configurar tu cámara para que puedas utilizar el intérprete de señas sin
+                problemas!
+                <br />
+                Ahora deberías poder verte en la pantalla. Acordate de alejarte lo suficiente de
+                la cámara para que podamos ver todas las señas que hacés.
+                <br />
+                Cuando estés listo, presiona el botón "Siguiente".
+            </h1>
+        </div>
+    </div>
+    <div class="calibracion2 calibracion">
+        <div id="tituloPagina">
+            <h1>
+                Calibración 2 / 4
+            </h1>
+        </div>
+        <div id="explicacionTituloPagina">
+            <h1>
+                Realiza la letra A <img src="../../Content/Resources/Actividad/A.jpg" />
+                <br />
+                Cuando veas el botón "Siguiente" y estés listo, presionalo para continuar.
+            </h1>
+        </div>
+    </div>
+    <div class="calibracion3 calibracion">
+        <div id="tituloPagina">
+            <h1>
+                Calibración 3 / 4
+            </h1>
+        </div>
+        <div id="explicacionTituloPagina">
+            <h1>
+                Realiza la letra B <img src="../../Content/Resources/Actividad/B.jpg" />
+                <br />
+                Cuando veas el botón "Siguiente" y estés listo, presionalo para continuar.
+            </h1>
+        </div>
+    </div>
+    <div class="calibracion4 calibracion">
+        <div id="tituloPagina">
+            <h1>
+                Calibración 4 / 4
+            </h1>
+        </div>
+        <div id="explicacionTituloPagina">
+            <h1>
+                Realiza la letra C <img src="../../Content/Resources/Actividad/C.jpg" />
+                <br />
+                Cuando veas el botón "Siguiente" y estés listo, presionalo para continuar.
+            </h1>
+        </div>
+    </div>
+
+    <div id="divReemplazableRecursos"></div>
+
+    <div id="divAyuda" class="reveal-modal large">
+        <h1 style="border-bottom:2px solid black; margin-bottom: 1em;"> AYUDA </h1>
+        <div id="tituloSeniaAyuda" style="width:auto; float:left; font-size: 2.5em; cursor: pointer; color: #ecae76;" onclick="$('#imgSeniaAyuda').show('slow');">@ViewBag.senia</div>
+        <img id="imgSeniaAyuda" src="@ViewBag.ayuda" style="display:none; float:right; margin-right:10%; border: 3px solid black;" />
+    </div>
+
+    <div id="divSeniaARealizar">
+        <div id="divTituloSeniaARealizar">
+        </div>
+        <div id="divContenidoSeniaARealizar">
+        </div>
+    </div>
+
+    
+
+    <div class="visorVideo">
+        <video id="video" width="320" height="240" autoplay style="display: inline;"></video>
+        <canvas width="320" id="canvas" height="240" style="display: none;"></canvas>
+        <canvas width="320" id="canvasVuelta" height="240" style="display: none;"></canvas>
+        <img id="imgRestart" src="../../Content/Resources/Actividad/restart.png" alt="Reiniciar" />
+        <div id="txtResultado" style="font-size: 0.5em; color: white; background-color: Red;
+            display: none;" />
+        @*<input type="button" id="btnSaltearEjercicio" value="Saltear Ejercicio" />*@
+        <img id="btnSaltearEjercicio" src="../../Content/Resources/Actividad/saltear.jpg" />
+    </div>
+    <div class="calibracion1 calibracion">
+        <div class="botonera">
+            <input type="button" id="btnSiguienteCalibracion1" value="Siguiente" />
+        </div>
+    </div>
+    <div class="calibracion2 calibracion">
+        <div class="botonera">
+            <input type="button" id="btnSiguienteCalibracion2" value="Siguiente" />
+        </div>
+    </div>
+    <div class="calibracion3 calibracion">
+        <div class="botonera">
+            <input type="button" id="btnSiguienteCalibracion3" value="Siguiente" />
+        </div>
+    </div>
+    <div class="calibracion4 calibracion">
+        <div class="botonera">
+            <input type="button" id="btnSiguienteCalibracion4" class="btnResolverActividad" value="Resolver Ejercicio" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var interval;
+    var reconocimiento = $.connection.reconocimientoHub;
+    var detenerEnvio = false;
+    var localStream;
+
+    $(document).ready(function () {
+        $('input:text, input:password, input[type="email"], input[type="date"]')
+                .button()
+                .css({
+                    'font': 'inherit',
+                    'text-align': 'left',
+                    'outline': 'none',
+                    'cursor': 'text'
+                });
+
+        $('input:submit, input:button, button').button();
+        $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+    });
+
+    function iniciarCaptura() {
+        var video = $("#video").get()[0];
+        var canvas = $("#canvas");
+        var ctx = canvas.get()[0].getContext('2d');
+
+        // use the chrome specific GetUserMedia function
+        navigator.getMedia = (navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+        navigator.getMedia(
+            {
+                video: true,
+                audio: true
+            },
+            function (stream) {
+                localStream = stream;
+                if (navigator.mozGetUserMedia) {
+                    video.mozSrcObject = stream;
+                } else {
+                    var vendorURL = window.URL || window.webkitURL;
+                    video.src = vendorURL.createObjectURL(stream);
+                }
+                video.play();
+            },
+            function (err) {
+                console.log("An error occured! " + err);
+            }
+          );
+        ctx.drawImage(video, 0, 0, 320, 240);
+    }
+
+
+
+    //Iniciar Hub de signalR
+    function iniciarClasificacion() {
+        //var reconocimiento = $.connection.reconocimientoHub;
+        //vuellta del server
+        reconocimiento.client.respuesta = function (imagen, respuesta) {
+            var canvasVuelta = $("#canvasVuelta");
+            var canvas = $("#canvas");
+            var ctxVuelta = canvasVuelta.get()[0].getContext('2d');
+
+            var img = new Image;
+            img.onload = function () {
+                ctxVuelta.drawImage(img, 0, 0, 320, 240);
+            };
+            img.src = imagen;
+            $("#txtResultado").text(respuesta);
+
+            canvas.get()[0].getContext('2d').drawImage(video, 0, 0, 320, 240);
+            var data = $("#canvas").get()[0].toDataURL('image/jpeg', 1.0);
+            var newblob = dataURItoBlob(data);
+            if ($("#txtCapturarVideo").val() == '1') {
+                reconocimiento.server.send(data, (@ViewBag.esCara == 1));
+            }
+        };
+
+        //ida al server
+        $.connection.hub.start().done(function () {
+            if(detenerEnvio == false) {
+                var data = $("#canvas").get()[0].toDataURL('image/jpeg', 1.0);
+                var newblob = dataURItoBlob(data);
+                reconocimiento.server.send(data, (@ViewBag.esCara == 1));
+            }
+            else {
+                $.connection.hub.stop();
+            }
+        });
+    }
+    function htmlEncode(value) {
+        var encodedValue = $('<div />').text(value).html();
+        return encodedValue;
+    }
+
+
+    function dataURItoBlob(dataURI) {
+        'use strict'
+        var byteString,
+        mimestring
+
+        if (dataURI.split(',')[0].indexOf('base64') !== -1) {
+            byteString = atob(dataURI.split(',')[1])
+        } else {
+            byteString = decodeURI(dataURI.split(',')[1])
+        }
+
+        mimestring = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+        var content = new Array();
+        for (var i = 0; i < byteString.length; i++) {
+            content[i] = byteString.charCodeAt(i)
+        }
+        return content;
+    }
+
+    //Pantalla Principal
+    $("#btnConsejos").click(function () {
+        $("#pantallaInicial").hide("slow", function () {
+            $("#consejos1").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Consejo 1
+    $("#btnAnteriorConsejo1").click(function () {
+        $("#consejos1").hide("slow", function () {
+            $("#pantallaInicial").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+    $("#btnSiguienteConsejo1").click(function () {
+        $("#consejos1").hide("slow", function () {
+            $("#consejos2").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Consejo 2
+    $("#btnAnteriorConsejo2").click(function () {
+        $("#consejos2").hide("slow", function () {
+            $("#consejos1").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+    $("#btnSiguienteConsejo2").click(function () {
+        $("#consejos2").hide("slow", function () {
+            $("#consejos3").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Consejo 3
+    $("#btnAnteriorConsejo3").click(function () {
+        $("#consejos3").hide("slow", function () {
+            $("#consejos2").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+    $("#btnSiguienteConsejo3").click(function () {
+        $("#consejos3").hide("slow", function () {
+            $("#consejos4").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Consejo 4
+    $("#btnAnteriorConsejo4").click(function () {
+        $("#consejos4").hide("slow", function () {
+            $("#consejos3").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+    $("#btnSiguienteConsejo4").click(function () {
+        $("#consejos4").hide("slow", function () {
+            $("#consejos5").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Consejo 5
+    $("#btnAnteriorConsejo5").click(function () {
+        $("#consejos5").hide("slow", function () {
+            $("#consejos4").show("slow", function () {
+                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+            });
+        });
+    });
+
+    //Calibración General / Calibracion1
+    $(".btnCalibracion").click(function () {
+        iniciarCaptura();
+        $(".visorVideo").hide();
+        $(this).parent().parent().hide("slow", function () {
+            $("#calibracionGeneral").show("slow", function () {
+                $(".calibracion1").show("slow", function () {
+                        $("#divReemplazableRecursos").hide();
+                        $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                });
+            });
+        });
+    });
+
+    //Calibración2
+    $("#btnSiguienteCalibracion1").click(function () {
+        $("#txtCapturarVideo").val('1');
+        iniciarClasificacion();
+        $("#calibracionGeneral").hide("slow", function () {
+            $(".calibracion1").hide(function () {
+                $(".visorVideo").hide(function () {
+                    $("#calibracionGeneral").show("slow", function () {
+                        $(".calibracion2").show("slow", function () {
+                            $(".visorVideo").show("slow", function () {
+                                $("#video").hide();
+                                $("#canvas").show();
+                                $("#canvasVuelta").show();
+                                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        interval = setInterval(function () {
+            var strValor = "imagenes\\" + "a";
+            if ($("#txtResultado").text() == strValor) {
+                alert('Éxito. Presioná "Siguiente" para continuar.');
+                $("#btnSiguienteCalibracion2").show();
+
+                clearInterval(interval);
+            }
+        }, 5000);
+    });
+
+
+    //Calibración3
+    $("#btnSiguienteCalibracion2").click(function () {
+        $("#calibracionGeneral").hide("slow", function () {
+            $(".calibracion2").hide(function () {
+                $(".visorVideo").hide(function () {
+                    $("#calibracionGeneral").show("slow", function () {
+                        $(".calibracion3").show("slow", function () {
+                            $(".visorVideo").show("slow", function () {
+                                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        interval = setInterval(function () {
+            var strValor = "imagenes\\" + "b";
+            if ($("#txtResultado").text() == strValor) {
+                alert('Calibración del lado izquierdo completada. Presioná "Siguiente" para continuar.');
+                $("#btnSiguienteCalibracion3").show();
+
+                clearInterval(interval);
+            }
+        }, 5000);
+    });
+
+    //Calibración4
+    $("#btnSiguienteCalibracion3").click(function () {
+        $("#calibracionGeneral").hide("slow", function () {
+            $(".calibracion3").hide(function () {
+                $(".visorVideo").hide(function () {
+                    $("#calibracionGeneral").show("slow", function () {
+                        $(".calibracion4").show("slow", function () {
+                            $(".visorVideo").show("slow", function () {
+                                $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+        interval = setInterval(function () {
+            var strValor = "imagenes\\" + "c";
+            if ($("#txtResultado").text() == strValor) {
+                alert('Calibración de la zona de la cara completada. Presioná "Siguiente" para continuar.');
+                $("#btnSiguienteCalibracion4").show();
+
+                clearInterval(interval);
+            }
+        }, 5000);
+    });
+
+
+    $("#btnSiguienteCalibracion4").click(function () {
+        $("#calibracionGeneral").hide("slow", function () {
+            $(".calibracion4").hide(function () {
+                $(".visorVideo").hide(function () {
+                    $("#calibracionGeneral").show("slow", function () {
+                        $(".visorVideo").show("slow", function () {
+                            $("#calibracionGeneral").show("slow", function () {
+                                $("#divSeniaARealizar").show();
+                                $("#btnSaltearEjercicio").show();
+                                $("#divReemplazableRecursos").show("slow");
+                            });
+                            iniciarCaptura();
+                            $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+
+    $("#btnResolverEjercicio").click(function () {
+        $("#divSeniaARealizar").show();
+        iniciarCaptura();
+        $(this).parent().parent().hide("slow", function () {
+            $("#calibracionGeneral").show("slow", function () {
+                $("html, body").animate({ scrollTop: $('#ejercicio').offset().top }, "slow");
+            });
+        });
+
+        setTimeout(
+          function () {
+              iniciarClasificacion();
+          }, 5000);
+    });
+
+
+    $("#imgRestart").click(function () {
+        reconocimiento.server.resetear();
+    });
+
+    $("#btnSaltearEjercicio").click(function () {
+        detenerEnvio = true;
+        localStream.stop();
+        $.connection.hub.stop();
+
+        clearInterval(intervalTiempo);
+        clearInterval(interval);
+
+        $("#txtEjNoResueltos").val(parseInt($("#txtEjNoResueltos").val()) + 1);
+
+        var nroEjercicio = $("#txtNroEjercicio").val();
+        nroEjercicio = parseInt(nroEjercicio) + 1;
+        var cantidadEjercicios = parseInt($("#txtCantidadEjercicios").val());
+        var avance = nroEjercicio * 100 / cantidadEjercicios;
+        var restante = 100 - avance;
+
+        $("#progresoCompletado").css('width', avance + '%');
+        $("#progresoRestante").css('width', restante + '%');
+
+        $("#progresoCompletado").text(nroEjercicio + ' completados');
+        $("#progresoRestante").text((cantidadEjercicios - nroEjercicio) + ' restantes');
+
+        $("#divResultado").trigger("click");
+    });
+
+
+</script>

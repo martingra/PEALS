@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "ProbandoAutocompletar";
+}
+
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.js") type="text/javascript"></script>
+	<script src=@Url.Content("~/Scripts/jquery.ui.core.js") type="text/javascript"></script>
+	<script src=@Url.Content("~/Scripts/jquery.ui.widget.js") type="text/javascript"></script>
+	<script src=@Url.Content("~/Scripts/jquery.ui.position.js") type="text/javascript"></script>
+	<script src=@Url.Content("~/Scripts/jquery.ui.menu.js") type="text/javascript"></script>
+	<script src=@Url.Content("~/Scripts/jquery.ui.autocomplete.js") type="text/javascript"></script>
+	
+    
+    <label for="somevalue">Some value:</label><input type="text" id="somevalue" name="somevalue"/>
+    
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+            $('#somevalue').autocomplete({
+                source: '@Url.Action("Autocomplete", "Prueba")'
+            });
+        })
+    </script>
+
+
+
+
+

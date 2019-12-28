@@ -1,0 +1,235 @@
+﻿<style>
+h2
+{
+    border-bottom: 2px solid #3966A2;
+    color: #3966A2;
+    margin: 5px;
+}    
+
+.section { clear: both }    
+
+.column { height: 150px; width: 150px; cursor: move; }
+
+.column, table
+{
+    margin: 15px;
+    float: left;
+    border: 2px solid #666666;
+    background-color: #ccc;
+    margin-right: 5px;
+    -webkit-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 3px #000;
+    -ms-box-shadow: inset 0 0 3px #000;
+    box-shadow: inset 0 0 3px #000;
+    text-align: center;
+}
+
+.column header, table thead 
+{
+    color: #fff;
+    text-shadow: #000 0 1px;
+    box-shadow: 5px;
+    padding: 5px;
+    background: -moz-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+    background: -webkit-gradient(linear, left top, right top,
+                                color-stop(0, rgb(0,0,0)),
+                                color-stop(0.50, rgb(79,79,79)),
+                                color-stop(1, rgb(21,21,21)));
+    background: -webkit-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+    background: -ms-linear-gradient(left center, rgb(0,0,0), rgb(79,79,79), rgb(21,21,21));
+    border-bottom: 1px solid #ddd;
+    -webkit-border-top-left-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -ms-border-radius-topleft: 10px;
+    border-top-left-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -ms-border-top-right-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    border-top-right-radius: 10px;
+    text-align:center;
+}
+
+.table { width: 90% }
+.table tbody > tr:hover 
+{
+    cursor: pointer;
+    background: #ffff99;
+}
+
+.filaSeleccionada { background: #ffff99 }
+
+.leftPanel
+{
+    width: 48%;
+    float: left;
+}
+
+.rightPanel
+{
+    width: 48%;
+    float: right;
+    border-left: 1px solid gray;
+}
+
+.lista 
+{
+    border-top: 1px solid ffff99;
+    border-bottom: 1px solid ffff99;
+    height: 200px;
+    overflow: auto;
+}
+
+.lista li 
+{ 
+    border-bottom: 1px solid gray;
+    padding: 10px;
+}
+</style>
+
+@{
+    ViewBag.Title = "ProbandoDragAndDrop";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/DragAndDrop.js")"></script>
+
+<div id="simpleDnD" class="section">
+  <h2>Drag and Drop de un sólo element</h2>
+  <div class="column"><header>A</header></div>
+  <div class="column"><header>B</header></div>
+  <div class="column"><header>C</header></div>
+</div>
+
+<div id="multipleDnD" class="section">
+  <h2>Drag and Drop de varios elements a la vez</h2>
+  <div class="leftPanel">
+      <p>Arrastra las peliculas al panel de la derecha</p>
+      <table class="table">
+        <thead>
+            <tr><th>Pelicula</th><th>Genero</th><th>Puntuacio</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>¿Que paso ayer? Parte 1</td><td>Comedia</td><td>5</td></tr>
+            <tr><td>¿Que paso ayer? Parte 2</td><td>Comedia</td><td>4</td></tr>
+            <tr><td>¿Que paso ayer? Parte 3</td><td>Comedia</td><td>3</td></tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="rightPanel">
+      <p>En este panel se mostrarán los nombres de la películas arrastradas</p>
+      <ul class="lista"></ul>
+  </div>
+</div>
+
+@{ Html.BeginForm("ProbandoDragAndDrop", "Prueba", FormMethod.Post, new { enctype="multipart/form-data" }); }
+<div id="fileDnD" class="section">
+  <h2>Drag and Drop de archivos</h2>
+  <div class="column"><img src="../../Content/Resources/Uploads/sin_imagen.jpg" width="100%" height="100%"/></div>
+  <div class="column"><img src="../../Content/Resources/Uploads/sin_imagen.jpg" width="100%" height="100%" /></div>
+  <div class="column"><img src="../../Content/Resources/Uploads/sin_imagen.jpg" width="100%" height="100%" /></div>
+</div>
+<input type="file" id="imagen" name="imagen" style="display:none"/>
+<input type="submit" value="Subir Imagenes Cargadas" style="margin-top:20px" />
+@{ Html.EndForm(); }
+
+<script type="text/javascript">
+    // Esta función es llamada cuando se suelta el elemento sobre un objeto dragueable.
+    // Corresponde al DIV "simpleDnd"
+    // [Parameter= "dropElement"]: es donde se suelta el elemento
+    // [Parameter= "data"]: es el elemento que se estaba moviendo.
+    function dropEndSimpleCallback(dropElement, data) {
+        // solo una pregunta de control para asegurarse que no me pasen datos incorrectos.
+        if (dropElement.parentElement != data.parentElement) return;
+
+        // intercambio el contenido de cada div
+        var tmp = dropElement.innerHTML;
+        dropElement.innerHTML = data.innerHTML;
+        data.innerHTML = tmp;
+    }
+
+    // Esta función es llamada cuando se sultan unos o varios elementos sobre un objeto dragueable.
+    // Corresponde al DIV "multipleDnd"
+    // [Parameter= "dropElement"]: es donde se suelta el elemento
+    // [Parameter= "data"]: es el elemento que se estaba moviendo.
+    function dropEndMultipleCallback(dropElement, data) {
+        // obtengo el nombre de la pelicula
+        var peliculaSeleccionada = $(data).find('td:first').text();
+
+        // verifico si los datos pasados son correctos.
+        if (dropElement.parentElement == data.parentElement || peliculaSeleccionada == "") return;
+
+        // veo si el elemento que esta siendo dragueado, existe en el array. En caso de no existir, lo agrego.
+        var pos = data.rowIndex;
+        if (existItem(pos) == -1) {
+            peliculasSeleccionadas.push({ 'pos': pos, 'obj': peliculaSeleccionada });
+            $(data).attr('class', 'filaSeleccionada');
+        }
+
+        // agrego las peliculas seleccionadas a la lista.
+        for (var i in peliculasSeleccionadas) {
+            row = peliculasSeleccionadas[i].obj;
+            dropElement.innerHTML += '<li>' + row + '</li>';
+        }
+    }
+
+    // Creo un array que contendra todos los elementos que van a ser movidos en conjunto. 
+    var peliculasSeleccionadas = new Array();
+    // Función que controla los click sobre las filas de la tabla, agregando o eliminando 
+    // (según corresponda) cada fila del array "peliculasSeleccionadas".
+    function onTableRowClick(event){
+        var i, pos = this.rowIndex;
+        if((i = existItem(pos)) > -1){ // si ya habia sido seleccionada
+            peliculasSeleccionadas.splice(i, 1);
+            $(this).removeAttr('class');
+        } else{ // si no estaba seleccionada
+            peliculasSeleccionadas.push({ 'pos': pos, 'obj': $(this).find('td:first').text() });
+            $(this).attr('class', 'filaSeleccionada');
+        }
+    }
+
+    // Función auxiliar para controlar los elementos dentro de un array.
+    function existItem(pos){
+        for (var i in peliculasSeleccionadas){
+            if (peliculasSeleccionadas[i].pos == pos) 
+                return i;
+        }
+
+        return -1;
+    }
+
+    // Esta función es llamada cuando se suelta una imagen del escritorio, sobre una imagen.
+    // Corresponde al DIV "fileDnd"
+    // [Parameter= "files"]: es la lista de archivos que se arrastraron 
+    // [Parameter= "element"]: es el elemento donde se suelta el archivo
+    function dropEndFileCallback(element, files) {
+        // cargo la imagen en el <input type= file .../> para que se puedan subir al servidor.
+//        $('#imagen').list = files;
+//        $('#imagen').value = files.name;
+//        $('#imagen').select();
+        $('#imagen') = files[0];
+    }
+
+    // Se encarga de agregar las propiedades de Drag and Drop a los elementos deseados.
+    function agregarDragAndDrop() {
+        /**************** Simple DnD *******************/
+        var simpleDrag = $('.column'); // obtengo todos los elementos con class="column"
+        simpleDrag.setDnD(dropEndSimpleCallback); // les agrego la propiedad de dragueable
+
+        /*************** Multple DnD *******************/
+        var tabla = $('tbody > tr', '.table'); // obtengo las filas de la tabla dentro del tbody
+        tabla.setDnD(dropEndMultipleCallback); // les agrego la propiedad de dragueable 
+        tabla.bind('click', onTableRowClick);  // les agrego el evento click
+        
+        var lista = $('.lista');               // obtengo la lista 
+        lista.setDnD(dropEndMultipleCallback); // les agrego la propiedad de dragueable
+
+        /**************** File DnD ********************/
+        // hago que los elemtos "img" puedan recibir archivos desde el escritorio, y establesco la 
+        // propieded "autoload" como true.
+        $('img').setFileDnD(dropEndFileCallback, true);
+    }
+
+    $(document).ready(agregarDragAndDrop);
+</script>

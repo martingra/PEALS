@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "PEALS - MODIFICAR DATOS";
+}
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<div id="tituloUsuario">
+     <h1>Modificar mis datos.</h1>
+</div>
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+        @{Html.RenderAction("EditarUsuario", "Usuario");}
+        <div class="boton">
+            <input type="submit" class="submit guardar" value="Aceptar"/>
+        </div>
+    @{Html.EndForm();}
+        <div class="boton">
+            <input type="button" onclick="location.href='@Url.Action("Index", "Administrador")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+
+        <div id="DarBaja">
+            ¿Deseas dar de <a href="@Url.Action("DarBajaAdministrador", "Administrador")">Baja al Usuario</a>?
+        </div>
+</div>
+

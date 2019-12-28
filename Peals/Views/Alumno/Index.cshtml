@@ -1,0 +1,105 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Alumno.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "PEALS - ALUMNO";
+
+    var grillaActividades = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridActividades");
+    grillaActividades.Bind(Model);
+    grillaActividades.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+}
+<section id="alumno_opciones" class="opciones">
+    <div>
+        <figure>
+        <a title="Seguimiento de desempeño de los alumnos" href="@Url.Action("TodasLasInstituciones", "Institucion", new { inicio = "0" })">
+            <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Alumno/MasCursos.jpg")" onclick="@Url.Action("TodasLasInstituciones", "Institucion", new { inicio = "0" })" width="100px" height="125px" />
+            <figcaption>
+                
+                    Más Cursos</a>
+            </figcaption>
+        </figure>
+    </div>
+
+    <div>
+        <figure>
+        <a title="Seguimiento de desempeño de los alumnos" href="@Url.Action("MisCursos", "Alumno")">
+            <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Alumno/MisCursos.png")" onclick="@Url.Action("EditarAlumno", "Alumno")" width="100px" height="125px" />
+            <figcaption>
+                    Mis Cursos</a>
+            </figcaption>
+        </figure>
+    </div>
+
+
+    <div>
+        <figure>
+        <a title="Seguimiento de desempeño de los alumnos" href="@Url.Action("EditarAlumno", "Alumno")">
+            <img class="imgConBorde" src="@Url.Content("~/Content/Resources/General/Profesor.jpg")" onclick="@Url.Action("EditarAlumno", "Alumno")" width="100px" height="125px" />
+            <figcaption>
+                    Modificar mis datos</a>
+            </figcaption>
+        </figure>
+    </div>
+
+    <div id="reportes">
+           <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/MasterPage/reportes.jpeg")" width="100" height="125" onclick="location.href='@Url.Action("Reportes", "Alumno")';" />
+               <figcaption><a href="@Url.Action("Reportes", "Alumno")">Reportes</a></figcaption>
+           </figure>
+        </div>
+
+</section>
+<section id="grillaActividades" style="clear: both">
+    <div class="titulo">
+        <img src="@Url.Content("~/Content/Resources/Alumno/Actividades.png")" width="30px" height="25px" />
+        <h2>Actividades</h2>
+    </div>
+    @{
+        if (grillaActividades.TotalRowCount == 0)
+        {
+            <section style="text-align: center; padding: 20px">
+                Felicitaciones! En este momento no te queda tarea por hacer.
+            </section>
+        }
+        else
+        {
+        @grillaActividades.GetHtml(htmlAttributes: new { id = "gridActividadesPendientes" },
+                tableStyle: "webgrid",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                columns: grillaActividades.Columns(
+                            grillaActividades.Column(format: @<input type="hidden" id="IDHidden" name="IDHidden" value="@item.ID"/>),
+                                     grillaActividades.Column(format: @<input type="hidden" id="IDCursoHidden" name="IDCursoHidden" value="@item.IDCurso"/>),
+                                     grillaActividades.Column("Nombre"),
+                                     grillaActividades.Column(header: "Curso", format: cur => string.Concat(cur.anocurso, cur.divisioncurso, " - ", cur.nombrecurso)),
+                                     grillaActividades.Column(header: "Resuelta", format: cur => cur.resolucion == 0 ? "No" : "Si")
+                            )
+               )
+        }
+    }
+</section>
+<script type="text/javascript">
+    $(document).ready(init);
+
+    function init() {
+        var act_pendientes = $('#gridActividadesPendientes').find('tbody > tr');
+        act_pendientes.bind('click', function (event) {
+            var id = $(this).find('#IDHidden').val();
+            var idCurso = $(this).find('#IDCursoHidden').val();
+            abrirActividad(id, idCurso);
+        });
+    }
+
+    // CLICKS EVENTS
+    function abrirActividad(id, idCurso) {
+        window.location.href =  "/HistorialActividad/historialAlumnoActividad?idAlumno=@ViewBag.idAlumno &idActividad=" + id + "&idCurso=" + idCurso;  //"/Actividad/VerActividad?idActividad=" + id + "&idCurso=" + idCurso;
+    }
+
+    // END CLICK EVENTS
+</script>

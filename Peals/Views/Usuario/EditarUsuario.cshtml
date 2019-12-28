@@ -1,0 +1,137 @@
+﻿<link href="@Url.Content("~/Content/Styles/Usuario.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/jquery.validate.css")" rel="stylesheet" type="text/css" />
+
+@model Peals.Models.usuario       
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.validate.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/combosCascada.js")"></script>
+
+<ul class="errorMessages"></ul>
+
+<style type="text/css">
+    
+
+</style>
+
+                       
+<fieldset>
+    <legend>Datos del Usuario</legend>
+    <table id="tablaUsuario">
+        <tbody>
+            <tr>
+                <td>E-Mail:</td>
+                <td>@Html.TextBoxFor(m => m.mail, new { disabled = true })</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("Cambiar Contraseña", "CambiarContrasenia", "Usuario")</td>
+            </tr>
+        </tbody>
+    </table>
+</fieldset>
+               
+<fieldset>
+    <legend>Información de Contacto</legend>
+    <table id="tablaDatosUsuario">
+        <tbody>
+            <tr>
+                <td>@Html.LabelFor(m => m.nombre, "Nombre/s:")</td>
+                <td>@Html.TextBoxFor(m => m.nombre, new { id = "usuario_nombre", placeholder = "Escribe tu nombre.", required = "required" })</td>
+            </tr>
+            
+            <tr>
+                <td>@Html.LabelFor(m => m.apellido, "Apellido/s:")</td>
+                <td>@Html.TextBoxFor(m => m.apellido, new { id = "usuario_apellido", placeholder = "Escribe tu apellido.", required = "required" })</td>
+            </tr>
+            
+            <tr>
+                <td>@Html.LabelFor(m => m.fecha_nacimiento, "Fecha de Nacimiento:")</td>
+                <td>@Html.TextBoxFor(m => m.fecha_nacimiento, new { id = "usuario_fNacimiento", type = "date", value = "DD/MM/AAAA", placeholder = "dd/mm/aaaa", required = "required", @class = "datePicker" })</td>
+            </tr>
+             
+            <tr>
+                <td>Pa&iacute;s:</td>
+                <td>@Html.DropDownList("pais", null, "Seleccionar país", new { id = "usuario_pais", required = "required" })</td>
+            </tr>
+            
+            <tr>
+                <td>Provincia:</td>
+                <td>@Html.DropDownList("provincia", null, "Seleccionar provincia", new { id = "usuario_provincia", required = "required" })</td>
+            </tr>
+
+            <tr>
+                <td>Localidad:</td>
+                <td>@Html.DropDownList("localidad", null, "Seleccionar localidad", new { id = "usuario_localidad", required = "required" })</td>
+            </tr>
+        </tbody>                                            
+    </table>
+</fieldset>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var form = $(this);
+        var errorList = $('ul.errorMessages', form);
+
+        var createAllErrors = function () {
+            var showAllErrorMessages = function () {
+                errorList.empty();
+
+                form.find(':invalid').each(function (index, node) {
+                    switch (node.type) {
+                        case "email":
+                            if (node.validationMessage.indexOf("Ya existe") >= 0)
+                                errorList.append('<li>' + node.validationMessage + '</li>');
+                            else
+                                errorList.append('<li>Por favor, ingresa tu dirección de E-mail con el siguiente formato: nombre@ejemplo.com</li>');
+                            break;
+                        case "password":
+                            if (node.validationMessage.indexOf("Las contraseñas deben coincidir") >= 0)
+                                errorList.append('<li>' + node.validationMessage + '</li>');
+                            else if (node.id == "usuario_pass")
+                                errorList.append('<li>Por favor, ingresa tu ingresa tu contraseña</li>');
+                            break;
+                        case "date": case "text":
+                            if (node.id != "usuario_fNacimiento")
+                                errorList.append('<li>Por favor, ingresa tu ' + node.name + '.</li>');
+                            else
+                                errorList.append('<li>Por favor, ingresa una fecha con el siguiente formato dd/mm/aaaa</li>');
+                            break;
+                    }
+                });
+
+                errorList.show();
+            };
+
+            $("#usuario_email").focusout(function () {
+                var action = '@Url.Action("EsUsuarioRegistrado", "Usuario")';
+                var params = { email: $("#usuario_email").val() };
+                $.getJSON(action,
+                    params,
+                    function (data) {
+                        if (data.Success)
+                            document.getElementById("usuario_email").setCustomValidity("Ya existe una cuenta asociada a " + params.email);
+                        else
+                            document.getElementById("usuario_email").setCustomValidity('');
+                    }
+                );
+            });
+
+            $("#usuario_repPass").focusout(function () {
+                if ($("#usuario_pass").val() != $("#usuario_repPass").val()) {
+                    document.getElementById("usuario_repPass").setCustomValidity('Las contraseñas deben coincidir. Por favor, escribelas de nuevo.');
+                } else
+                    document.getElementById("usuario_repPass").setCustomValidity('');
+            });
+
+            $('input[type=submit]', form).on('click', showAllErrorMessages);
+            $('input[type=text]', form).on('keypress', function (event) {
+                //keyCode 13 es Enter
+                if (event.keyCode == 13) {
+                    showAllErrorMessages();
+                }
+            });
+        };
+
+        $('form').each(createAllErrors);
+    });
+</script>

@@ -1,0 +1,83 @@
+﻿<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Alumno.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "PEALS - HISTORIAL RESOLUCION";
+
+    var grillaActividades = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridActividades");
+    grillaActividades.Bind(Model);
+    grillaActividades.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero", lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+}
+
+<section id="datosGenerales" >
+    <div id="tituloPagina">
+        <h1>@ViewBag.Actividad</h1>
+    </div>
+    <div id="explicacionTituloPagina" style="text-align:center;">
+        <h1> @ViewBag.Institucion - @ViewBag.Curso </h1>
+    </div>
+</section>
+
+<section id="grillaActividades" style="clear: both">
+    <div class="titulo">
+        <img src="@Url.Content("~/Content/Resources/Alumno/Actividades.png")" width="30px" height="25px" />
+        <h2>Resoluciones</h2>
+    </div>
+    @{
+        if (grillaActividades.TotalRowCount == 0)
+        {
+            <section style="text-align: center; padding: 20px">
+                No tienes ninguna resolución de esta actividad.
+            </section>
+        }
+        else
+        {
+        @grillaActividades.GetHtml(htmlAttributes: new { id = "gridActividades" },
+                tableStyle: "webgrid",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                columns: grillaActividades.Columns(
+                            grillaActividades.Column(format: @<input type="hidden" id="IDHidden" name="IDHidden" value="@item.id"/>),
+                            grillaActividades.Column(format: @<input type="hidden" id="idCurso" name="idCurso" value="@item.idCurso"/>),
+                            grillaActividades.Column("fecha_realizacion"),
+                            grillaActividades.Column("calificacion_docente"),
+                            grillaActividades.Column("calificacion_sistema"),
+                            grillaActividades.Column("tiempo")
+                        )
+               )
+        }
+    }
+</section>
+
+<section id="botonera">
+    <div id="divBotonera" style="float:right; margin-top:1em; margin-bottom:1em;" >
+        <input type="button" id="btnNuevaResolucion" value="Nueva Resolución" />
+    </div>
+</section>
+
+<script type="text/javascript" >
+    $(document).ready(init);
+    
+    function init() {
+        var act_pendientes = $('#gridActividades').find('tbody > tr');
+        act_pendientes.bind('click', function (event) {
+            var id = $(this).find('#IDHidden').val();
+            abrirResolucion(id);
+        });
+    }
+
+    // CLICKS EVENTS
+    function abrirResolucion(id) {
+        window.location.href = "/Actividad/ResultadoActividad?historialActividad=" + id;
+    }
+
+    $("#btnNuevaResolucion").click(function () {
+        window.location.href = "/Actividad/VerActividad?idActividad=@ViewBag.IdActividad &idCurso=@ViewBag.IdCurso";
+    });
+</script>

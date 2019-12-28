@@ -1,0 +1,71 @@
+﻿<div id="grillaSolicitudes">
+    @{
+        var solicitudes = (System.Collections.IEnumerable)ViewBag.Solicitudes;
+        var count = (int)solicitudes.GetType().GetProperties()[1].GetValue(solicitudes, null);
+        if (count > 0) 
+        {
+            <ul>
+                 
+                @foreach (var solicitud in solicitudes)
+                {
+                    var id_mensaje = solicitud.GetType().GetProperties()[0].GetValue(solicitud, null);
+                    var alumno = solicitud.GetType().GetProperties()[1].GetValue(solicitud, null);
+                    //var curso = solicitud.GetType().GetProperties()[2].GetValue(solicitud, null);
+
+                    String tipoSol = "";
+
+                    if ((int)solicitud.GetType().GetProperties()[3].GetValue(solicitud, null) == 1)
+                    {
+                        tipoSol = "<<Inscr. Alumno a curso>>";
+                    }
+                    else if ((int)solicitud.GetType().GetProperties()[3].GetValue(solicitud, null) == 2)
+                    {
+                        tipoSol = "<<Inscripción a Institución>>";
+                    }
+                    else if ((int)solicitud.GetType().GetProperties()[3].GetValue(solicitud, null) == 3)
+                    {
+                        tipoSol = "<<Asignación a Institución>>";
+                    }
+                    else if ((int)solicitud.GetType().GetProperties()[3].GetValue(solicitud, null) == 4)
+                    {
+                        tipoSol = "<<Asignación a Curso>>";
+                    }
+                    else if ((int)solicitud.GetType().GetProperties()[3].GetValue(solicitud, null) == 5)
+                    {
+                        tipoSol = "<<Asignación Alumno a Curso>>";
+                    }
+                    
+                        <li>
+                         
+                         <div style="float:left; background-color:#59A2BE; width:100%; color: white; margin-bottom: 0.5em; margin-top: 0.5em; font-weight: lighter;">     
+                            <div style="float:left; width:78%; float:left; margin-left:2%;">
+                                <div class="solicitud_alumno"><b>@tipoSol</b> </div>
+                                <div class="solicitud_curso"><b>De: @alumno</b></div>
+                            </div>
+                            <div style="float:right; width:20%; float:left; text-align:center;" >
+                                <a href="#">
+                                    <img class ="btnAbrir" src="@Url.Content("~/Content/Resources/General/flecha_derecha.png")" width="50px"; height="50px" />
+                                    <input type="hidden" id="id-solicitud" value='@id_mensaje'/>
+                                </a>
+                        </div>
+  
+                    </div> 
+                    </li> 
+                }
+            </ul>
+        }
+        else
+        {
+                <section style="text-align:center; padding:20px;color:#F58457;">
+                No tienes solicitudes de inscripción.
+            </section>
+        }
+    }     
+</div>
+
+
+<script type="text/javascript">
+
+
+
+</script>

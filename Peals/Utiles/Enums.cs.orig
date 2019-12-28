@@ -1,0 +1,41 @@
+<<<<<<< Updated upstream
+﻿public enum TipoDeUsuario
+{
+    Administrador = 1, 
+    Docente = 2, 
+    Alumno = 3
+}
+
+public enum TipoDeRecurso
+{
+    Imagen = 1,
+    Audio = 2,
+    Video = 3
+}
+
+public enum EstadoUsuario
+{
+    EsperandoConfirmacion = 1,
+    DeAlta = 2,
+    DeBaja = 3
+=======
+﻿public enum TipoDeUsuario
+{
+    Administrador = 1, 
+    Docente = 2, 
+    Alumno = 3
+}
+
+public enum EstadoUsuario
+{
+    EsperandoConfirmacion = 1,
+    DeAlta = 2,
+    DeBaja = 3
+>>>>>>> Stashed changes
+}
+
+public enum TipoSolicitud
+{
+    inscripcionCurso = 1,
+    inscripcionInstitucion = 2
+}

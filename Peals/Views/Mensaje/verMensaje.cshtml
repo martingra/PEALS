@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Ver Mensaje";
+}
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Mensajes.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+
+@model Peals.Models.mensaje
+
+<div class="titulo" style="width: 900px; float: left;">
+    <h1> @Model.titulo_mensaje </h1>
+    </div>
+    <div style="width:100%; float:left;">
+    <input id="idMensaje" type="hidden" value=@Model.id />
+    <input id="destinatarioMensaje" type="hidden" value=@Model.emisor_mensaje />
+    <input id="tipoMensaje" type="hidden" value=@Model.tipo_mensaje1.nombre />
+    <table id="tablaDatosMensaje">
+        <tr>
+            <td class="tablaMensajeTitulo">TIPO:</td>
+            <td>@Model.tipo_mensaje1.nombre</td>
+        </tr>
+        <tr>
+            <td class="tablaMensajeTitulo">DE:</td>
+            <td>@ViewBag.emisor</td>
+        </tr>
+        <tr>
+            <td class="tablaMensajeTitulo">PARA:</td>
+            <td>@foreach (String persona in ViewBag.destinatarios.Split(','))
+                {
+                    if (persona != "")
+                    {
+                        <div>@persona</div>
+                    }
+                }</td>
+        </tr>
+    </table>
+   </div>
+    <div id="botonera">
+        
+        @if (@Model.estado_mensaje1.nombre != "Aceptado" && @Model.estado_mensaje1.nombre != "Rechazado" && ViewBag.habilitarResponder == true)
+        {
+            <a href="#"><img class="botonVerMensaje  botonResponder" width="50px" height="50px" title="Responder" src="/Content/Resources/Mensajes/responder.png"></a>
+        }
+
+        <a href="/Mensaje/Mensajes"><img class="botonVerMensaje" width="50px" height="50px" title= "Volver al centro de mensajes" src="/Content/Resources/Mensajes/volver.png"></a>
+</div>
+
+
+    <div class="similTextArea" style="float:left;">
+        <div>@Html.Raw(Model.mensaje1)</div>
+    </div>
+    <div id="modal_ver_solicitud" class="reveal-modal xlarge" >
+</div>
+
+    <script type="text/javascript">
+
+        $(".botonResponder").click(function () {
+            var tipoMensaje = $("#tipoMensaje").val().toUpperCase();
+            if ( tipoMensaje == "SOLICITUD") {
+                                    var idMensaje = $("#idMensaje").val();
+                                    var url = '/Mensaje/_VerSolicitud?idMensaje=' + idMensaje;
+                                    //$('#modal_ver_solicitud').load(url);
+
+//                                    $(document).ajaxStart(function () {
+//                                    }).ajaxStop(function () {
+//                                        $('#modal_ver_solicitud').reveal();
+//                                    });
+                                    $('#modal_ver_solicitud').load(url, function () { $('#modal_ver_solicitud').reveal(); });
+            }
+            else {
+                window.location = "/Mensaje/NuevoMensaje?idDestinatario=" + $("#destinatarioMensaje").val();
+            }
+        }); 
+
+    </script>

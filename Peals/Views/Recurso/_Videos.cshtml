@@ -1,0 +1,76 @@
+﻿ @{  if (ViewBag.ListVideos == null)
+            { 
+                <p>No tienes videos cargados.</p>
+            }
+            else
+            { 
+                <ul>
+                    @foreach (var video in ViewBag.ListVideos)
+                    { 
+                        <li class="content" >
+                            <img class="en-reproduccion" src="../../Content/Resources/General/play.png" alt="Reproduciendo" />
+                            <input type="hidden" class="id" value="@video.id" />
+                            <input type="hidden" class="src" value="@Url.Content(video.ruta)" />
+                            <div id="@video.id">
+                                <h2 class="nombre" onclick="$('.video-reproductor video').attr('src', '@Url.Content(video.ruta)');">@video.nombre</h2>
+                                @if (video.recurso_compartido.Count > 0)
+                                {
+                                    <div class="informacion activo" onclick="mostrarInstitucionesRecCompartidos($(this.parentElement.parentElement).children('.id').val())">   
+                                        <img src="../../Content/Resources/General/group.png" alt="Compartido" width="20px" height="20px" />
+                                        <h3>Compartido</h3>
+                                    </div>
+                                }
+                                else
+                                { 
+                                    <div class="informacion inactivo" >
+                                        <img src="../../Content/Resources/General/user.png" alt="Sin compartir" width="20px" height="20px" />
+                                        <h3>Sin compartir</h3>
+                                    </div>
+                                }
+                                
+                                @if (video.ejercicio_x_recurso.Count > 0)
+                                {
+                                    <div class="informacion activo">
+                                        <img src="../../Content/Resources/General/share-on.png" alt="Usado" width="20px" height="20px" />
+                                        <h3>Usado</h3>
+                                        <div>
+                                            <div class="triangulo" ></div>
+                                            <ul>
+                                                <li onclick="mostrarActividades(@video.id)">
+                                                    <img src="../../Content/Resources/General/Ver.png" alt="Ver" width="24px" height="24px" />
+                                                    <h2>Ver</h2>
+                                                </li>
+                                                <li onclick="activarCambiarRecurso(@video.id)">
+                                                    <img src="../../Content/Resources/General/Cambiar.png" alt="Cambiar" width="24px" height="24px" />
+                                                    <h2>Cambiar</h2>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="informacion inactivo" >
+                                        <img src="../../Content/Resources/General/share-off.png" alt="Sin usar" width="20px" height="20px" />
+                                        <h3>Sin usar</h3>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <img class="eliminar" src="../../Content/Resources/MasterPage/delete.png" alt="Eliminar Video" onclick="eliminarRecurso(@video.id, '@video.nombre', @video.ejercicio_x_recurso.Count > 0)" />
+
+                            <div style="float:left; width:100%;">
+                                <button type="button" class="btn_editar" value="Editar" onclick="editar(@video.id, this.parentElement.parentElement)">Editar</button>
+                                <button type="button" class="btn_compartir" value="Compartir" onclick="compartir(@video.id)">Compartir</button>
+                            </div>
+                            
+                            <img class="seleccion" src="../../Content/Resources/MasterPage/ok-off.png" width="32px" height="32px" />
+                        </li>
+                    }
+                    </ul>
+                    <div class="video-reproductor">
+                        <video controls="controls" src="" autoplay="autoplay" />
+                        <label class="video-label"></label>
+                    </div>
+            }
+        }

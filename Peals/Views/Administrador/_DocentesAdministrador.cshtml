@@ -1,0 +1,31 @@
+﻿@{
+	var grillaDocentesDarBaja = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridDocentes");
+    grillaDocentesDarBaja.Bind(Model);
+    grillaDocentesDarBaja.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 5);
+
+	if (grillaDocentesDarBaja.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px; color:#F58457;">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaDocentesDarBaja.GetHtml(htmlAttributes: new { id = "gridDocentes" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            rowStyle: "webgrid-row-style",
+            columns: grillaDocentesDarBaja.Columns(
+                        grillaDocentesDarBaja.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+                        grillaDocentesDarBaja.Column(columnName: "nombre", header: "Nombre", style: "docente"),
+                        grillaDocentesDarBaja.Column(columnName: "apellido", header: "Apellido", style: "docente")
+            )
+        )
+    }
+}      

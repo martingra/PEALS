@@ -1,0 +1,51 @@
+﻿@{
+    if (@ViewBag.Docentes_DefaultMessage != null) 
+    {
+        <section style="text-align:center; padding:20px; color:#F58457;">
+	        @ViewBag.Docentes_DefaultMessage
+		</section> 
+    }
+    else if (ViewBag.esLista)
+    {
+        <ul>
+			@foreach (var docente in Model)
+            {
+				<li>
+					<div style="width:80%; float:left">
+						<input type="hidden" id="id-docente" value='@docente.docente'/>
+						<div id="docente_nombre"><b>@docente.usuario.apellido, @docente.usuario.nombre</b></div>
+						<div id="docente_mail"><i>@docente.usuario.mail</i></div>
+					</div>
+					<div style="width:20%; float:left; text-align:center; cursor: pointer" onclick="quitarDocenteInstitucion(@docente.docente)">
+						<img src="@Url.Content("~/Content/Resources/General/Eliminar.jpg")" width="24px"; height="24px" />
+					</div>
+				</li> 
+            }
+		</ul>
+    }
+    else
+    {
+        var grid = new WebGrid(canPage: true, rowsPerPage: ViewBag.docentesPorPagina, canSort: true, ajaxUpdateContainerId: "gridDocentes");
+        grid.Bind(Model);
+        grid.Pager(mode: WebGridPagerModes.All,
+            firstText: "Primero", lastText: "Ultimo",
+            previousText: "Anterior",
+            nextText: "Siguiente",
+            numericLinksCount: 10);
+    
+        @grid.GetHtml(htmlAttributes: new { id = "gridDocentes" },
+                tableStyle: "webgrid",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                columns: grid.Columns(
+                            grid.Column(columnName: "usuario.apellido", header: "Nombre", format: item => string.Concat(item.usuario.apellido, ", ", item.usuario.nombre)),
+                            grid.Column(columnName: "usuario.mail", header: "Mail"),
+                            grid.Column(columnName: "usuario.especialidad1.nombre", header: "Especialidad"),
+                            grid.Column(format: @<input type="hidden" name="IDHidden" value="@item.docente"/>)
+                        )
+        ) 
+    }
+}

@@ -1,0 +1,154 @@
+﻿<style type="text/css"">
+#fecha 
+{
+    float: left;
+    width: 100%;
+    margin: 4%;
+}
+
+#fecha_apertura 
+{
+    margin-left: 2%;
+}
+
+</style>
+
+
+@{
+	var grillaCursos = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridCursos");
+	grillaCursos.Bind(Model);
+	grillaCursos.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 15);
+}
+
+@{ Html.BeginForm("AsignarActividad", "Actividad", FormMethod.Post); }
+	<div class="titulo">
+		<h2>@ViewBag.Titulo</h2>
+        <p id="contador">No hay cursos seleccionados.</p>
+	</div>
+	<div id="dialog_grillaCursos" >
+        @if (grillaCursos.TotalRowCount == 0)
+	    {
+		    <section style="text-align:center; padding:20px">
+			    @ViewBag.Cursos_DefaultMessage
+		    </section>
+	    }
+	    else
+	    {
+		    @grillaCursos.GetHtml(htmlAttributes: new { id = "gridCursos" },
+			    tableStyle: "webgrid",
+			    headerStyle: "webgrid-header",
+			    footerStyle: "webgrid-footer",
+			    alternatingRowStyle: "webgrid-alternating-row",
+			    selectedRowStyle: "webgrid-selected-row",
+			    rowStyle: "webgrid-row-style",
+			    columns: grillaCursos.Columns(
+						    grillaCursos.Column(format: @<input type="hidden" name="IDHidden" value="@item.id"/>),
+						    grillaCursos.Column(columnName: "institucion1.nombre", header: "Institución", style: "institucion"),
+						    grillaCursos.Column(
+							    columnName: "ano",
+							    header: "Año",
+							    format: item => string.Concat(item.ano, item.division)
+						    ),
+						    grillaCursos.Column(columnName: "nombre", header: "Nombre", style: "nombre"),
+						    grillaCursos.Column(format: @<div class="blob"><h2>Descripción</h2><p>@item.descripcion</p></div>)
+			    )
+		    )
+	    }
+    </div>
+
+	<div id="fecha">
+		<label for="fecha_apertura" >Fecha de Apertura:</label>
+		<input type="date" id="fecha_apertura" name="fecha_apertura" placeholder="dd/mm/aaaa" class="datePicker" />
+	</div>
+@{ Html.EndForm(); }
+
+<div id="acciones">
+	<button type="button" id="btn_cancelar" onclick="@ViewBag.Btn_Cancelar">Mejor no</button>
+	<button type="button" id="btn_aceptar" onclick="btnClick_Aceptar()">Asignar</button>
+</div>
+
+<script type="text/javascript">
+	var ids_cursosSel = [];
+
+	function init() {
+
+	    $('input[type="date"]').datepicker();
+
+	    $.datepicker.regional['es'] = {
+	        closeText: 'Cerrar',
+	        prevText: '<Ant',
+	        nextText: 'Sig>',
+	        currentText: 'Hoy',
+	        changeMonth: true,
+	        changeYear: true,
+	        yearRange: ' 1967 : * ',
+	        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+	        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+	        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+	        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+	        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+	        weekHeader: 'Sm',
+	        dateFormat: 'dd/mm/yy',
+	        //dateFormat: 'yy-mm-dd',
+	        firstDay: 1,
+	        isRTL: false,
+	        showMonthAfterYear: false,
+	        yearSuffix: ''
+	    };
+	    $.datepicker.setDefaults($.datepicker.regional['es']);
+
+
+
+		var row_cursos = $('#dialog_grillaCursos').find('tbody > tr');
+		row_cursos.bind('click', function (event) {
+			var pos, id = $('input[type=hidden]', $(this)).val();
+
+			if ((pos = existItem(id)) > -1) { // si ya habia sido seleccionada
+				ids_cursosSel.splice(pos, 1);
+				$(this).attr('class', (this.rowIndex % 2 == 1) ? 'webgrid-row-style' : 'webgrid-alternating-row');
+			} else { // si no estaba seleccionada
+				ids_cursosSel.push(id);
+				$(this).attr('class', 'webgrid-selected-row');
+			}
+
+			if (ids_cursosSel.length > 0) {
+				$('#contador').text(ids_cursosSel.length + ' curso(s) seleccionado(s).');
+			}
+			else {
+				$('#contador').text('No hay cursos seleccionados.');
+			}
+		});
+
+		row_cursos.hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+		);
+	}
+
+	function btnClick_Aceptar() {
+		var input_cursos = $('<input>').attr({ 'type': 'hidden', 'name': 'ids_cursos', 'value': ids_cursosSel });
+		$('form').append(input_cursos);
+
+		if ($("#fecha_apertura").val() == '') {
+            alert('Debes ingresar una fecha de apertura de la actividad.');
+        }
+        else {
+            $('form').submit();
+        }
+	}
+
+	function existItem(id) {
+		for (var i in ids_cursosSel) {
+			if (ids_cursosSel[i] == id)
+				return i;
+		}
+
+		return -1;
+	}
+
+	$(document).ready(init); 
+</script>

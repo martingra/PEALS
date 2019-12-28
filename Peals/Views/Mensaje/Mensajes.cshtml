@@ -1,0 +1,251 @@
+﻿@{
+    ViewBag.Title = "Mensajes";
+}
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Mensajes.css")" rel="stylesheet" type="text/css" />
+<div class="titulo" style="width: 400px; float: left;">
+    <h1>
+        Centro de Comunicaciones</h1>
+</div>
+<div style="float: right; text-align: center;">
+    <figure>
+                <a href="/Mensaje/NuevoMensaje" title="Nuevo Mensaje">
+                    <img class="imgConBorde" width="50px" height="40px" onclick="/Mensaje/NuevoMensaje" src="/Content/Resources/Mensajes/nuevo_mensaje.jpg">
+                </a>
+                <figcaption>
+                    <a href="/Mensaje/NuevoMensaje" title="Nuevo Mensaje">Nuevo Mensaje</a>
+                </figcaption>
+            </figure>
+</div>
+<div id="divContenedorRefEstado" class="contenedorReferencia" style="padding-top: 2em; display:none;">
+    <div class="renglonReferencia">
+        <div class="caja_aceptada cajaRefEstado">
+            ACEPTADO</div>
+    </div>
+    <div class="renglonReferencia">
+        <div class="caja_rechazada cajaRefEstado">
+            RECHAZADO</div>
+    </div>
+</div>
+
+<div class="contenedorReferencia">
+    <div class="renglonReferencia">
+        <div class="caja_mensaje cajaRef">
+            M</div>
+        ensaje</div>
+    <div class="renglonReferencia">
+        <div class="caja_solicitud cajaRef">
+            S</div>
+        olicitud</div>
+    <div class="renglonReferencia">
+        <div class="caja_notificacion cajaRef">
+            N</div>
+        otificación</div>
+</div>
+
+
+<div id="divFiltro">
+    Desde
+    <input class="datePicker" type="date" id="fechaDesde" value="@ViewBag.fechaDesde"/>
+    Hasta
+    <input class="datePicker" type="date" id="fechaHasta" value="@ViewBag.fechaHasta"/>
+    <input style="padding:0.1em;" type="button" value="Buscar" id="btnBuscar" onclick="filtrarMensaje()"/>
+</div>
+
+
+<div class="tabs" style="float: left; width: 900px; margin-top:2em;">
+    <ul>
+        @*<li><a href="#todosLosTipos">Todos</a></li>*@
+        <li onclick="mostrarReferencia('NoLeidos');"><a href="#noLeidos">No leídos</a></li>
+        <li onclick="mostrarReferencia('Mensajes');"><a href="#mensajes">Mensajes</a></li>
+        <li onclick="mostrarReferencia('Solicitudes');"><a href="#solicitudes">Solicitudes</a></li>
+        <li onclick="mostrarReferencia('Notificaciones');"><a href="#notificaciones">Notificaciones</a></li>
+    </ul>
+    @*<div id="todosLosTipos">
+    <div id="accordion" class="accordion">
+        <h3>RECIBIDOS</h3>
+            <div>
+                @{Html.RenderAction("_Recibidos", "Mensaje", new { tipo = "" });}
+            </div>
+        <h3>ENVIADOS</h3>
+            <div>
+                @{Html.RenderAction("_Enviados", "Mensaje", new { tipo = "" });}
+            </div>
+         <h3>TODOS</h3>
+            <div style = "width:auto;">
+                @{Html.RenderAction("_MostrarTodos", "Mensaje", new { tipo = "" });}
+            </div>
+        
+    </div>
+</div>*@
+    <div id="noLeidos">
+        <div id="accordion" class="accordion">
+            <h3>
+                NO LEIDOS</h3>
+            <div>
+                @{Html.RenderAction("_NoLeidos", "Mensaje", new { tipo = "", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+        </div>
+    </div>
+    <div id="mensajes">
+        <div id="accordion" class="accordion">
+            <h3>
+                RECIBIDOS</h3>
+            <div>
+                @{Html.RenderAction("_Recibidos", "Mensaje", new { tipo = "Mensaje", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                ENVIADOS</h3>
+            <div>
+                @{Html.RenderAction("_Enviados", "Mensaje", new { tipo = "Mensaje", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                TODOS</h3>
+            <div style="width: auto;">
+                @{Html.RenderAction("_MostrarTodos", "Mensaje", new { tipo = "Mensaje", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+        </div>
+    </div>
+    <div id="solicitudes">
+        <div id="accordion" class="accordion">
+            <h3>
+                RECIBIDOS</h3>
+            <div>
+                @{Html.RenderAction("_Recibidos", "Mensaje", new { tipo = "Solicitud", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                ENVIADOS</h3>
+            <div>
+                @{Html.RenderAction("_Enviados", "Mensaje", new { tipo = "Solicitud", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                TODOS</h3>
+            <div style="width: auto;">
+                @{Html.RenderAction("_MostrarTodos", "Mensaje", new { tipo = "Solicitud", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+        </div>
+    </div>
+    <div id="notificaciones">
+        <div id="accordion" class="accordion">
+            <h3>
+                RECIBIDOS</h3>
+            <div>
+                @{Html.RenderAction("_Recibidos", "Mensaje", new { tipo = "Notificacion", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                ENVIADOS</h3>
+            <div>
+                @{Html.RenderAction("_Enviados", "Mensaje", new { tipo = "Notificacion", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+            <h3>
+                TODOS</h3>
+            <div style="width: auto;">
+                @{Html.RenderAction("_MostrarTodos", "Mensaje", new { tipo = "Notificacion", fechaDesde = @ViewBag.fechaDesde, fechaHasta = @ViewBag.fechaHasta });}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //inicializar el componente tabs de jquery ui
+    var active = $(".tabs").tabs({ heightStyle: "content" }, { hide: { effect: "explode", duration: 1000} }, { show: { effect: "explode", duration: 500} });
+
+    $(function () {
+        //Inicializacion del componente acordion de jquery ui
+        $('.accordion').accordion({
+            collapsible: true,
+            navigation: true,
+            clearStyle: true,
+            heightStyle: "content",
+            icons: { "header": "ui-icon-plus", "activeHeader": "ui-icon-minus" },
+            animate: true
+
+        });
+    });
+
+    //    $('#gridMensajesTodos').find('tbody > tr').bind('click', function (event) {
+    //        id = $(this).find('input[type=hidden]').val();
+    //        alert(id);
+    //    });
+
+    $(document).ready(function () {
+        seleccionarMensaje("Todos");
+        seleccionarMensaje("TodosMensaje");
+        seleccionarMensaje("TodosSolicitud");
+        seleccionarMensaje("TodosNotificacion");
+
+        seleccionarMensaje("Enviados");
+        seleccionarMensaje("EnviadosMensaje");
+        seleccionarMensaje("EnviadosSolicitud");
+        seleccionarMensaje("EnviadosNotificacion");
+
+        seleccionarMensaje("NoLeidos");
+
+        seleccionarMensaje("Recibidos");
+        seleccionarMensaje("RecibidosMensaje");
+        seleccionarMensaje("RecibidosSolicitud");
+        seleccionarMensaje("RecibidosNotificacion");
+
+        pintarMensajes("#gridMensajesTodos");
+        pintarMensajes("#gridMensajesEnviados");
+        pintarMensajes("#gridMensajesRecibidos");
+
+        pintarMensajes("#gridMensajesTodosMensaje");
+        pintarMensajes("#gridMensajesEnviadosMensaje");
+        pintarMensajes("#gridMensajesRecibidosMensaje");
+
+        pintarMensajes("#gridMensajesTodosSolicitud");
+        pintarMensajes("#gridMensajesEnviadosSolicitud");
+        pintarMensajes("#gridMensajesRecibidosSolicitud");
+
+        pintarMensajes("#gridMensajesTodosNotificacion");
+        pintarMensajes("#gridMensajesEnviadosNotificacion");
+        pintarMensajes("#gridMensajesRecibidosNotificacion");
+    });
+
+    function seleccionarMensaje(tipo) {
+        var rowInstitucionSeleccionada = $('#gridMensajes' + tipo).find('tbody > tr');
+        rowInstitucionSeleccionada.bind('click', function (event) {
+            id = $(this).find('input[type=hidden]').val();
+            //alert(id);
+            window.location.href = 'VerMensaje?idMensaje=' + id;
+        });
+        
+    }
+
+    function mostrarReferencia(tipo) {
+        debugger;
+        if (tipo == "Solicitudes") {
+            $("#divContenedorRefEstado").show("slow");
+        }
+        else {
+            $("#divContenedorRefEstado").hide("slow");
+        }
+    }
+
+    function pintarMensajes(tabla) {
+        $(tabla + " tr:not(:first)").each(function () {
+            //get the value of the table cell located
+            //in the third column of the current row
+            var estado = $(this).find("td:nth-child(8)").find("input").val();
+            if (estado == 'Pendiente' || estado == 'Notificado') {
+                $(this).css("background-color", "#ECAE76");
+            }
+            else if (estado == 'Rechazado') {
+                $(this).css("background-color", "#FF5151");
+                $(this).css("color", "white");
+            }
+            else if (estado == 'Aceptado') {
+                $(this).css("background-color", "#65BC74");
+                $(this).css("color", "white");
+            }
+        });
+    }
+
+    function filtrarMensaje() {
+        window.location.href = "/Mensaje/MensajesConFiltro?fechaDesde=" + $("#fechaDesde").val() + "&fechaHasta=" + $("#fechaHasta").val();
+    }
+
+
+
+    
+</script>

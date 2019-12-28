@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "INFORME ENVIO DE MENSAJE";
+}
+
+<style type="text/css">
+    .persona 
+    {
+        color: #ECAE76;
+        font-family: 'Oswald',sans-serif;
+        font-size: 1.3em;
+        font-style: oblique;
+        font-weight: bolder;
+    }
+
+    .imagenResultado
+    {
+        height:30px;
+        width:30px;
+        margin-left:6px;
+    }
+</style>
+
+<div class="titulo" style="width: 900px; float: left;">
+    <h1>El resultado del envio fue el siguiente</h1>
+</div>
+
+<div style="float:left; width:100%;">
+<table style="margin-top:20px; margin-left:40px; margin-bottom:20px;">
+        @if (ViewBag.usuariosEnviados != null)
+        {
+            foreach (String persona in ViewBag.usuariosEnviados.Split(','))
+            {
+                if (persona != "")
+                {
+                    <tr> 
+                        <td class="persona">@persona</td>
+                        <td><img class ="imagenResultado" src="../../Content/Resources/General/aceptar.png" /></td>
+                    </tr>
+                }
+            }
+        }
+        @if (ViewBag.usuariosNoEnviados != null)
+        {
+            foreach (String persona in ViewBag.usuariosNoEnviados.Split(','))
+            {
+                if (persona != "")
+                {
+                    <tr> 
+                        <td class="persona">@persona</td>
+                        <td><img class ="imagenResultado" src="../../Content/Resources/General/cancelar.png" /></td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+
+<div style="text-align: center; margin-bottom:20px;">
+    <input id="volverAMensajes" type="button" style="font-size:1.4em;" value="Ir a Central de Mensajes"/>
+    <input id="volver" type="button" style="font-size:1.4em;" value="Volver"/>
+</div>
+
+
+
+<script type="text/javascript">
+    $("input")
+    .button()
+    .click(function (event) {
+        event.preventDefault();
+    });
+
+    $("#volverAMensajes").click(function () {
+        window.location.href = 'Mensajes';
+    });
+
+    $("#volver").click(function () {
+        window.history.back();
+    });
+</script>

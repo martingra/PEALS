@@ -1,0 +1,59 @@
+﻿<link href="@Url.Content("~/Content/Styles/Usuario.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/Administrador.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "PEALS - DAR BAJA DOCENTE";
+}
+
+<style type="text/css" >
+.contenedor 
+{
+    border: 3px solid #0aa7a2;
+    border-radius: 1em;
+    padding: 1em;
+    width: 90%;
+    margin-bottom:1em;
+}
+
+#grillaActividadesDarBaja 
+{
+    float:left;
+}
+
+</style>
+
+<div id="tituloUsuario">
+    <h1>A continuaci&oacute;n se dar&aacute; de baja al docente</h1>
+</div>
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+        <fieldset>
+            @{Html.RenderAction("DarBajaUsuario", "Usuario");}
+            <div id="grillas">
+                <div id="grillaInstitucionesDarBaja" class="contenedor">
+                <p>Se borrar&aacute; la inscripci&oacute;n a las siguientes instituciones:</p>
+                    @{Html.RenderAction("_InstitucionesDocente");}
+                </div>
+                <div id="grillaCursosDarBaja" class="contenedor">
+                <p>Los siguientes cursos dejara&aacute;n de estar a tu cargo. El administrador de la instituci&oacute;n deber&aacute; asignar un nuevo docente a los mismos:</p>
+                    @{Html.RenderAction("_CursosDocente");}
+                </div>
+                <div id="grillaActividadesDarBaja" class="contenedor">
+                <p>Las siguientes actividades dejara&aacute;n de estar a tu cargo. </p>
+                <p>Aquellas que pertenezcan a un curso, quedar&aacute;n sin docente a cargo hasta que el administrador de la instituci&oacute;n asigne un nuevo docente al mismo.</p>
+                <p>Las actividades que no esten asignadas a ningun curso ser&aacute;n eliminadas a excepci&oacute;n de aquellas que hayan sido realizadas al menos una vez.</p>
+                    @{Html.RenderAction("_ActividadesDocente");}
+                </div>
+            </div>
+        </fieldset>
+       <div class="boton">
+            <input class="submit guardar" type="submit" value="Aceptar" />       
+       </div>
+    @{Html.EndForm();}
+    
+       <div class="boton">
+            <input type="button" onclick="location.href='@Url.Action("Index", "Docente")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+</div>

@@ -1,0 +1,49 @@
+﻿
+
+
+@{
+	var grillaCursos = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridCursos");
+	grillaCursos.Bind(Model);
+	grillaCursos.Pager(mode: WebGridPagerModes.All,
+		firstText: "Primero", lastText: "Ultimo",
+		previousText: "Anterior",
+		nextText: "Siguiente",
+		numericLinksCount: 15);
+
+	if (grillaCursos.TotalRowCount == 0)
+	{
+		<section style="text-align:center; padding:20px; color:#F58457;">
+			@ViewBag.Cursos_DefaultMessage
+		</section>
+	}
+	else
+	{
+		@grillaCursos.GetHtml(htmlAttributes: new { id = "gridCursos" },
+			tableStyle: "webgrid",
+			headerStyle: "webgrid-header",
+			footerStyle: "webgrid-footer",
+			alternatingRowStyle: "webgrid-alternating-row",
+			selectedRowStyle: "webgrid-selected-row",
+			rowStyle: "webgrid-row-style",
+			columns: grillaCursos.Columns(
+						grillaCursos.Column(format: @<input type="hidden" class="idHidden" name="IDHidden" value="@item.id"/>),
+						grillaCursos.Column(columnName: "institucion1.nombre", header: "Institución", style: "institucion"),
+                        grillaCursos.Column(format: @<input type="hidden" class="idInstitucionCurso" name="idInstitucionCurso" value="@item.institucion1.id"/>),
+						grillaCursos.Column(
+							columnName: "ano",
+							header: "Año",
+							format: item => string.Concat(item.ano, item.division)
+						),
+						grillaCursos.Column(columnName: "nombre", header: "Nombre", style: "nombre"),
+						grillaCursos.Column(format: @<div class="blob"><h2>Descripción</h2><p>@item.descripcion</p></div>)
+			)
+		)
+	}
+}      
+<script type="text/javascript">
+	var cursos = document.querySelectorAll('#gridCursos tbody > tr');
+	$(cursos).hover(
+			function () { $(this).find('.blob').css('display', 'block'); },
+			function () { $(this).find('.blob').css('display', 'none'); }
+    );
+</script>

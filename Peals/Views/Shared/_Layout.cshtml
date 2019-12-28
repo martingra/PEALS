@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+
+    <link href="@Url.Content("~/Content/Styles/oswald.css")" rel='stylesheet' type='text/css'/>
+    
+    
+    <link href="@Url.Content("~/Content/Styles/MasterPage.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Styles/jquery.kwicks.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Styles/ajaxLoading.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/Styles/alertify.core.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/Styles/alertify.default.css")" id="toggleCSS" />   
+
+    <script src="@Url.Content("~/Scripts/jquery-1.10.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.flip.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Dev/jquery.kwicks.js")" type="text/javascript"></script>
+    
+    <script src="@Url.Content("~/Scripts/ajaxLoading.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/alertify.min.js")"></script>
+
+</head>
+
+<body>
+   <div class="Container">
+        <!-- Cabecera -->
+        <div class="Header">
+            <div id="name">
+                <div id="nombre">
+                    <img id="P" src="../../Content/Resources/MasterPage/Nombre/P.png"/>
+                    <img id="E" src="../../Content/Resources/MasterPage/Nombre/E.png"/>
+                    <img id="A" src="../../Content/Resources/MasterPage/Nombre/A.png"/>
+                    <img id="L" src="../../Content/Resources/MasterPage/Nombre/L.png"/>
+                    <img id="S" src="../../Content/Resources/MasterPage/Nombre/S.png"/>
+                </div>
+                <p>Plataforma Educativa para Actividades del Lenguaje de Señas</p> 
+            </div>
+            <div id="sun"></div>
+            
+            <div id="centroMensaje">
+                @Html.Partial("mensajesHeader")
+            </div>
+
+            <div id="logindisplay">
+                @Html.Partial("sesion")
+            </div>
+            
+        </div>
+        <img id="img-ayuda" src="../../Content/Resources/General/ayuda.png" alt="Ayuda" onclick="abrirAyuda();" />
+        <!-- Menu Central -->
+        <div class="Menu">
+            <ul class='kwicks kwicks-horizontal'>
+            @if (!Request.IsAuthenticated || Request.Cookies["DatosUsuario"] == null)
+            {
+                <li><a href= @Url.Action("Index", "Home")>Inicio</a></li>
+            }
+            else
+            {
+                String tipoUsuario = Request.Cookies["DatosUsuario"]["tipoUsuario"];
+                <li><a href= @Url.Action("Index", tipoUsuario)>Inicio @tipoUsuario</a></li>
+            }
+            
+            <li><a href= @Url.Action("Index", "Quienessomos")>¿Quienes Somos?</a></li>
+            <li><a href= @Url.Action("Index", "Contacto")>Contacto</a></li>
+             </ul> 
+         </div>
+         <div id="guarda1"><img src="../../Content/Resources/MasterPage/guarda.png" /></div>
+        <!-- Contenido especifico de cada pagina -->
+        <div class="Content">
+              @RenderBody()
+        </div>
+    
+        <div class="Footer">
+            <div id="proyecto">
+            <p>Proyecto Final</p>
+            <p>Ingenieria en Sistemas de Informacion</p>
+            <p>UTN-FRC</p>
+            </div>
+            <div id="integrantes">
+            <p>Freisz, Gabriel</p>
+            <p>Gramática, Martin</p>
+            <p>Mondolo, Adrián</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="fade"></div>
+        <div id="modal">
+            <img id="loader" src="../../Content/Resources/MasterPage/loading.gif" />
+        </div>
+
+    <!-- Javascript Area -->
+    <script type='text/javascript'>
+        window.setInterval(girarNombre, 10000);
+
+        var url = '../../Content/Resources/MasterPage/Nombre/';
+        function girarNombre() {
+            girar('P', url + 'P.png', url + 'P1.png', Math.floor(Math.random() * 3));
+            girar('E', url + 'E.png', url + 'E1.png', Math.floor(Math.random() * 3));
+            girar('A', url + 'A.png', url + 'A1.png', Math.floor(Math.random() * 3));
+            girar('L', url + 'L.png', url + 'L1.png', Math.floor(Math.random() * 3));
+            girar('S', url + 'S.png', url + 'S1.png', Math.floor(Math.random() * 3));
+        }
+
+        var volverImagen = false;
+        var tipoRotacion = ['tb', 'bt', 'lr', 'rl'];
+
+        function girar(elementID, primeraImagen, segundaImagen, rotacion) {
+            var imagen = (volverImagen) ? primeraImagen : segundaImagen;
+            $('#'+elementID).flip({
+                direction: tipoRotacion[rotacion],
+                content: document.getElementById(elementID).src = imagen,
+                color: getColor()
+            });
+
+            volverImagen = !volverImagen;
+        }
+
+        function getColor() {
+            var r = Math.floor(Math.random() * 100) + 50;
+            var g = Math.floor(Math.random() * 50) + 50;
+            var b = Math.floor(Math.random() * 150) + 50;
+
+            return 'rgb(' + r + ',' + g + ',' + b + ')';
+        }
+
+        $(function () {
+            $('.kwicks').kwicks({
+                size: 320,
+                maxSize: 400,
+                spacing: 0,
+                behavior: 'menu'
+            });
+        });
+
+        function backPage() {
+            history.back();
+        }
+
+        $(document).ready(function () {
+            $('#nombre').find('img').each(function (index, node) { $(node).css('background-color', getColor()); });
+
+            applyUIStyles();
+        });
+
+        function applyUIStyles() {
+            $('input:text, input:password, input[type="email"], input[type="date"]')
+                .button()
+                .css({
+                    'font': 'inherit',
+                    'text-align': 'left',
+                    'outline': 'none',
+                    'cursor': 'text'
+            });
+
+            $('input:submit, input:button, button').button();
+        }
+
+        $('input[type="date"]').datepicker();
+
+        $.datepicker.regional['es'] = {
+              closeText: 'Cerrar',
+              prevText: '<Ant',
+              nextText: 'Sig>',
+              currentText: 'Hoy',
+              changeMonth: true,
+              changeYear: true,
+              yearRange: ' 1967 : * ',
+              monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+              monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+              dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+              dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+              dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+              weekHeader: 'Sm',
+              dateFormat: 'dd/mm/yy',
+              //dateFormat: 'yy-mm-dd',
+              firstDay: 1,
+              isRTL: false,
+              showMonthAfterYear: false,
+              yearSuffix: ''
+          };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+
+        function alert(mensaje) {
+            reset();
+            alertify.alert(mensaje);
+            return false;
+        }
+
+        function confirmAlert(mensaje, fn_aceptar, fn_cancelar) 
+        {
+            reset();
+            alertify.confirm(mensaje, function (e) {
+                if (e) {
+                    if (fn_aceptar != null) fn_aceptar();
+                } else {
+                    if (fn_cancelar != null) fn_cancelar();
+                }
+            });
+            return false; 
+        }
+
+        function reset() {
+            alertify.set({
+                  labels: {
+                      ok: "Aceptar",
+                      cancel: "Cancelar"
+                  },
+                  delay: 5000,
+                  buttonReverse: false,
+                  buttonFocus: "ok"
+            });
+          }
+
+          function abrirAyuda() {
+            location.href= "@Url.Action("Index", "Ayuda")";
+          }
+    </script>
+</body>
+
+</html>

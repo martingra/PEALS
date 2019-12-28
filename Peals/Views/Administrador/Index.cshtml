@@ -1,0 +1,229 @@
+﻿<link href="@Url.Content("~/Content/Styles/Administrador.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/WebGrid.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/Styles/reveal.css")" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "PEALS - ADMINISTRADOR";
+
+    var gridInstituciones = new WebGrid(canPage: true, rowsPerPage: 10, canSort: true, ajaxUpdateContainerId: "gridInstituciones", ajaxUpdateCallback: "AgregarEventosGrid");
+    gridInstituciones.Bind(Model);
+    gridInstituciones.Pager(mode: WebGridPagerModes.All,
+        firstText: "Primero",
+        lastText: "Ultimo",
+        previousText: "Anterior",
+        nextText: "Siguiente",
+        numericLinksCount: 15);
+}
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.reveal.js")"></script>
+<section id="adminInicio">
+    <div id="institucionActual" class="institucionActual">
+        <div class="nombreInstSel">
+            <img src="@Url.Content("~/Content/Resources/Administrador/Instituciones.png")" width="30px" height="25px"/>
+            <input type="hidden" id="idInstitucion" />
+            <label id="nombreInstitucion" onclick="verInfoInstitucion();"></label>
+        </div>
+        <a href="#" onclick="$('#dialog_institucion').reveal();">
+            <div class="accionInstSel">
+                <img src="@Url.Content("~/Content/Resources/General/Cambiar.png")" width="24" height="24"/>
+                <label>Cambiar</label>
+            </div>
+        </a>
+        <a href="#" onclick="editarInstitucion();">
+            <div class="accionInstSel" >
+                <img src="@Url.Content("~/Content/Resources/General/Editar.png")" width="24" height="24"/>
+                <label>Editar</label>
+            </div>
+        </a>
+        <a href="#" onclick="eliminarInstitucion()">
+            <div class="accionInstSel">
+                <img src="@Url.Content("~/Content/Resources/General/Eliminar.jpg")" width="24" height="24"/>
+                <label>Eliminar</label>
+            </div>
+        </a>
+    </div>
+    <div id="dialog_institucion" class="reveal-modal">
+        <div class="titulo" >
+            <img src="@Url.Content("~/Content/Resources/Administrador/Instituciones.png")" width="30px" height="25px" />
+            <h2>Mis Instituciones</h2>
+        </div>
+        @gridInstituciones.GetHtml(htmlAttributes: new { id = "gridInstituciones" },
+            tableStyle: "webgrid",
+            headerStyle: "webgrid-header",
+            footerStyle: "webgrid-footer",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            columns: gridInstituciones.Columns(
+                        gridInstituciones.Column("Nombre"),
+                        gridInstituciones.Column("Cursos"),
+                        gridInstituciones.Column("Docentes"),
+                        gridInstituciones.Column("Alumnos"),
+                        gridInstituciones.Column(format: @<input type="hidden" name="IDHidden" value="@item.ID"/>)
+            )
+        )
+    </div>
+    <div id="admin_opciones" class="opciones">
+        <div id="nuevaInstitucion">
+            <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Administrador/NuevaInstitucion.png")" width="100" height="125" onclick="location.href='@Url.Action("NuevaInstitucion", "Institucion")';" />
+                <figcaption><a href="@Url.Action("NuevaInstitucion", "Institucion")">Agregar Instituciones</a></figcaption>
+            </figure>
+        </div>
+        <div id="nuevoDocente">
+            <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Administrador/AgregarDocentes.png")" width="100" height="125" onclick="nuevoDocente();" />
+                <figcaption onClick="nuevoDocente();"><a href="#">Agregar Docentes</a></figcaption>
+            </figure>
+        </div>
+        <div id="nuevoCurso">
+            <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Administrador/NuevoCurso.png")" width="100" height="125" onclick="nuevoCurso();" />
+                <figcaption onclick="nuevoCurso();"><a href="#">Agregar Cursos</a></figcaption>
+            </figure>
+        </div>
+        <div id="misDatos">
+            <figure>
+                <img class="imgConBorde" src="@Url.Content("~/Content/Resources/General/Profesor.jpg")" width="100" height="125" onclick="location.href='@Url.Action("EditarAdministrador", "Administrador")';" />
+                <figcaption><a href="@Url.Action("EditarAdministrador", "Administrador")">Mis Datos</a></figcaption>
+            </figure>
+        </div>
+        <div id="misDatos">
+           <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/Docente/Seguimiento.jpg")" width="100" height="125" onclick="location.href='@Url.Action("Index", "Diac")';" />
+               <figcaption><a href="@Url.Action("Index", "Diac")">D.I.A.C.</a></figcaption>
+           </figure>
+        </div>
+        <div id="reportes">
+           <figure>
+               <img class="imgConBorde" src="@Url.Content("~/Content/Resources/MasterPage/reportes.jpeg")" width="100" height="125" onclick="location.href='@Url.Action("Reportes", "Administrador")';" />
+               <figcaption><a href="@Url.Action("Reportes", "Administrador")">Reportes</a></figcaption>
+           </figure>
+        </div>
+    </div>
+    <div id="institucion" ><!--Aca se carga el index de la institucion seleccionada--></div>
+</section>
+<div id="div_mensajes" class="reveal-modal">
+    <p id="mensaje">
+    </p>
+    <div id="acciones_mensaje">
+        <button type="button" id="btn_cancelar">
+            Mejor no</button>
+        <button type="button" id="btn_aceptar">
+            Sí, estoy seguro</button>
+        <button type="button" id="btn_exportar">
+            Exportar y cerrar</button>
+    </div>
+</div>
+<script type="text/javascript">
+     var idInst = -1;
+
+     function editarInstitucion() {
+         location.href = '@Url.Action("EditarInstitucion", "Institucion")' + '?idInstitucion=' + idInst;
+     }
+
+     function eliminarInstitucion(){
+        var mensaje= $('#mensaje','#div_mensajes');
+        $(mensaje).text("¿Estas seguro que quieres eliminar la institución? Si quieres, puedes pasar los cursos y al personal docente a otra institución a tu cargo.");
+
+        $('#btn_cancelar', '#div_mensajes').on('click', function(){ $('.reveal-modal').trigger('reveal:close'); });
+        $('#btn_exportar', '#div_mensajes').on('click', function(){ 
+            location.href = '@Url.Action("EliminarInstitucion", "Institucion")' + '?idInstitucion=' + idInst; 
+            $('.reveal-modal').trigger('reveal:close');
+        });
+        $('#btn_aceptar', '#div_mensajes').on('click', function(){ 
+            $.post('/Institucion/EliminarInstitucion', { idInstitucion: idInst, idInstitucionNueva : 0 }, function (succes){
+                if (succes) location.href = '@Url.Action("Index", "Administrador")';
+            });
+        });
+
+        $('#div_mensajes').reveal();
+     }
+
+     function nuevoCurso() {
+         location.href = '@Url.Action("NuevoCurso", "Curso")' + '?idInstitucion=' + idInst;
+     }
+
+     function verInfoInstitucion(){
+        location.href = '@Url.Action("VerInformacion", "Informacion")' + '?idInstitucion=' + idInst;
+     }
+
+     function seleccionarInstitucion(nombre){
+        $.post("/Administrador/setInstitucionSeleccionada", { idInstitucion: idInst}, function(data){
+                 $('#institucion').fadeOut();
+                 $('#institucion').load('@Url.Action("Index", "Institucion")', { 'idInstitucion': idInst });
+                 $('#institucion').fadeIn();
+
+                 $('#idInstitucion').text(idInst);
+                 $('#nombreInstitucion').text(nombre);
+                 $('.reveal-modal').trigger('reveal:close');
+            });
+     }
+
+     function seleccionarInstitucionSinAjax(nombre, idInstitucion){
+                 $('#institucion').fadeOut();
+                 $('#institucion').load('@Url.Action("Index", "Institucion")', { 'idInstitucion': idInstitucion });
+                 $('#institucion').fadeIn();
+
+                 $('#idInstitucion').text(idInst);
+                 $('#nombreInstitucion').text(nombre);
+                 $('.reveal-modal').trigger('reveal:close');
+
+                 idInst = idInstitucion;
+     }
+
+     function AgregarEventosGrid(){
+        var rowInstitucionSeleccionada = $('#gridInstituciones').find('tbody > tr');
+         rowInstitucionSeleccionada.bind('click', function (event) {
+             idInst = $(this).find('input[type=hidden]').val();
+             var nombre = $(this).find('td:first').text();
+
+             seleccionarInstitucion(nombre);
+         });
+     }
+
+     function nuevoDocente() {
+        location.href = '@Url.Action("TodosLosDocentes", "Docente")' + '?idInstitucion=' + idInst;
+     }
+
+
+     $(document).ready(function () {
+         AgregarEventosGrid();
+         
+         var totalInstituciones = @gridInstituciones.TotalRowCount;
+         if(@ViewBag.institucionSeleccionada == 0) {
+
+         switch (@gridInstituciones.TotalRowCount){
+            case 0:
+                $('#institucion').append('<section class="sinInstituciones"><i>No tienes Instituciones a tu nombre. Para crear una, haz click en <b>"Agregar Instituciones"</b></i></section>');
+                document.getElementById('institucionActual').style.display = 'none';
+                
+                $("a[href='#']").attr('onclick','').unbind('click');
+                $("a[href='#']").removeAttr("href").css("opacity", "0.4");
+                $("#nuevoCurso").hide();
+                $("#nuevoDocente").hide();
+
+                break;
+            case 1:
+                var rowInstitucionSeleccionada = $('#gridInstituciones').find('tbody > tr');
+                idInst = rowInstitucionSeleccionada.find('input[type=hidden]').val();
+                var nombre = rowInstitucionSeleccionada.find('td:first').text();
+
+                seleccionarInstitucion(nombre);
+                break;
+            default:
+                $('#dialog_institucion').reveal();
+         }  
+
+         var actualizarFilas = function() {
+            var rowInstitucionSeleccionada = $('#gridInstituciones').find('tbody > tr');
+            rowInstitucionSeleccionada.bind('click', function (event) {
+                idInst = $(this).find('input[type=hidden]').val();
+                var nombre = $(this).find('td:first').text();
+                
+                seleccionarInstitucion(nombre);
+            });   
+         }
+         }else {
+                seleccionarInstitucionSinAjax("@Html.Raw(@ViewBag.nombreInstitucionSeleccionada)", @ViewBag.institucionSeleccionada);
+            }
+     });
+</script>

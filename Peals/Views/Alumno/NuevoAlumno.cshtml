@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "PEALS - NUEVO ALUMNO";
+}
+
+<div id="tituloUsuario">
+    <h1>A continuaci&oacute;n se solicitan datos sobre el Alumno</h1>
+</div>
+<div id="datosUsuario">
+    @{Html.BeginForm();}
+        @{Html.RenderAction("NuevoUsuario", "Usuario");}
+        <div class="boton">
+            <input type="submit" class="submit guardar" value="Aceptar"/>
+        </div>
+    @{Html.EndForm();}
+        <div class="boton">
+            <input type="button" onclick="location.href='@Url.Action("Index", "Home")'" class="submit cancelar" value="Cancelar"/>
+        </div>
+        
+</div>

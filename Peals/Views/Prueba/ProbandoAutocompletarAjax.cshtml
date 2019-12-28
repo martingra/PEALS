@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "ProbandoAutocompletar";
+}
+
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <script src=@Url.Content("~/Scripts/jquery-ui-1.10.3.js") type="text/javascript"></script>  
+	
+    <input type="text" id="buscar" />
+
+    <script type="text/javascript" language="javascript">
+        $(function () {
+
+            $("#buscar").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "http://ws.geonames.org/searchJSON", dataType: "json",
+                        data: {
+                            featureClass: "P",
+                            style: "full",
+                            maxRows: 12,
+                            name_startsWith: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data.geonames, function (item) {
+                                return {
+                                    label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+                                    value: item.name
+                                }
+                            }))
+                        }
+                    })
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    alert(ui.item ?
+					"Selected: " + ui.item.label :
+					"Nothing selected, input was " + this.value);
+                },
+                search: function () { $(this).addClass('working'); },
+                open: function () { $(this).removeClass('working'); }
+            });
+        });
+    </script>
+

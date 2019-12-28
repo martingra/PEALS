@@ -1,0 +1,96 @@
+﻿@{
+    ViewBag.Title = "Preparar Entorno";
+}
+<div id="pantallaInicial">
+    <div id="explicacionTituloPagina">
+        <h1>
+            Selecciona la opción correcta y presiona el botón "Resolver".
+        </h1>
+    </div>
+    
+    <div id="divReemplazableRecursos"></div>
+
+    <div id="divResolucion">
+        <input type="hidden" id="txtResultadoRecursoCorrecto" />
+    </div>
+
+    <div class="botonera">
+        @*<input type="button" id="btnSaltearEjercicio" value="Saltear Ejercicio" />
+        <input type="button" id="btnResolverEjercicio" class="btnResolverActividad" value="Resolver" />*@
+        <img id="btnSaltearEjercicio" src="../../Content/Resources/Actividad/saltear.jpg" />
+        <img id="btnResolverEjercicio" src="../../Content/Resources/Actividad/resolver.jpg" />
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var tiempo = 0;
+    $(document).ready(function () {
+        $('input:text, input:password, input[type="email"], input[type="date"]')
+                .button()
+                .css({
+                    'font': 'inherit',
+                    'text-align': 'left',
+                    'outline': 'none',
+                    'cursor': 'text'
+                });
+
+                $('input:submit, input:button, button').button();
+                //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+
+                intervalTiempo = setInterval(function () {
+                    tiempo++;
+                }, 1000);
+    });
+
+
+      $("#btnSaltearEjercicio").click(function () {
+          $("#txtEjNoResueltos").val(parseInt($("#txtEjNoResueltos").val()) + 1);
+          $("#divResultado").trigger("click");
+      });
+
+
+
+
+      $("#btnResolverEjercicio").click(function () {
+          if ($("#txtResultadoRecursoCorrecto").val() == '') {
+              alert('Selecciona una opción.');
+          }
+          else {
+              if ($("#txtResultadoRecursoCorrecto").val() == $("#txtRecursoCorrecto").val()) {
+
+                  $("#divResultado").css('background-color', '#5DB85D');
+                  $("#divResultado").text('Has resulto el ejercicio correctamente en ' + tiempo + ' segundos. Hace click para continuar!');
+                  $("#txtTiempo").val(parseInt($("#txtTiempo").val()) + tiempo);
+
+                  $("#ejercicio").hide("slow", function () {
+                      $("#divResultado").show("slow", function () {
+                          var nroEjercicio = $("#txtNroEjercicio").val();
+                          nroEjercicio = parseInt(nroEjercicio) + 1;
+                          var cantidadEjercicios = parseInt($("#txtCantidadEjercicios").val());
+                          var avance = nroEjercicio * 100 / cantidadEjercicios;
+                          var restante = 100 - avance;
+
+                          $("#progresoCompletado").css('width', avance + '%');
+                          $("#progresoRestante").css('width', restante + '%');
+
+                          $("#progresoCompletado").text(nroEjercicio + ' completados');
+                          $("#progresoRestante").text((cantidadEjercicios - nroEjercicio) + ' restantes');
+
+                          $("#btnSiguienteEjercicio").show();
+                      });
+                  });
+
+              }
+              else {
+                  alert('La respuesta no es correcta. Intenta nuevamente!');
+                  $("#txtIntentos").val(parseInt($("#txtIntentos").val()) + 1);
+              }
+          }
+      });
+
+      $('#txtResultadoTexto').keyup(function () {
+          this.value = this.value.toUpperCase();
+      });
+
+</script>
